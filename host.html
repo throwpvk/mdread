@@ -1,124 +1,139 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome file</title>
+    <link rel="stylesheet" href="https://stackedit.io/style.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome file</title>
-  <link rel="stylesheet" href="https://stackedit.io/style.css" />
-</head>
-
-<body class="stackedit">
-  <div class="stackedit__html"><h1 id="🏠-hướng-dẫn-self-hosting-toàn-diện">🏠 Hướng Dẫn Self-Hosting Toàn Diện</h1>
-<blockquote>
-<p><strong>Tài liệu này dành cho:</strong> Người muốn tự host dự án trên máy chủ riêng</p>
-</blockquote>
-<blockquote>
-<p><strong>Mục tiêu:</strong> Từ mua máy → cài đặt → bảo mật → đưa lên internet → xử lý sự cố</p>
-</blockquote>
-<hr>
-<h2 id="📖-mục-lục">📖 Mục Lục</h2>
-<h3 id="phần-1-chuẩn-bị">Phần 1: Chuẩn Bị</h3>
-<ol>
-<li>
-<p><a href="#1-ch%E1%BB%8Dn-ph%E1%BA%A7n-c%E1%BB%A9ng">Chọn Phần Cứng</a></p>
-</li>
-<li>
-<p><a href="#2-c%C3%A0i-%C4%91%E1%BA%B7t-linux">Cài Đặt Linux</a></p>
-</li>
-<li>
-<p><a href="#3-thi%E1%BA%BFt-l%E1%BA%ADp-c%C6%A1-b%E1%BA%A3n">Thiết Lập Cơ Bản</a></p>
-</li>
-</ol>
-<h3 id="phần-2-triển-khai">Phần 2: Triển Khai</h3>
-<ol start="4">
-<li>
-<p><a href="#4-c%C3%A0i-%C4%91%E1%BA%B7t-docker">Cài Đặt Docker</a></p>
-</li>
-<li>
-<p><a href="#5-deploy-%E1%BB%A9ng-d%E1%BB%A5ng">Deploy Ứng Dụng</a></p>
-</li>
-<li>
-<p><a href="#6-database-local-vs-cloud">Database: Local vs Cloud</a></p>
-</li>
-<li>
-<p><a href="#7-storage-drive-api-vs-cloudflare-r2">Storage: Drive API vs Cloudflare R2</a></p>
-</li>
-</ol>
-<h3 id="phần-3-đưa-lên-internet">Phần 3: Đưa Lên Internet</h3>
-<ol start="8">
-<li>
-<p><a href="#8-mua-domain">Mua Domain</a></p>
-</li>
-<li>
-<p><a href="#9-cloudflare-setup">Cloudflare Setup</a></p>
-</li>
-<li>
-<p><a href="#10-sslhttps">SSL/HTTPS</a></p>
-</li>
-<li>
-<p><a href="#11-reverse-proxy-v%E1%BB%9Bi-nginx">Reverse Proxy với Nginx</a></p>
-</li>
-</ol>
-<h3 id="phần-4-bảo-mật">Phần 4: Bảo Mật</h3>
-<ol start="12">
-<li>
-<p><a href="#12-b%E1%BA%A3o-m%E1%BA%ADt-server">Bảo Mật Server</a></p>
-</li>
-<li>
-<p><a href="#13-b%E1%BA%A3o-m%E1%BA%ADt-%E1%BB%A9ng-d%E1%BB%A5ng">Bảo Mật Ứng Dụng</a></p>
-</li>
-<li>
-<p><a href="#14-cloudflare-protection">Cloudflare Protection</a></p>
-</li>
-</ol>
-<h3 id="phần-5-vận-hành">Phần 5: Vận Hành</h3>
-<ol start="15">
-<li>
-<p><a href="#15-monitoring--logging">Monitoring &amp; Logging</a></p>
-</li>
-<li>
-<p><a href="#16-backup--recovery">Backup &amp; Recovery</a></p>
-</li>
-<li>
-<p><a href="#17-x%E1%BB%AD-l%C3%BD-s%E1%BB%B1-c%E1%BB%91">Xử Lý Sự Cố</a></p>
-</li>
-<li>
-<p><a href="#18-scaling">Scaling</a></p>
-</li>
-</ol>
-<h3 id="phần-6-devops-roadmap">Phần 6: DevOps Roadmap</h3>
-<ol start="19">
-<li>
-<p><a href="#19-devops-l%C3%A0-g%C3%AC">DevOps là gì?</a></p>
-</li>
-<li>
-<p><a href="#20-h%E1%BB%8Dc-g%C3%AC-ti%E1%BA%BFp-theo">Học gì tiếp theo?</a></p>
-</li>
-</ol>
-<hr>
-<h1 id="phần-1-chuẩn-bị-1">PHẦN 1: CHUẨN BỊ</h1>
-<hr>
-<h2 id="chọn-phần-cứng">1. Chọn Phần Cứng</h2>
-<h3 id="yêu-cầu-tối-thiểu">1.1 Yêu cầu tối thiểu</h3>
-<p>| Thành phần | Tối thiểu | Khuyến nghị |</p>
-<p>| ----------- | --------- | ----------- |</p>
-<p>| <strong>CPU</strong> | 2 cores | 4+ cores |</p>
-<p>| <strong>RAM</strong> | 4GB | 8-16GB |</p>
-<p>| <strong>Storage</strong> | 50GB SSD | 100GB+ SSD |</p>
-<p>| <strong>Network</strong> | 100Mbps | 1Gbps |</p>
-<h3 id="mua-máy-trạm-cũ">1.2 Mua máy trạm cũ</h3>
-<p><strong>Ở đâu mua?</strong></p>
-<ul>
-<li>
-<p><strong>Nhật Bản:</strong> Yahoo Auction, Mercari, Hard-Off</p>
-</li>
-<li>
-<p><strong>Việt Nam:</strong> Shopee, Facebook Marketplace, các shop máy tính cũ</p>
-</li>
-</ul>
-<p><strong>Các dòng máy đề xuất:</strong></p>
-<pre><code>
+  <body class="stackedit">
+    <div class="stackedit__html">
+      <h1 id="🏠-hướng-dẫn-self-hosting-toàn-diện">
+        🏠 Hướng Dẫn Self-Hosting Toàn Diện
+      </h1>
+      <blockquote>
+        <p>
+          <strong>Tài liệu này dành cho:</strong> Người muốn tự host dự án trên
+          máy chủ riêng
+        </p>
+      </blockquote>
+      <blockquote>
+        <p>
+          <strong>Mục tiêu:</strong> Từ mua máy → cài đặt → bảo mật → đưa lên
+          internet → xử lý sự cố
+        </p>
+      </blockquote>
+      <hr />
+      <h2 id="📖-mục-lục">📖 Mục Lục</h2>
+      <h3 id="phần-1-chuẩn-bị">Phần 1: Chuẩn Bị</h3>
+      <ol>
+        <li>
+          <p><a href="#chọn-phần-cứng">Chọn Phần Cứng</a></p>
+        </li>
+        <li>
+          <p><a href="#cài-đặt-linux">Cài Đặt Linux</a></p>
+        </li>
+        <li>
+          <p><a href="#thiết-lập-cơ-bản">Thiết Lập Cơ Bản</a></p>
+        </li>
+      </ol>
+      <h3 id="phần-2-triển-khai">Phần 2: Triển Khai</h3>
+      <ol start="4">
+        <li>
+          <p><a href="#cài-đặt-docker">Cài Đặt Docker</a></p>
+        </li>
+        <li>
+          <p><a href="#deploy-ứng-dụng">Deploy Ứng Dụng</a></p>
+        </li>
+        <li>
+          <p><a href="#database-local-vs-cloud">Database: Local vs Cloud</a></p>
+        </li>
+        <li>
+          <p>
+            <a href="#storage-drive-api-vs-cloudflare-r2"
+              >Storage: Drive API vs Cloudflare R2</a
+            >
+          </p>
+        </li>
+      </ol>
+      <h3 id="phần-3-đưa-lên-internet">Phần 3: Đưa Lên Internet</h3>
+      <ol start="8">
+        <li>
+          <p><a href="#mua-domain">Mua Domain</a></p>
+        </li>
+        <li>
+          <p><a href="#cloudflare-setup">Cloudflare Setup</a></p>
+        </li>
+        <li>
+          <p><a href="#sslhttps">SSL/HTTPS</a></p>
+        </li>
+        <li>
+          <p><a href="#reverse-proxy-với-nginx">Reverse Proxy với Nginx</a></p>
+        </li>
+      </ol>
+      <h3 id="phần-4-bảo-mật">Phần 4: Bảo Mật</h3>
+      <ol start="12">
+        <li>
+          <p><a href="#bảo-mật-server">Bảo Mật Server</a></p>
+        </li>
+        <li>
+          <p><a href="#bảo-mật-ứng-dụng">Bảo Mật Ứng Dụng</a></p>
+        </li>
+        <li>
+          <p><a href="#cloudflare-protection">Cloudflare Protection</a></p>
+        </li>
+      </ol>
+      <h3 id="phần-5-vận-hành">Phần 5: Vận Hành</h3>
+      <ol start="15">
+        <li>
+          <p><a href="#monitoring--logging">Monitoring &amp; Logging</a></p>
+        </li>
+        <li>
+          <p><a href="#backup--recovery">Backup &amp; Recovery</a></p>
+        </li>
+        <li>
+          <p><a href="#xử-lý-sự-cố">Xử Lý Sự Cố</a></p>
+        </li>
+        <li>
+          <p><a href="#scaling">Scaling</a></p>
+        </li>
+      </ol>
+      <h3 id="phần-6-devops-roadmap">Phần 6: DevOps Roadmap</h3>
+      <ol start="19">
+        <li>
+          <p><a href="#devops-là-gì">DevOps là gì?</a></p>
+        </li>
+        <li>
+          <p><a href="#học-gì-tiếp-theo">Học gì tiếp theo?</a></p>
+        </li>
+      </ol>
+      <hr />
+      <h1 id="phần-1-chuẩn-bị-1">PHẦN 1: CHUẨN BỊ</h1>
+      <hr />
+      <h2 id="chọn-phần-cứng">1. Chọn Phần Cứng</h2>
+      <h3 id="yêu-cầu-tối-thiểu">1.1 Yêu cầu tối thiểu</h3>
+      <p>| Thành phần | Tối thiểu | Khuyến nghị |</p>
+      <p>| ----------- | --------- | ----------- |</p>
+      <p>| <strong>CPU</strong> | 2 cores | 4+ cores |</p>
+      <p>| <strong>RAM</strong> | 4GB | 8-16GB |</p>
+      <p>| <strong>Storage</strong> | 50GB SSD | 100GB+ SSD |</p>
+      <p>| <strong>Network</strong> | 100Mbps | 1Gbps |</p>
+      <h3 id="mua-máy-trạm-cũ">1.2 Mua máy trạm cũ</h3>
+      <p><strong>Ở đâu mua?</strong></p>
+      <ul>
+        <li>
+          <p><strong>Nhật Bản:</strong> Yahoo Auction, Mercari, Hard-Off</p>
+        </li>
+        <li>
+          <p>
+            <strong>Việt Nam:</strong> Shopee, Facebook Marketplace, các shop
+            máy tính cũ
+          </p>
+        </li>
+      </ul>
+      <p><strong>Các dòng máy đề xuất:</strong></p>
+      <pre><code>
 1. Dell OptiPlex (3050, 5050, 7050)
 
 - Giá: 3-5 triệu VNĐ
@@ -152,46 +167,99 @@
 - Giá cao hơn một chút
 
 </code></pre>
-<p><strong>Checklist khi mua:</strong></p>
-<ul>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Kiểm tra CPU (chạy stress test)</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Kiểm tra RAM (memtest86)</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Kiểm tra ổ cứng (CrystalDiskInfo)</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Cổng mạng LAN hoạt động</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Có thể cài Linux</p>
-</li>
-</ul>
-<h3 id="alternative-vpscloud">1.3 Alternative: VPS/Cloud</h3>
-<p>Nếu không muốn mua máy vật lý:</p>
-<p>| Provider | Free Tier | Giá rẻ nhất |</p>
-<p>| ---------------- | ------------------------------ | ----------------- |</p>
-<p>| <strong>Oracle Cloud</strong> | 4 core ARM, 24GB RAM (mãi mãi) | $0/tháng |</p>
-<p>| <strong>Google Cloud</strong> | e2-micro (1GB RAM) | $0/tháng |</p>
-<p>| <strong>AWS</strong> | t2.micro (1GB RAM, 12 tháng) | ~$5/tháng |</p>
-<p>| <strong>Vultr</strong> | - | $5/tháng (1GB) |</p>
-<p>| <strong>Contabo</strong> | - | €4.99/tháng (4GB) |</p>
-<p><strong>Khuyến nghị:</strong> Oracle Cloud Free Tier rất mạnh cho học tập!</p>
-<hr>
-<h2 id="cài-đặt-linux">2. Cài Đặt Linux</h2>
-<h3 id="chọn-bản-phân-phối">2.1 Chọn bản phân phối</h3>
-<p>| Distro | Đặc điểm | Phù hợp cho |</p>
-<p>| --------------------------- | ------------------------ | ----------------------- |</p>
-<p>| <strong>Ubuntu Server 22.04 LTS</strong> | Phổ biến, nhiều tài liệu | Người mới |</p>
-<p>| <strong>Debian 12</strong> | Ổn định, nhẹ | Server production |</p>
-<p>| <strong>Rocky Linux 9</strong> | Giống CentOS, enterprise | Môi trường doanh nghiệp |</p>
-<p><strong>Khuyến nghị:</strong> Ubuntu Server 22.04 LTS</p>
-<h3 id="cài-đặt-ubuntu-server">2.2 Cài đặt Ubuntu Server</h3>
-<p><strong>Bước 1: Tạo USB boot</strong></p>
-<pre><code>
+      <p><strong>Checklist khi mua:</strong></p>
+      <ul>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Kiểm tra CPU (chạy stress test)
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Kiểm tra RAM (memtest86)
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Kiểm tra ổ cứng (CrystalDiskInfo)
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Cổng mạng LAN hoạt động
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Có thể cài Linux
+          </p>
+        </li>
+      </ul>
+      <h3 id="alternative-vpscloud">1.3 Alternative: VPS/Cloud</h3>
+      <p>Nếu không muốn mua máy vật lý:</p>
+      <p>| Provider | Free Tier | Giá rẻ nhất |</p>
+      <p>
+        | ---------------- | ------------------------------ | -----------------
+        |
+      </p>
+      <p>
+        | <strong>Oracle Cloud</strong> | 4 core ARM, 24GB RAM (mãi mãi) |
+        $0/tháng |
+      </p>
+      <p>| <strong>Google Cloud</strong> | e2-micro (1GB RAM) | $0/tháng |</p>
+      <p>| <strong>AWS</strong> | t2.micro (1GB RAM, 12 tháng) | ~$5/tháng |</p>
+      <p>| <strong>Vultr</strong> | - | $5/tháng (1GB) |</p>
+      <p>| <strong>Contabo</strong> | - | €4.99/tháng (4GB) |</p>
+      <p>
+        <strong>Khuyến nghị:</strong> Oracle Cloud Free Tier rất mạnh cho học
+        tập!
+      </p>
+      <hr />
+      <h2 id="cài-đặt-linux">2. Cài Đặt Linux</h2>
+      <h3 id="chọn-bản-phân-phối">2.1 Chọn bản phân phối</h3>
+      <p>| Distro | Đặc điểm | Phù hợp cho |</p>
+      <p>
+        | --------------------------- | ------------------------ |
+        ----------------------- |
+      </p>
+      <p>
+        | <strong>Ubuntu Server 22.04 LTS</strong> | Phổ biến, nhiều tài liệu |
+        Người mới |
+      </p>
+      <p>| <strong>Debian 12</strong> | Ổn định, nhẹ | Server production |</p>
+      <p>
+        | <strong>Rocky Linux 9</strong> | Giống CentOS, enterprise | Môi trường
+        doanh nghiệp |
+      </p>
+      <p><strong>Khuyến nghị:</strong> Ubuntu Server 22.04 LTS</p>
+      <h3 id="cài-đặt-ubuntu-server">2.2 Cài đặt Ubuntu Server</h3>
+      <p><strong>Bước 1: Tạo USB boot</strong></p>
+      <pre><code>
 1. Tải ISO: https://ubuntu.com/download/server
 
 2. Tải Rufus (Windows): https://rufus.ie/
@@ -199,8 +267,8 @@
 3. Cắm USB → Mở Rufus → Chọn ISO → Start
 
 </code></pre>
-<p><strong>Bước 2: Boot từ USB</strong></p>
-<pre><code>
+      <p><strong>Bước 2: Boot từ USB</strong></p>
+      <pre><code>
 1. Cắm USB vào máy trạm
 
 2. Khởi động, nhấn F12 (hoặc F2, Del) để vào Boot Menu
@@ -210,8 +278,8 @@
 4. Chọn "Install Ubuntu Server"
 
 </code></pre>
-<p><strong>Bước 3: Cài đặt</strong></p>
-<pre><code>
+      <p><strong>Bước 3: Cài đặt</strong></p>
+      <pre><code>
 - Language: English
 
 - Keyboard: Vietnamese hoặc US
@@ -235,8 +303,8 @@
 - Featured snaps: Bỏ qua
 
 </code></pre>
-<p><strong>Bước 4: Sau khi cài xong</strong></p>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <p><strong>Bước 4: Sau khi cài xong</strong></p>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Đăng nhập với user đã tạo</span>
 
   
@@ -262,16 +330,16 @@ ip  addr  show
 <span class="token function">hostname</span>  -I
 
 </code></pre>
-<hr>
-<h2 id="thiết-lập-cơ-bản">3. Thiết Lập Cơ Bản</h2>
-<h3 id="cấu-hình-ip-tĩnh">3.1 Cấu hình IP tĩnh</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h2 id="thiết-lập-cơ-bản">3. Thiết Lập Cơ Bản</h2>
+      <h3 id="cấu-hình-ip-tĩnh">3.1 Cấu hình IP tĩnh</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># File cấu hình network</span>
 
 <span class="token function">sudo</span>  vim  /etc/netplan/00-installer-config.yaml
 
 </code></pre>
-<pre class=" language-yaml"><code class="prism  language-yaml">
+      <pre class="language-yaml"><code class="prism  language-yaml">
 <span class="token key atrule">network</span><span class="token punctuation">:</span>
 
 <span class="token key atrule">ethernets</span><span class="token punctuation">:</span>
@@ -301,7 +369,7 @@ ip  addr  show
 <span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token number">2</span>
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Áp dụng cấu hình</span>
 
 <span class="token function">sudo</span>  netplan  apply
@@ -315,8 +383,8 @@ ip  addr  show
 <span class="token function">ping</span>  google.com
 
 </code></pre>
-<h3 id="ssh-từ-windows">3.2 SSH từ Windows</h3>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <h3 id="ssh-từ-windows">3.2 SSH từ Windows</h3>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># Mở PowerShell trên Windows</span>
 
 ssh admin@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100
@@ -342,8 +410,8 @@ ssh<span class="token operator">-</span>keygen <span class="token operator">-</s
 ssh admin@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100
 
 </code></pre>
-<h3 id="cấu-hình-timezone">3.3 Cấu hình timezone</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="cấu-hình-timezone">3.3 Cấu hình timezone</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Xem timezone hiện tại</span>
 
 timedatectl
@@ -361,12 +429,12 @@ timedatectl
 <span class="token function">sudo</span>  timedatectl  set-timezone  Asia/Tokyo
 
 </code></pre>
-<hr>
-<h1 id="phần-2-triển-khai-1">PHẦN 2: TRIỂN KHAI</h1>
-<hr>
-<h2 id="cài-đặt-docker">4. Cài Đặt Docker</h2>
-<h3 id="cài-docker-trên-ubuntu">4.1 Cài Docker trên Ubuntu</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h1 id="phần-2-triển-khai-1">PHẦN 2: TRIỂN KHAI</h1>
+      <hr />
+      <h2 id="cài-đặt-docker">4. Cài Đặt Docker</h2>
+      <h3 id="cài-docker-trên-ubuntu">4.1 Cài Docker trên Ubuntu</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Cài đặt dependencies</span>
 
 <span class="token function">sudo</span>  apt  update
@@ -426,14 +494,14 @@ docker --version
 docker compose version
 
 </code></pre>
-<h3 id="cấu-hình-docker">4.2 Cấu hình Docker</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="cấu-hình-docker">4.2 Cấu hình Docker</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Tạo file cấu hình</span>
 
 <span class="token function">sudo</span>  vim  /etc/docker/daemon.json
 
 </code></pre>
-<pre class=" language-json"><code class="prism  language-json">
+      <pre class="language-json"><code class="prism  language-json">
 <span class="token punctuation">{</span>
 
 <span class="token string">"log-driver"</span><span class="token punctuation">:</span> <span class="token string">"json-file"</span><span class="token punctuation">,</span>
@@ -451,16 +519,16 @@ docker compose version
 <span class="token punctuation">}</span>
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Restart Docker</span>
 
 <span class="token function">sudo</span>  systemctl  restart  docker
 
 </code></pre>
-<hr>
-<h2 id="deploy-ứng-dụng">5. Deploy Ứng Dụng</h2>
-<h3 id="clone-project">5.1 Clone project</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h2 id="deploy-ứng-dụng">5. Deploy Ứng Dụng</h2>
+      <h3 id="clone-project">5.1 Clone project</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Tạo thư mục cho apps</span>
 
 <span class="token function">mkdir</span>  -p  ~/apps
@@ -476,8 +544,8 @@ docker compose version
 <span class="token function">cd</span>  2pjp-api
 
 </code></pre>
-<h3 id="tạo-file-.env">5.2 Tạo file .env</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="tạo-file-.env">5.2 Tạo file .env</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Copy từ example</span>
 
 <span class="token function">cp</span>  .env.example  .env
@@ -489,7 +557,7 @@ docker compose version
 vim  .env
 
 </code></pre>
-<pre class=" language-env"><code class="prism  language-env">
+      <pre class="language-env"><code class="prism  language-env">
 # Database (đổi password mạnh!)
 
 MYSQL_ROOT_PASSWORD=SuperStr0ng!RootP@ss2024
@@ -539,8 +607,8 @@ GEMINI_API_KEY_3=xxx
 GEMINI_API_KEY_4=xxx
 
 </code></pre>
-<h3 id="deploy-với-docker-compose">5.3 Deploy với Docker Compose</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="deploy-với-docker-compose">5.3 Deploy với Docker Compose</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Build và chạy production</span>
 
 docker  compose  up  -d  --build
@@ -564,8 +632,8 @@ docker  compose  <span class="token function">exec</span>  api  npx  prisma  mig
 docker  compose  <span class="token function">exec</span>  api  npx  ts-node  prisma/seeds/seed.ts
 
 </code></pre>
-<h3 id="kiểm-tra">5.4 Kiểm tra</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="kiểm-tra">5.4 Kiểm tra</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Xem containers</span>
 
 docker  compose  <span class="token function">ps</span>
@@ -577,88 +645,95 @@ docker  compose  <span class="token function">ps</span>
 curl  http://localhost:3000/health
 
 </code></pre>
-<hr>
-<h2 id="database-local-vs-cloud">6. Database: Local vs Cloud</h2>
-<h3 id="so-sánh">6.1 So sánh</h3>
-<p>| Tiêu chí | Local MySQL | Cloud (PlanetScale, Railway) |</p>
-<p>| --------------- | ----------------------- | ---------------------------- |</p>
-<p>| <strong>Giá</strong> | $0 (tự host) | Free tier giới hạn |</p>
-<p>| <strong>Performance</strong> | Tùy hardware | Tốt, có CDN |</p>
-<p>| <strong>Backup</strong> | Tự làm | Tự động |</p>
-<p>| <strong>Maintenance</strong> | Tự làm | Có team chuyên |</p>
-<p>| <strong>Scaling</strong> | Khó | Dễ |</p>
-<p>| <strong>Latency</strong> | Rất thấp (same machine) | Cao hơn |</p>
-<p>| <strong>Học hỏi</strong> | Học nhiều | Ít học |</p>
-<h3 id="local-mysql-đã-có-trong-docker">6.2 Local MySQL (Đã có trong Docker)</h3>
-<p><strong>Ưu điểm:</strong></p>
-<ul>
-<li>
-<p>Miễn phí hoàn toàn</p>
-</li>
-<li>
-<p>Không giới hạn storage</p>
-</li>
-<li>
-<p>Latency cực thấp</p>
-</li>
-<li>
-<p>Full control</p>
-</li>
-</ul>
-<p><strong>Nhược điểm:</strong></p>
-<ul>
-<li>
-<p>Phải tự backup</p>
-</li>
-<li>
-<p>Phải tự monitor</p>
-</li>
-<li>
-<p>Nếu server hỏng = mất data</p>
-</li>
-</ul>
-<h3 id="cloud-database-options">6.3 Cloud Database Options</h3>
-<p><strong>PlanetScale (MySQL compatible)</strong></p>
-<ul>
-<li>
-<p>Free tier: 5GB storage, 1 billion row reads/month</p>
-</li>
-<li>
-<p>URL: <a href="https://planetscale.com/">https://planetscale.com/</a></p>
-</li>
-</ul>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h2 id="database-local-vs-cloud">6. Database: Local vs Cloud</h2>
+      <h3 id="so-sánh">6.1 So sánh</h3>
+      <p>| Tiêu chí | Local MySQL | Cloud (PlanetScale, Railway) |</p>
+      <p>
+        | --------------- | ----------------------- |
+        ---------------------------- |
+      </p>
+      <p>| <strong>Giá</strong> | $0 (tự host) | Free tier giới hạn |</p>
+      <p>| <strong>Performance</strong> | Tùy hardware | Tốt, có CDN |</p>
+      <p>| <strong>Backup</strong> | Tự làm | Tự động |</p>
+      <p>| <strong>Maintenance</strong> | Tự làm | Có team chuyên |</p>
+      <p>| <strong>Scaling</strong> | Khó | Dễ |</p>
+      <p>| <strong>Latency</strong> | Rất thấp (same machine) | Cao hơn |</p>
+      <p>| <strong>Học hỏi</strong> | Học nhiều | Ít học |</p>
+      <h3 id="local-mysql-đã-có-trong-docker">
+        6.2 Local MySQL (Đã có trong Docker)
+      </h3>
+      <p><strong>Ưu điểm:</strong></p>
+      <ul>
+        <li>
+          <p>Miễn phí hoàn toàn</p>
+        </li>
+        <li>
+          <p>Không giới hạn storage</p>
+        </li>
+        <li>
+          <p>Latency cực thấp</p>
+        </li>
+        <li>
+          <p>Full control</p>
+        </li>
+      </ul>
+      <p><strong>Nhược điểm:</strong></p>
+      <ul>
+        <li>
+          <p>Phải tự backup</p>
+        </li>
+        <li>
+          <p>Phải tự monitor</p>
+        </li>
+        <li>
+          <p>Nếu server hỏng = mất data</p>
+        </li>
+      </ul>
+      <h3 id="cloud-database-options">6.3 Cloud Database Options</h3>
+      <p><strong>PlanetScale (MySQL compatible)</strong></p>
+      <ul>
+        <li>
+          <p>Free tier: 5GB storage, 1 billion row reads/month</p>
+        </li>
+        <li>
+          <p>
+            URL: <a href="https://planetscale.com/">https://planetscale.com/</a>
+          </p>
+        </li>
+      </ul>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Chỉ cần đổi DATABASE_URL trong .env</span>
 
 DATABASE_URL<span class="token operator">=</span><span class="token string">"mysql://user:pass@region.connect.psdb.cloud/dbname?sslaccept=strict"</span>
 
 </code></pre>
-<p><strong>Railway</strong></p>
-<ul>
-<li>
-<p>Free tier: $5 credit/month</p>
-</li>
-<li>
-<p>URL: <a href="https://railway.app/">https://railway.app/</a></p>
-</li>
-</ul>
-<p><strong>Supabase (PostgreSQL)</strong></p>
-<ul>
-<li>
-<p>Free tier: 500MB, 2GB bandwidth</p>
-</li>
-<li>
-<p>URL: <a href="https://supabase.com/">https://supabase.com/</a></p>
-</li>
-</ul>
-<h3 id="backup-local-mysql">6.4 Backup Local MySQL</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <p><strong>Railway</strong></p>
+      <ul>
+        <li>
+          <p>Free tier: $5 credit/month</p>
+        </li>
+        <li>
+          <p>URL: <a href="https://railway.app/">https://railway.app/</a></p>
+        </li>
+      </ul>
+      <p><strong>Supabase (PostgreSQL)</strong></p>
+      <ul>
+        <li>
+          <p>Free tier: 500MB, 2GB bandwidth</p>
+        </li>
+        <li>
+          <p>URL: <a href="https://supabase.com/">https://supabase.com/</a></p>
+        </li>
+      </ul>
+      <h3 id="backup-local-mysql">6.4 Backup Local MySQL</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Tạo script backup</span>
 
 vim  ~/scripts/backup-mysql.sh
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment">#!/bin/bash</span>
 
   
@@ -696,7 +771,7 @@ docker  <span class="token function">exec</span>  <span class="token variable">$
 <span class="token keyword">echo</span>  <span class="token string">"Backup completed: backup_<span class="token variable">$DATE</span>.sql.gz"</span>
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Cho phép chạy</span>
 
 <span class="token function">chmod</span>  +x  ~/scripts/backup-mysql.sh
@@ -712,27 +787,35 @@ docker  <span class="token function">exec</span>  <span class="token variable">$
 0  2  *  *  *  /home/admin/scripts/backup-mysql.sh <span class="token operator">&gt;&gt;</span> /home/admin/logs/backup.log 2<span class="token operator">&gt;</span><span class="token operator">&amp;</span>1
 
 </code></pre>
-<hr>
-<h2 id="storage-drive-api-vs-cloudflare-r2">7. Storage: Drive API vs Cloudflare R2</h2>
-<h3 id="so-sánh-1">7.1 So sánh</h3>
-<p>| Tiêu chí | Google Drive API | Cloudflare R2 |</p>
-<p>| ------------- | ------------------ | ----------------------------- |</p>
-<p>| <strong>Free tier</strong> | 15GB | 10GB + 10 triệu request/tháng |</p>
-<p>| <strong>Pricing</strong> | $1.99/100GB | $0.015/GB |</p>
-<p>| <strong>Speed</strong> | Chậm hơn | Nhanh (CDN global) |</p>
-<p>| <strong>API</strong> | REST, phức tạp hơn | S3 compatible |</p>
-<p>| <strong>Use case</strong> | Lưu file lâu dài | CDN, public files |</p>
-<h3 id="nén-json-trước-khi-upload">7.2 Nén JSON trước khi upload</h3>
-<p><strong>Tại sao nén?</strong></p>
-<ul>
-<li>
-<p>File JSON 1MB → Nén còn ~100KB (90% smaller)</p>
-</li>
-<li>
-<p>Tiết kiệm bandwidth và storage</p>
-</li>
-</ul>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <hr />
+      <h2 id="storage-drive-api-vs-cloudflare-r2">
+        7. Storage: Drive API vs Cloudflare R2
+      </h2>
+      <h3 id="so-sánh-1">7.1 So sánh</h3>
+      <p>| Tiêu chí | Google Drive API | Cloudflare R2 |</p>
+      <p>
+        | ------------- | ------------------ | ----------------------------- |
+      </p>
+      <p>
+        | <strong>Free tier</strong> | 15GB | 10GB + 10 triệu request/tháng |
+      </p>
+      <p>| <strong>Pricing</strong> | $1.99/100GB | $0.015/GB |</p>
+      <p>| <strong>Speed</strong> | Chậm hơn | Nhanh (CDN global) |</p>
+      <p>| <strong>API</strong> | REST, phức tạp hơn | S3 compatible |</p>
+      <p>
+        | <strong>Use case</strong> | Lưu file lâu dài | CDN, public files |
+      </p>
+      <h3 id="nén-json-trước-khi-upload">7.2 Nén JSON trước khi upload</h3>
+      <p><strong>Tại sao nén?</strong></p>
+      <ul>
+        <li>
+          <p>File JSON 1MB → Nén còn ~100KB (90% smaller)</p>
+        </li>
+        <li>
+          <p>Tiết kiệm bandwidth và storage</p>
+        </li>
+      </ul>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// Nén JSON với gzip</span>
 
 <span class="token keyword">import</span> <span class="token punctuation">{</span> gzip<span class="token punctuation">,</span> gunzip <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'zlib'</span><span class="token punctuation">;</span>
@@ -790,9 +873,9 @@ docker  <span class="token function">exec</span>  <span class="token variable">$
 <span class="token keyword">await</span>  <span class="token function">uploadToStorage</span><span class="token punctuation">(</span><span class="token string">'content-123.json.gz'</span><span class="token punctuation">,</span> compressed<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre>
-<h3 id="cloudflare-r2-setup">7.3 Cloudflare R2 Setup</h3>
-<p><strong>Bước 1: Tạo R2 bucket</strong></p>
-<pre><code>
+      <h3 id="cloudflare-r2-setup">7.3 Cloudflare R2 Setup</h3>
+      <p><strong>Bước 1: Tạo R2 bucket</strong></p>
+      <pre><code>
 1. Đăng nhập Cloudflare Dashboard
 
 2. Vào R2 → Create bucket
@@ -802,8 +885,8 @@ docker  <span class="token function">exec</span>  <span class="token variable">$
 4. Chọn region gần nhất
 
 </code></pre>
-<p><strong>Bước 2: Tạo API Token</strong></p>
-<pre><code>
+      <p><strong>Bước 2: Tạo API Token</strong></p>
+      <pre><code>
 1. R2 → Manage R2 API Tokens
 
 2. Create API Token
@@ -813,8 +896,8 @@ docker  <span class="token function">exec</span>  <span class="token variable">$
 4. Lưu lại Access Key ID và Secret Access Key
 
 </code></pre>
-<p><strong>Bước 3: Code upload</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Bước 3: Code upload</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token keyword">import</span> <span class="token punctuation">{</span>
 
 S3Client<span class="token punctuation">,</span>
@@ -890,20 +973,32 @@ Key<span class="token punctuation">:</span>  key<span class="token punctuation">
 <span class="token punctuation">}</span>
 
 </code></pre>
-<hr>
-<h1 id="phần-3-đưa-lên-internet-1">PHẦN 3: ĐƯA LÊN INTERNET</h1>
-<hr>
-<h2 id="mua-domain">8. Mua Domain</h2>
-<h3 id="các-nhà-cung-cấp-domain">8.1 Các nhà cung cấp domain</h3>
-<p>| Provider | Giá .com/năm | Đặc điểm |</p>
-<p>| ------------------------ | ------------ | ---------------------------- |</p>
-<p>| <strong>Cloudflare Registrar</strong> | ~$9 | Giá gốc, không phí ẩn |</p>
-<p>| <strong>Namecheap</strong> | ~$10-15 | Phổ biến, WHOIS privacy free |</p>
-<p>| <strong>Google Domains</strong> | ~$12 | Đơn giản, integrate tốt |</p>
-<p>| <strong>Porkbun</strong> | ~$9 | Rẻ, WHOIS privacy free |</p>
-<p><strong>Khuyến nghị:</strong> Cloudflare Registrar (giá gốc, tích hợp sẵn Cloudflare)</p>
-<h3 id="mua-domain-trên-cloudflare">8.2 Mua domain trên Cloudflare</h3>
-<pre><code>
+      <hr />
+      <h1 id="phần-3-đưa-lên-internet-1">PHẦN 3: ĐƯA LÊN INTERNET</h1>
+      <hr />
+      <h2 id="mua-domain">8. Mua Domain</h2>
+      <h3 id="các-nhà-cung-cấp-domain">8.1 Các nhà cung cấp domain</h3>
+      <p>| Provider | Giá .com/năm | Đặc điểm |</p>
+      <p>
+        | ------------------------ | ------------ | ----------------------------
+        |
+      </p>
+      <p>
+        | <strong>Cloudflare Registrar</strong> | ~$9 | Giá gốc, không phí ẩn |
+      </p>
+      <p>
+        | <strong>Namecheap</strong> | ~$10-15 | Phổ biến, WHOIS privacy free |
+      </p>
+      <p>
+        | <strong>Google Domains</strong> | ~$12 | Đơn giản, integrate tốt |
+      </p>
+      <p>| <strong>Porkbun</strong> | ~$9 | Rẻ, WHOIS privacy free |</p>
+      <p>
+        <strong>Khuyến nghị:</strong> Cloudflare Registrar (giá gốc, tích hợp
+        sẵn Cloudflare)
+      </p>
+      <h3 id="mua-domain-trên-cloudflare">8.2 Mua domain trên Cloudflare</h3>
+      <pre><code>
 1. Đăng ký tài khoản Cloudflare: https://dash.cloudflare.com/sign-up
 
 2. Vào Domain Registration → Register Domains
@@ -913,10 +1008,10 @@ Key<span class="token punctuation">:</span>  key<span class="token punctuation">
 4. Thanh toán (cần thẻ Visa/Mastercard)
 
 </code></pre>
-<hr>
-<h2 id="cloudflare-setup">9. Cloudflare Setup</h2>
-<h3 id="tại-sao-dùng-cloudflare">9.1 Tại sao dùng Cloudflare?</h3>
-<pre><code>
+      <hr />
+      <h2 id="cloudflare-setup">9. Cloudflare Setup</h2>
+      <h3 id="tại-sao-dùng-cloudflare">9.1 Tại sao dùng Cloudflare?</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ KHÔNG CÓ CLOUDFLARE │
@@ -948,8 +1043,8 @@ Key<span class="token punctuation">:</span>  key<span class="token punctuation">
 └─────────────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<h3 id="thêm-site-vào-cloudflare">9.2 Thêm site vào Cloudflare</h3>
-<pre><code>
+      <h3 id="thêm-site-vào-cloudflare">9.2 Thêm site vào Cloudflare</h3>
+      <pre><code>
 1. Cloudflare Dashboard → Add a Site
 
 2. Nhập domain: yourdomain.com
@@ -967,8 +1062,8 @@ Key<span class="token punctuation">:</span>  key<span class="token punctuation">
 6. Đợi 24-48 giờ để propagate
 
 </code></pre>
-<h3 id="cấu-hình-dns">9.3 Cấu hình DNS</h3>
-<pre><code>
+      <h3 id="cấu-hình-dns">9.3 Cấu hình DNS</h3>
+      <pre><code>
 Dashboard → DNS → Records
 
   
@@ -988,18 +1083,18 @@ A api 192.168.1.100 ☁️ Proxied
 CNAME www yourdomain.com ☁️ Proxied
 
 </code></pre>
-<p><strong>Lưu ý về IP:</strong></p>
-<ul>
-<li>
-<p>Nếu có IP công cộng tĩnh → Dùng IP đó</p>
-</li>
-<li>
-<p>Nếu IP động → Dùng Dynamic DNS (xem phần sau)</p>
-</li>
-</ul>
-<h3 id="dynamic-dns-ip-động">9.4 Dynamic DNS (IP động)</h3>
-<p>Nếu nhà bạn có IP động (đổi mỗi lần restart router):</p>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <p><strong>Lưu ý về IP:</strong></p>
+      <ul>
+        <li>
+          <p>Nếu có IP công cộng tĩnh → Dùng IP đó</p>
+        </li>
+        <li>
+          <p>Nếu IP động → Dùng Dynamic DNS (xem phần sau)</p>
+        </li>
+      </ul>
+      <h3 id="dynamic-dns-ip-động">9.4 Dynamic DNS (IP động)</h3>
+      <p>Nếu nhà bạn có IP động (đổi mỗi lần restart router):</p>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Cài ddclient</span>
 
 <span class="token function">sudo</span>  apt  <span class="token function">install</span>  ddclient
@@ -1011,7 +1106,7 @@ CNAME www yourdomain.com ☁️ Proxied
 <span class="token function">sudo</span>  vim  /etc/ddclient.conf
 
 </code></pre>
-<pre><code>
+      <pre><code>
 protocol=cloudflare
 
 use=web
@@ -1027,7 +1122,7 @@ zone=yourdomain.com
 api.yourdomain.com
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Khởi động</span>
 
 <span class="token function">sudo</span>  systemctl  <span class="token function">enable</span>  ddclient
@@ -1035,10 +1130,10 @@ api.yourdomain.com
 <span class="token function">sudo</span>  systemctl  start  ddclient
 
 </code></pre>
-<hr>
-<h2 id="sslhttps">10. SSL/HTTPS</h2>
-<h3 id="cloudflare-ssl-modes">10.1 Cloudflare SSL Modes</h3>
-<pre><code>
+      <hr />
+      <h2 id="sslhttps">10. SSL/HTTPS</h2>
+      <h3 id="cloudflare-ssl-modes">10.1 Cloudflare SSL Modes</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ SSL Mode: Flexible (KHÔNG KHUYẾN NGHỊ) │
@@ -1066,8 +1161,10 @@ api.yourdomain.com
 └─────────────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<h3 id="lấy-cloudflare-origin-certificate">10.2 Lấy Cloudflare Origin Certificate</h3>
-<pre><code>
+      <h3 id="lấy-cloudflare-origin-certificate">
+        10.2 Lấy Cloudflare Origin Certificate
+      </h3>
+      <pre><code>
 1. Cloudflare Dashboard → SSL/TLS → Origin Server
 
 2. Create Certificate
@@ -1085,7 +1182,7 @@ api.yourdomain.com
 - Private Key → /etc/ssl/cloudflare/key.pem
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Tạo thư mục và lưu certificates</span>
 
 <span class="token function">sudo</span>  <span class="token function">mkdir</span>  -p  /etc/ssl/cloudflare
@@ -1097,10 +1194,10 @@ api.yourdomain.com
 <span class="token function">sudo</span>  <span class="token function">chmod</span>  600  /etc/ssl/cloudflare/*
 
 </code></pre>
-<hr>
-<h2 id="reverse-proxy-với-nginx">11. Reverse Proxy với Nginx</h2>
-<h3 id="tại-sao-cần-nginx">11.1 Tại sao cần Nginx?</h3>
-<pre><code>
+      <hr />
+      <h2 id="reverse-proxy-với-nginx">11. Reverse Proxy với Nginx</h2>
+      <h3 id="tại-sao-cần-nginx">11.1 Tại sao cần Nginx?</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ NGINX LÀM GÌ? │
@@ -1120,8 +1217,8 @@ api.yourdomain.com
 └─────────────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<h3 id="cài-đặt-nginx">11.2 Cài đặt Nginx</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="cài-đặt-nginx">11.2 Cài đặt Nginx</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">sudo</span>  apt  <span class="token function">install</span>  -y  nginx
 
   
@@ -1131,12 +1228,12 @@ api.yourdomain.com
 <span class="token function">sudo</span>  systemctl  status  nginx
 
 </code></pre>
-<h3 id="cấu-hình-nginx">11.3 Cấu hình Nginx</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="cấu-hình-nginx">11.3 Cấu hình Nginx</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">sudo</span>  vim  /etc/nginx/sites-available/2pjp-api
 
 </code></pre>
-<pre class=" language-nginx"><code class="prism  language-nginx">
+      <pre class="language-nginx"><code class="prism  language-nginx">
 <span class="token comment"># Redirect HTTP → HTTPS</span>
 
 <span class="token keyword">server</span> <span class="token punctuation">{</span>
@@ -1248,7 +1345,7 @@ api.yourdomain.com
 <span class="token punctuation">}</span>
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Thêm rate limiting vào nginx.conf</span>
 
 <span class="token function">sudo</span>  vim  /etc/nginx/nginx.conf
@@ -1276,12 +1373,12 @@ limit_req_zone  <span class="token variable">$binary_remote_addr</span>  zone<sp
 <span class="token function">sudo</span>  systemctl  reload  nginx
 
 </code></pre>
-<hr>
-<h1 id="phần-4-bảo-mật-1">PHẦN 4: BẢO MẬT</h1>
-<hr>
-<h2 id="bảo-mật-server">12. Bảo Mật Server</h2>
-<h3 id="firewall-với-ufw">12.1 Firewall với UFW</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h1 id="phần-4-bảo-mật-1">PHẦN 4: BẢO MẬT</h1>
+      <hr />
+      <h2 id="bảo-mật-server">12. Bảo Mật Server</h2>
+      <h3 id="firewall-với-ufw">12.1 Firewall với UFW</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Cài đặt</span>
 
 <span class="token function">sudo</span>  apt  <span class="token function">install</span>  ufw
@@ -1323,12 +1420,12 @@ limit_req_zone  <span class="token variable">$binary_remote_addr</span>  zone<sp
 <span class="token function">sudo</span>  ufw  status
 
 </code></pre>
-<h3 id="ssh-hardening">12.2 SSH Hardening</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="ssh-hardening">12.2 SSH Hardening</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">sudo</span>  vim  /etc/ssh/sshd_config
 
 </code></pre>
-<pre><code>
+      <pre><code>
 # Đổi port (optional, tránh scan)
 
 Port 2222
@@ -1362,7 +1459,7 @@ ClientAliveInterval 300
 ClientAliveCountMax 2
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Restart SSH (cẩn thận, đừng lock yourself out!)</span>
 
 <span class="token function">sudo</span>  systemctl  restart  sshd
@@ -1376,8 +1473,8 @@ ClientAliveCountMax 2
 <span class="token function">sudo</span>  ufw  deny  22/tcp
 
 </code></pre>
-<h3 id="fail2ban-chống-brute-force">12.3 Fail2Ban (Chống brute force)</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="fail2ban-chống-brute-force">12.3 Fail2Ban (Chống brute force)</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">sudo</span>  apt  <span class="token function">install</span>  fail2ban
 
   
@@ -1385,7 +1482,7 @@ ClientAliveCountMax 2
 <span class="token function">sudo</span>  vim  /etc/fail2ban/jail.local
 
 </code></pre>
-<pre class=" language-ini"><code class="prism  language-ini">
+      <pre class="language-ini"><code class="prism  language-ini">
 <span class="token selector">[DEFAULT]</span>
 
 <span class="token constant">bantime</span> <span class="token attr-value"><span class="token punctuation">=</span> 1h</span>
@@ -1419,7 +1516,7 @@ ClientAliveCountMax 2
 <span class="token constant">enabled</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">sudo</span>  systemctl  <span class="token function">enable</span>  fail2ban
 
 <span class="token function">sudo</span>  systemctl  start  fail2ban
@@ -1433,8 +1530,8 @@ ClientAliveCountMax 2
 <span class="token function">sudo</span>  fail2ban-client  status  sshd
 
 </code></pre>
-<h3 id="auto-updates">12.4 Auto Updates</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="auto-updates">12.4 Auto Updates</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">sudo</span>  apt  <span class="token function">install</span>  unattended-upgrades
 
   
@@ -1442,7 +1539,7 @@ ClientAliveCountMax 2
 <span class="token function">sudo</span>  vim  /etc/apt/apt.conf.d/50unattended-upgrades
 
 </code></pre>
-<pre><code>
+      <pre><code>
 Unattended-Upgrade::Allowed-Origins {
 
 "${distro_id}:${distro_codename}";
@@ -1462,10 +1559,10 @@ Unattended-Upgrade::Remove-Unused-Dependencies "true";
 Unattended-Upgrade::Automatic-Reboot "false"; # Không tự restart
 
 </code></pre>
-<hr>
-<h2 id="bảo-mật-ứng-dụng">13. Bảo Mật Ứng Dụng</h2>
-<h3 id="environment-variables">13.1 Environment Variables</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h2 id="bảo-mật-ứng-dụng">13. Bảo Mật Ứng Dụng</h2>
+      <h3 id="environment-variables">13.1 Environment Variables</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># KHÔNG BAO GIỜ commit .env vào git!</span>
 
 <span class="token keyword">echo</span>  <span class="token string">".env"</span> <span class="token operator">&gt;&gt;</span> .gitignore
@@ -1481,8 +1578,8 @@ Unattended-Upgrade::Automatic-Reboot "false"; # Không tự restart
 <span class="token comment"># Option 3: AWS Secrets Manager</span>
 
 </code></pre>
-<h3 id="helmet.js-security-headers">13.2 Helmet.js (Security Headers)</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="helmet.js-security-headers">13.2 Helmet.js (Security Headers)</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// main.ts</span>
 
 <span class="token keyword">import</span>  helmet  <span class="token keyword">from</span>  <span class="token string">'helmet'</span><span class="token punctuation">;</span>
@@ -1492,8 +1589,8 @@ Unattended-Upgrade::Automatic-Reboot "false"; # Không tự restart
 app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">helmet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre>
-<h3 id="rate-limiting-trong-nestjs">13.3 Rate Limiting trong NestJS</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="rate-limiting-trong-nestjs">13.3 Rate Limiting trong NestJS</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// app.module.ts</span>
 
 <span class="token keyword">import</span> <span class="token punctuation">{</span> ThrottlerModule<span class="token punctuation">,</span> ThrottlerGuard <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/throttler'</span><span class="token punctuation">;</span>
@@ -1529,8 +1626,8 @@ useClass<span class="token punctuation">:</span>  ThrottlerGuard<span class="tok
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 </code></pre>
-<h3 id="cors-configuration">13.4 CORS Configuration</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="cors-configuration">13.4 CORS Configuration</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// main.ts</span>
 
 app<span class="token punctuation">.</span><span class="token function">enableCors</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
@@ -1544,10 +1641,10 @@ credentials<span class="token punctuation">:</span>  <span class="token keyword"
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre>
-<hr>
-<h2 id="cloudflare-protection">14. Cloudflare Protection</h2>
-<h3 id="security-settings">14.1 Security Settings</h3>
-<pre><code>
+      <hr />
+      <h2 id="cloudflare-protection">14. Cloudflare Protection</h2>
+      <h3 id="security-settings">14.1 Security Settings</h3>
+      <pre><code>
 Dashboard → Security → Settings
 
   
@@ -1559,8 +1656,8 @@ Dashboard → Security → Settings
 - Browser Integrity Check: ON
 
 </code></pre>
-<h3 id="waf-rules">14.2 WAF Rules</h3>
-<pre><code>
+      <h3 id="waf-rules">14.2 WAF Rules</h3>
+      <pre><code>
 Dashboard → Security → WAF
 
   
@@ -1572,8 +1669,8 @@ Enable Managed Rules:
 - Cloudflare OWASP Core Ruleset: ON
 
 </code></pre>
-<h3 id="ddos-protection">14.3 DDoS Protection</h3>
-<pre><code>
+      <h3 id="ddos-protection">14.3 DDoS Protection</h3>
+      <pre><code>
 Dashboard → Security → DDoS
 
   
@@ -1581,8 +1678,8 @@ Dashboard → Security → DDoS
 - DDoS L7 Attack Protection: ON (tự động)
 
 </code></pre>
-<h3 id="bot-management-free-tier">14.4 Bot Management (Free tier)</h3>
-<pre><code>
+      <h3 id="bot-management-free-tier">14.4 Bot Management (Free tier)</h3>
+      <pre><code>
 Dashboard → Security → Bots
 
   
@@ -1592,14 +1689,14 @@ Dashboard → Security → Bots
 - Chặn Known Bad Bots
 
 </code></pre>
-<h3 id="chỉ-cho-phép-cloudflare-ips">14.5 Chỉ cho phép Cloudflare IPs</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="chỉ-cho-phép-cloudflare-ips">14.5 Chỉ cho phép Cloudflare IPs</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Nginx: Chỉ chấp nhận request từ Cloudflare</span>
 
 <span class="token function">sudo</span>  vim  /etc/nginx/cloudflare-ips.conf
 
 </code></pre>
-<pre class=" language-nginx"><code class="prism  language-nginx">
+      <pre class="language-nginx"><code class="prism  language-nginx">
 <span class="token comment"># Cloudflare IPv4 (cập nhật từ https://www.cloudflare.com/ips-v4)</span>
 
 <span class="token keyword">set_real_ip_from</span> <span class="token number">173.245</span><span class="token punctuation">.</span><span class="token number">48.0</span><span class="token operator">/</span><span class="token number">20</span><span class="token punctuation">;</span>
@@ -1637,7 +1734,7 @@ Dashboard → Security → Bots
 <span class="token keyword">real_ip_header</span> CF<span class="token operator">-</span>Connecting<span class="token operator">-</span>IP<span class="token punctuation">;</span>
 
 </code></pre>
-<pre class=" language-nginx"><code class="prism  language-nginx">
+      <pre class="language-nginx"><code class="prism  language-nginx">
 <span class="token comment"># Trong server block</span>
 
 <span class="token keyword">include</span> <span class="token operator">/</span>etc<span class="token operator">/</span>nginx<span class="token operator">/</span>cloudflare<span class="token operator">-</span>ips<span class="token punctuation">.</span>conf<span class="token punctuation">;</span>
@@ -1653,19 +1750,19 @@ Dashboard → Security → Bots
 <span class="token punctuation">}</span>
 
 </code></pre>
-<hr>
-<h1 id="phần-5-vận-hành-1">PHẦN 5: VẬN HÀNH</h1>
-<hr>
-<h2 id="monitoring--logging">15. Monitoring &amp; Logging</h2>
-<h3 id="htop-xem-resource">15.1 Htop (xem resource)</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h1 id="phần-5-vận-hành-1">PHẦN 5: VẬN HÀNH</h1>
+      <hr />
+      <h2 id="monitoring--logging">15. Monitoring &amp; Logging</h2>
+      <h3 id="htop-xem-resource">15.1 Htop (xem resource)</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">htop</span>
 
 <span class="token comment"># CPU, RAM, processes real-time</span>
 
 </code></pre>
-<h3 id="docker-logs">15.2 Docker logs</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="docker-logs">15.2 Docker logs</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Logs tất cả containers</span>
 
 docker  compose  logs  -f
@@ -1689,8 +1786,8 @@ docker  compose  logs  -f  -t  api
 docker  compose  logs  --tail<span class="token operator">=</span>100  api
 
 </code></pre>
-<h3 id="nginx-logs">15.3 Nginx logs</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="nginx-logs">15.3 Nginx logs</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Access log</span>
 
 <span class="token function">tail</span>  -f  /var/log/nginx/2pjp-api.access.log
@@ -1702,21 +1799,24 @@ docker  compose  logs  --tail<span class="token operator">=</span>100  api
 <span class="token function">tail</span>  -f  /var/log/nginx/2pjp-api.error.log
 
 </code></pre>
-<h3 id="uptime-monitoring-free">15.4 Uptime monitoring (Free)</h3>
-<p><strong>Uptime Robot:</strong> <a href="https://uptimerobot.com/">https://uptimerobot.com/</a></p>
-<ul>
-<li>
-<p>Free: 50 monitors</p>
-</li>
-<li>
-<p>Kiểm tra mỗi 5 phút</p>
-</li>
-<li>
-<p>Alert qua email/Telegram</p>
-</li>
-</ul>
-<p><strong>Cài đặt:</strong></p>
-<pre><code>
+      <h3 id="uptime-monitoring-free">15.4 Uptime monitoring (Free)</h3>
+      <p>
+        <strong>Uptime Robot:</strong>
+        <a href="https://uptimerobot.com/">https://uptimerobot.com/</a>
+      </p>
+      <ul>
+        <li>
+          <p>Free: 50 monitors</p>
+        </li>
+        <li>
+          <p>Kiểm tra mỗi 5 phút</p>
+        </li>
+        <li>
+          <p>Alert qua email/Telegram</p>
+        </li>
+      </ul>
+      <p><strong>Cài đặt:</strong></p>
+      <pre><code>
 1. Tạo tài khoản
 
 2. Add New Monitor
@@ -1728,8 +1828,10 @@ docker  compose  logs  --tail<span class="token operator">=</span>100  api
 5. Monitoring Interval: 5 minutes
 
 </code></pre>
-<h3 id="prometheus--grafana-advanced">15.5 Prometheus + Grafana (Advanced)</h3>
-<pre class=" language-yaml"><code class="prism  language-yaml">
+      <h3 id="prometheus--grafana-advanced">
+        15.5 Prometheus + Grafana (Advanced)
+      </h3>
+      <pre class="language-yaml"><code class="prism  language-yaml">
 <span class="token comment"># docker-compose.monitoring.yml</span>
 
 <span class="token key atrule">services</span><span class="token punctuation">:</span>
@@ -1761,10 +1863,10 @@ docker  compose  logs  --tail<span class="token operator">=</span>100  api
 <span class="token punctuation">-</span> GF_SECURITY_ADMIN_PASSWORD=admin
 
 </code></pre>
-<hr>
-<h2 id="backup--recovery">16. Backup &amp; Recovery</h2>
-<h3 id="backup-strategy-3-2-1-rule">16.1 Backup Strategy (3-2-1 Rule)</h3>
-<pre><code>
+      <hr />
+      <h2 id="backup--recovery">16. Backup &amp; Recovery</h2>
+      <h3 id="backup-strategy-3-2-1-rule">16.1 Backup Strategy (3-2-1 Rule)</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ 3-2-1 BACKUP RULE │
@@ -1790,12 +1892,12 @@ docker  compose  logs  --tail<span class="token operator">=</span>100  api
 └─────────────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<h3 id="script-backup-toàn-diện">16.2 Script backup toàn diện</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="script-backup-toàn-diện">16.2 Script backup toàn diện</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 vim  ~/scripts/full-backup.sh
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment">#!/bin/bash</span>
 
   
@@ -1939,7 +2041,7 @@ docker  <span class="token function">exec</span>  <span class="token variable">$
 <span class="token keyword">echo</span>  <span class="token string">" Configs: <span class="token variable">$BACKUP_DIR</span>/configs/configs_<span class="token variable">$DATE</span>.tar.gz"</span>
 
 </code></pre>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token function">chmod</span>  +x  ~/scripts/full-backup.sh
 
   
@@ -1951,8 +2053,8 @@ docker  <span class="token function">exec</span>  <span class="token variable">$
 0  3  *  *  *  /home/admin/scripts/full-backup.sh <span class="token operator">&gt;&gt;</span> /home/admin/logs/backup.log 2<span class="token operator">&gt;</span><span class="token operator">&amp;</span>1
 
 </code></pre>
-<h3 id="restore">16.3 Restore</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="restore">16.3 Restore</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Restore MySQL</span>
 
 gunzip <span class="token operator">&lt;</span> backup_file.sql.gz <span class="token operator">|</span> docker  <span class="token function">exec</span>  -i  2pjp-mysql  mysql  -u  root  -p<span class="token string">"<span class="token variable">$MYSQL_ROOT_PASSWORD</span>"</span>  2pjp_db
@@ -1966,10 +2068,10 @@ gunzip <span class="token operator">&lt;</span> backup_file.sql.gz <span class="
 docker  compose  up  -d  --build
 
 </code></pre>
-<hr>
-<h2 id="xử-lý-sự-cố">17. Xử Lý Sự Cố</h2>
-<h3 id="server-không-truy-cập-được">17.1 Server không truy cập được</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <hr />
+      <h2 id="xử-lý-sự-cố">17. Xử Lý Sự Cố</h2>
+      <h3 id="server-không-truy-cập-được">17.1 Server không truy cập được</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Checklist debug:</span>
 
 <span class="token comment"># 1. Ping server</span>
@@ -2021,8 +2123,8 @@ docker  compose  logs  -f  api
 <span class="token function">free</span>  -h
 
 </code></pre>
-<h3 id="database-lỗi">17.2 Database lỗi</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="database-lỗi">17.2 Database lỗi</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Kiểm tra MySQL container</span>
 
 docker  compose  logs  mysql
@@ -2040,8 +2142,8 @@ docker  compose  restart  mysql
 docker  <span class="token function">exec</span>  -it  2pjp-mysql  mysqlcheck  --repair  --all-databases  -u  root  -p
 
 </code></pre>
-<h3 id="out-of-memory">17.3 Out of memory</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="out-of-memory">17.3 Out of memory</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Xem process nào dùng nhiều RAM</span>
 
 <span class="token function">htop</span>  <span class="token comment"># Sắp xếp theo memory: F6 → %MEM</span>
@@ -2067,8 +2169,8 @@ docker  compose  restart  api
 <span class="token keyword">echo</span>  <span class="token string">'/swapfile none swap sw 0 0'</span> <span class="token operator">|</span> <span class="token function">sudo</span>  <span class="token function">tee</span>  -a  /etc/fstab
 
 </code></pre>
-<h3 id="disk-full">17.4 Disk full</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="disk-full">17.4 Disk full</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Xem disk usage</span>
 
 <span class="token function">df</span>  -h
@@ -2092,10 +2194,12 @@ docker  system  prune  -a
 <span class="token function">sudo</span>  journalctl  --vacuum-time<span class="token operator">=</span>7d
 
 </code></pre>
-<hr>
-<h2 id="scaling">18. Scaling</h2>
-<h3 id="vertical-scaling-nâng-cấp-server">18.1 Vertical Scaling (Nâng cấp server)</h3>
-<pre><code>
+      <hr />
+      <h2 id="scaling">18. Scaling</h2>
+      <h3 id="vertical-scaling-nâng-cấp-server">
+        18.1 Vertical Scaling (Nâng cấp server)
+      </h3>
+      <pre><code>
 - Thêm RAM
 
 - Upgrade CPU
@@ -2103,8 +2207,10 @@ docker  system  prune  -a
 - Thay SSD nhanh hơn
 
 </code></pre>
-<h3 id="horizontal-scaling-thêm-server">18.2 Horizontal Scaling (Thêm server)</h3>
-<pre><code>
+      <h3 id="horizontal-scaling-thêm-server">
+        18.2 Horizontal Scaling (Thêm server)
+      </h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ LOAD BALANCER │
@@ -2146,19 +2252,19 @@ docker  system  prune  -a
 └───────────────────┘
 
 </code></pre>
-<h3 id="khi-nào-cần-scale">18.3 Khi nào cần scale?</h3>
-<p>| Dấu hiệu | Action |</p>
-<p>| ----------------------- | -------------------------------- |</p>
-<p>| CPU &gt; 80% liên tục | Scale up hoặc optimize code |</p>
-<p>| RAM &gt; 80% liên tục | Thêm RAM hoặc scale out |</p>
-<p>| Response time &gt; 2s | Optimize, cache, hoặc scale |</p>
-<p>| &gt; 1000 concurrent users | Load balancer + multiple servers |</p>
-<hr>
-<h1 id="phần-6-devops-roadmap-1">PHẦN 6: DEVOPS ROADMAP</h1>
-<hr>
-<h2 id="devops-là-gì">19. DevOps là gì?</h2>
-<h3 id="định-nghĩa">19.1 Định nghĩa</h3>
-<pre><code>
+      <h3 id="khi-nào-cần-scale">18.3 Khi nào cần scale?</h3>
+      <p>| Dấu hiệu | Action |</p>
+      <p>| ----------------------- | -------------------------------- |</p>
+      <p>| CPU &gt; 80% liên tục | Scale up hoặc optimize code |</p>
+      <p>| RAM &gt; 80% liên tục | Thêm RAM hoặc scale out |</p>
+      <p>| Response time &gt; 2s | Optimize, cache, hoặc scale |</p>
+      <p>| &gt; 1000 concurrent users | Load balancer + multiple servers |</p>
+      <hr />
+      <h1 id="phần-6-devops-roadmap-1">PHẦN 6: DEVOPS ROADMAP</h1>
+      <hr />
+      <h2 id="devops-là-gì">19. DevOps là gì?</h2>
+      <h3 id="định-nghĩa">19.1 Định nghĩa</h3>
+      <pre><code>
 DevOps = Development + Operations
 
   
@@ -2170,8 +2276,8 @@ Tự động hóa quy trình deploy
 Đảm bảo hệ thống ổn định
 
 </code></pre>
-<h3 id="devops-làm-gì">19.2 DevOps làm gì?</h3>
-<pre><code>
+      <h3 id="devops-làm-gì">19.2 DevOps làm gì?</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ DEVOPS LIFECYCLE │
@@ -2197,35 +2303,41 @@ Tự động hóa quy trình deploy
 └─────────────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<h3 id="devops-skills-bạn-đã-học-trong-tài-liệu-này">19.3 DevOps skills bạn đã học trong tài liệu này</h3>
-<ul>
-<li>
-<p>✅ <strong>Linux Administration</strong> - Cài đặt, cấu hình server</p>
-</li>
-<li>
-<p>✅ <strong>Docker</strong> - Containerization</p>
-</li>
-<li>
-<p>✅ <strong>Nginx</strong> - Reverse proxy, load balancer</p>
-</li>
-<li>
-<p>✅ <strong>SSL/TLS</strong> - Security</p>
-</li>
-<li>
-<p>✅ <strong>Backup/Recovery</strong> - Data protection</p>
-</li>
-<li>
-<p>✅ <strong>Monitoring</strong> - Logs, metrics</p>
-</li>
-<li>
-<p>✅ <strong>CDN</strong> - Cloudflare</p>
-</li>
-</ul>
-<hr>
-<h2 id="học-gì-tiếp-theo">20. Học Gì Tiếp Theo?</h2>
-<h3 id="cicd-pipeline">20.1 CI/CD Pipeline</h3>
-<p><strong>Mục tiêu:</strong> Tự động build, test, deploy khi push code</p>
-<pre class=" language-yaml"><code class="prism  language-yaml">
+      <h3 id="devops-skills-bạn-đã-học-trong-tài-liệu-này">
+        19.3 DevOps skills bạn đã học trong tài liệu này
+      </h3>
+      <ul>
+        <li>
+          <p>
+            ✅ <strong>Linux Administration</strong> - Cài đặt, cấu hình server
+          </p>
+        </li>
+        <li>
+          <p>✅ <strong>Docker</strong> - Containerization</p>
+        </li>
+        <li>
+          <p>✅ <strong>Nginx</strong> - Reverse proxy, load balancer</p>
+        </li>
+        <li>
+          <p>✅ <strong>SSL/TLS</strong> - Security</p>
+        </li>
+        <li>
+          <p>✅ <strong>Backup/Recovery</strong> - Data protection</p>
+        </li>
+        <li>
+          <p>✅ <strong>Monitoring</strong> - Logs, metrics</p>
+        </li>
+        <li>
+          <p>✅ <strong>CDN</strong> - Cloudflare</p>
+        </li>
+      </ul>
+      <hr />
+      <h2 id="học-gì-tiếp-theo">20. Học Gì Tiếp Theo?</h2>
+      <h3 id="cicd-pipeline">20.1 CI/CD Pipeline</h3>
+      <p>
+        <strong>Mục tiêu:</strong> Tự động build, test, deploy khi push code
+      </p>
+      <pre class="language-yaml"><code class="prism  language-yaml">
 <span class="token comment"># .github/workflows/deploy.yml (GitHub Actions)</span>
 
 <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
@@ -2289,9 +2401,12 @@ docker compose pull
 docker compose up <span class="token punctuation">-</span>d
 
 </code></pre>
-<h3 id="kubernetes-k8s">20.2 Kubernetes (K8s)</h3>
-<p><strong>Khi nào cần?</strong> Khi cần quản lý nhiều containers trên nhiều servers</p>
-<pre><code>
+      <h3 id="kubernetes-k8s">20.2 Kubernetes (K8s)</h3>
+      <p>
+        <strong>Khi nào cần?</strong> Khi cần quản lý nhiều containers trên
+        nhiều servers
+      </p>
+      <pre><code>
 Kubernetes giúp:
 
 - Auto-scaling
@@ -2303,10 +2418,15 @@ Kubernetes giúp:
 - Service discovery
 
 </code></pre>
-<p><strong>Học tại:</strong> <a href="https://kubernetes.io/docs/tutorials/">https://kubernetes.io/docs/tutorials/</a></p>
-<h3 id="infrastructure-as-code-iac">20.3 Infrastructure as Code (IaC)</h3>
-<p><strong>Terraform:</strong> Định nghĩa infrastructure bằng code</p>
-<pre class=" language-hcl"><code class="prism  language-hcl">
+      <p>
+        <strong>Học tại:</strong>
+        <a href="https://kubernetes.io/docs/tutorials/"
+          >https://kubernetes.io/docs/tutorials/</a
+        >
+      </p>
+      <h3 id="infrastructure-as-code-iac">20.3 Infrastructure as Code (IaC)</h3>
+      <p><strong>Terraform:</strong> Định nghĩa infrastructure bằng code</p>
+      <pre class="language-hcl"><code class="prism  language-hcl">
 # main.tf
 
 resource "aws_instance" "web" {
@@ -2326,8 +2446,8 @@ Name = "2pjp-api"
 }
 
 </code></pre>
-<h3 id="recommended-learning-path">20.4 Recommended Learning Path</h3>
-<pre><code>
+      <h3 id="recommended-learning-path">20.4 Recommended Learning Path</h3>
+      <pre><code>
 BEGINNER (Bạn đang ở đây!)
 
 ├── ✅ Linux basics
@@ -2365,49 +2485,67 @@ ADVANCED
 └── Site Reliability Engineering (SRE)
 
 </code></pre>
-<h3 id="tài-nguyên-học-tập">20.5 Tài nguyên học tập</h3>
-<p><strong>Free:</strong></p>
-<ul>
-<li>
-<p><strong>Linux:</strong> <a href="https://linuxjourney.com/">https://linuxjourney.com/</a></p>
-</li>
-<li>
-<p><strong>Docker:</strong> <a href="https://docs.docker.com/get-started/">https://docs.docker.com/get-started/</a></p>
-</li>
-<li>
-<p><strong>Kubernetes:</strong> <a href="https://kubernetes.io/docs/tutorials/">https://kubernetes.io/docs/tutorials/</a></p>
-</li>
-<li>
-<p><strong>DevOps Roadmap:</strong> <a href="https://roadmap.sh/devops">https://roadmap.sh/devops</a></p>
-</li>
-</ul>
-<p><strong>YouTube Channels:</strong></p>
-<ul>
-<li>
-<p>TechWorld with Nana</p>
-</li>
-<li>
-<p>NetworkChuck</p>
-</li>
-<li>
-<p>freeCodeCamp</p>
-</li>
-</ul>
-<p><strong>Chứng chỉ (cho phỏng vấn):</strong></p>
-<ul>
-<li>
-<p>AWS Certified Solutions Architect</p>
-</li>
-<li>
-<p>Certified Kubernetes Administrator (CKA)</p>
-</li>
-<li>
-<p>Docker Certified Associate</p>
-</li>
-</ul>
-<hr>
-<h2 id="📋-checklist-self-hosting-hoàn-chỉnh">📋 Checklist Self-Hosting Hoàn Chỉnh</h2>
-<pre><code>
+      <h3 id="tài-nguyên-học-tập">20.5 Tài nguyên học tập</h3>
+      <p><strong>Free:</strong></p>
+      <ul>
+        <li>
+          <p>
+            <strong>Linux:</strong>
+            <a href="https://linuxjourney.com/">https://linuxjourney.com/</a>
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Docker:</strong>
+            <a href="https://docs.docker.com/get-started/"
+              >https://docs.docker.com/get-started/</a
+            >
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Kubernetes:</strong>
+            <a href="https://kubernetes.io/docs/tutorials/"
+              >https://kubernetes.io/docs/tutorials/</a
+            >
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>DevOps Roadmap:</strong>
+            <a href="https://roadmap.sh/devops">https://roadmap.sh/devops</a>
+          </p>
+        </li>
+      </ul>
+      <p><strong>YouTube Channels:</strong></p>
+      <ul>
+        <li>
+          <p>TechWorld with Nana</p>
+        </li>
+        <li>
+          <p>NetworkChuck</p>
+        </li>
+        <li>
+          <p>freeCodeCamp</p>
+        </li>
+      </ul>
+      <p><strong>Chứng chỉ (cho phỏng vấn):</strong></p>
+      <ul>
+        <li>
+          <p>AWS Certified Solutions Architect</p>
+        </li>
+        <li>
+          <p>Certified Kubernetes Administrator (CKA)</p>
+        </li>
+        <li>
+          <p>Docker Certified Associate</p>
+        </li>
+      </ul>
+      <hr />
+      <h2 id="📋-checklist-self-hosting-hoàn-chỉnh">
+        📋 Checklist Self-Hosting Hoàn Chỉnh
+      </h2>
+      <pre><code>
 HARDWARE &amp; OS
 
 ├── [ ] Mua/setup hardware
@@ -2477,17 +2615,18 @@ OPERATIONS
 ├── [ ] Auto updates
 
 </code></pre>
-<hr>
-<blockquote>
-<p><strong>Chúc bạn thành công! 🚀</strong></p>
-</blockquote>
-<blockquote>
-<p>Hành trình từ developer → DevOps Engineer bắt đầu từ đây.</p>
-</blockquote>
-<blockquote>
-<p>Mỗi lỗi bạn gặp, mỗi sự cố bạn giải quyết đều là kinh nghiệm quý giá.</p>
-</blockquote>
-</div>
-</body>
-
+      <hr />
+      <blockquote>
+        <p><strong>Chúc bạn thành công! 🚀</strong></p>
+      </blockquote>
+      <blockquote>
+        <p>Hành trình từ developer → DevOps Engineer bắt đầu từ đây.</p>
+      </blockquote>
+      <blockquote>
+        <p>
+          Mỗi lỗi bạn gặp, mỗi sự cố bạn giải quyết đều là kinh nghiệm quý giá.
+        </p>
+      </blockquote>
+    </div>
+  </body>
 </html>

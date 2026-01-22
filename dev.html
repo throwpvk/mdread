@@ -1,78 +1,99 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome file</title>
+    <link rel="stylesheet" href="https://stackedit.io/style.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome file</title>
-  <link rel="stylesheet" href="https://stackedit.io/style.css" />
-</head>
-
-<body class="stackedit">
-  <div class="stackedit__html"><h1 id="📚-hướng-dẫn-phát-triển-toàn-diện---2pjp-api">📚 Hướng Dẫn Phát Triển Toàn Diện - 2PJP API</h1>
-<blockquote>
-<p><strong>Tài liệu này dành cho:</strong> Người mới bắt đầu muốn hiểu toàn bộ dự án</p>
-</blockquote>
-<blockquote>
-<p><strong>Mục tiêu:</strong> Từ zero đến có thể tự phát triển và mở rộng dự án</p>
-</blockquote>
-<hr>
-<h2 id="📖-mục-lục">📖 Mục Lục</h2>
-<h3 id="phần-1-nền-tảng-kiến-thức">Phần 1: Nền Tảng Kiến Thức</h3>
-<ol>
-<li>
-<p><a href="#1-t%E1%BB%95ng-quan-ki%E1%BA%BFn-tr%C3%BAc-d%E1%BB%B1-%C3%A1n">Tổng Quan Kiến Trúc Dự Án</a></p>
-</li>
-<li>
-<p><a href="#2-docker---%C4%91%C3%B3ng-g%C3%B3i-%E1%BB%A9ng-d%E1%BB%A5ng">Docker - Đóng Gói Ứng Dụng</a></p>
-</li>
-<li>
-<p><a href="#3-nestjs---framework-backend">NestJS - Framework Backend</a></p>
-</li>
-<li>
-<p><a href="#4-prisma---orm-database">Prisma - ORM Database</a></p>
-</li>
-<li>
-<p><a href="#5-redis---in-memory-cache--queue">Redis - In-Memory Cache &amp; Queue</a></p>
-</li>
-</ol>
-<h3 id="phần-2-thực-hành">Phần 2: Thực Hành</h3>
-<ol start="6">
-<li>
-<p><a href="#6-kh%E1%BB%9Fi-ch%E1%BA%A1y-d%E1%BB%B1-%C3%A1n-t%E1%BB%AB-%C4%91%E1%BA%A7u">Khởi Chạy Dự Án Từ Đầu</a></p>
-</li>
-<li>
-<p><a href="#7-hi%E1%BB%83u-v%E1%BB%81-seed-data">Hiểu Về Seed Data</a></p>
-</li>
-<li>
-<p><a href="#8-th%C3%AAm-t%C3%ADnh-n%C4%83ng-m%E1%BB%9Bi">Thêm Tính Năng Mới</a></p>
-</li>
-<li>
-<p><a href="#9-debug-v%C3%A0-x%E1%BB%AD-l%C3%BD-l%E1%BB%97i">Debug và Xử Lý Lỗi</a></p>
-</li>
-<li>
-<p><a href="#10-best-practices">Best Practices</a></p>
-</li>
-</ol>
-<hr>
-<h1 id="phần-1-nền-tảng-kiến-thức-1">PHẦN 1: NỀN TẢNG KIẾN THỨC</h1>
-<hr>
-<h2 id="tổng-quan-kiến-trúc-dự-án">1. Tổng Quan Kiến Trúc Dự Án</h2>
-<h3 id="dự-án-này-làm-gì">1.1 Dự án này làm gì?</h3>
-<p><strong>2PJP API</strong> là backend API cho ứng dụng học tiếng Nhật qua podcast:</p>
-<ul>
-<li>
-<p>Quản lý nội dung podcast (script, audio, video)</p>
-</li>
-<li>
-<p>Xử lý AI: dịch thuật, phân tích từ vựng, ngữ pháp</p>
-</li>
-<li>
-<p>Quản lý người dùng, xác thực</p>
-</li>
-</ul>
-<h3 id="kiến-trúc-tổng-quan">1.2 Kiến trúc tổng quan</h3>
-<pre><code>
+  <body class="stackedit">
+    <div class="stackedit__html">
+      <h1 id="📚-hướng-dẫn-phát-triển-toàn-diện---2pjp-api">
+        📚 Hướng Dẫn Phát Triển Toàn Diện - 2PJP API
+      </h1>
+      <blockquote>
+        <p>
+          <strong>Tài liệu này dành cho:</strong> Người mới bắt đầu muốn hiểu
+          toàn bộ dự án
+        </p>
+      </blockquote>
+      <blockquote>
+        <p>
+          <strong>Mục tiêu:</strong> Từ zero đến có thể tự phát triển và mở rộng
+          dự án
+        </p>
+      </blockquote>
+      <hr />
+      <h2 id="📖-mục-lục">📖 Mục Lục</h2>
+      <h3 id="phần-1-nền-tảng-kiến-thức">Phần 1: Nền Tảng Kiến Thức</h3>
+      <ol>
+        <li>
+          <p>
+            <a href="#tổng-quan-kiến-trúc-dự-án">Tổng Quan Kiến Trúc Dự Án</a>
+          </p>
+        </li>
+        <li>
+          <p>
+            <a href="#docker---đóng-gói-ứng-dụng">Docker - Đóng Gói Ứng Dụng</a>
+          </p>
+        </li>
+        <li>
+          <p>
+            <a href="#nestjs---framework-backend">NestJS - Framework Backend</a>
+          </p>
+        </li>
+        <li>
+          <p><a href="#prisma---orm-database">Prisma - ORM Database</a></p>
+        </li>
+        <li>
+          <p>
+            <a href="#redis---in-memory-cache--queue"
+              >Redis - In-Memory Cache &amp; Queue</a
+            >
+          </p>
+        </li>
+      </ol>
+      <h3 id="phần-2-thực-hành">Phần 2: Thực Hành</h3>
+      <ol start="6">
+        <li>
+          <p><a href="#khởi-chạy-dự-án-từ-đầu">Khởi Chạy Dự Án Từ Đầu</a></p>
+        </li>
+        <li>
+          <p><a href="#hiểu-về-seed-data">Hiểu Về Seed Data</a></p>
+        </li>
+        <li>
+          <p><a href="#thêm-tính-năng-mới">Thêm Tính Năng Mới</a></p>
+        </li>
+        <li>
+          <p><a href="#debug-và-xử-lý-lỗi">Debug và Xử Lý Lỗi</a></p>
+        </li>
+        <li>
+          <p><a href="#best-practices">Best Practices</a></p>
+        </li>
+      </ol>
+      <hr />
+      <h1 id="phần-1-nền-tảng-kiến-thức-1">PHẦN 1: NỀN TẢNG KIẾN THỨC</h1>
+      <hr />
+      <h2 id="tổng-quan-kiến-trúc-dự-án">1. Tổng Quan Kiến Trúc Dự Án</h2>
+      <h3 id="dự-án-này-làm-gì">1.1 Dự án này làm gì?</h3>
+      <p>
+        <strong>2PJP API</strong> là backend API cho ứng dụng học tiếng Nhật qua
+        podcast:
+      </p>
+      <ul>
+        <li>
+          <p>Quản lý nội dung podcast (script, audio, video)</p>
+        </li>
+        <li>
+          <p>Xử lý AI: dịch thuật, phân tích từ vựng, ngữ pháp</p>
+        </li>
+        <li>
+          <p>Quản lý người dùng, xác thực</p>
+        </li>
+      </ul>
+      <h3 id="kiến-trúc-tổng-quan">1.2 Kiến trúc tổng quan</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ FRONTEND (ReactJS) │
@@ -112,8 +133,8 @@
 └────────────────────┘ └────────────────────┘ └────────────────────┘
 
 </code></pre>
-<h3 id="cấu-trúc-thư-mục">1.3 Cấu trúc thư mục</h3>
-<pre><code>
+      <h3 id="cấu-trúc-thư-mục">1.3 Cấu trúc thư mục</h3>
+      <pre><code>
 2pjp-api/
 
 ├── src/ # 📁 SOURCE CODE CHÍNH
@@ -195,9 +216,11 @@
 └── package.json # Dependencies và scripts
 
 </code></pre>
-<h3 id="flow-xử-lý-một-request">1.4 Flow xử lý một request</h3>
-<p><strong>Ví dụ:</strong> User gọi API <code>GET /api/v1/contents/1</code></p>
-<pre><code>
+      <h3 id="flow-xử-lý-một-request">1.4 Flow xử lý một request</h3>
+      <p>
+        <strong>Ví dụ:</strong> User gọi API <code>GET /api/v1/contents/1</code>
+      </p>
+      <pre><code>
 1. Request đến → main.ts (entry point)
 
 ↓
@@ -221,43 +244,65 @@
 6. Response JSON ← Controller trả về client
 
 </code></pre>
-<hr>
-<h2 id="docker---đóng-gói-ứng-dụng">2. Docker - Đóng Gói Ứng Dụng</h2>
-<h3 id="docker-là-gì-giải-thích-đơn-giản">2.1 Docker là gì? (Giải thích đơn giản)</h3>
-<p><strong>Vấn đề không có Docker:</strong></p>
-<ul>
-<li>
-<p>Bạn cài MySQL 8.0, đồng nghiệp cài MySQL 5.7 → Bug</p>
-</li>
-<li>
-<p>Bạn cài Node 18, server cài Node 16 → Không chạy</p>
-</li>
-<li>
-<p>Mỗi lần setup máy mới phải cài lại hàng chục thứ</p>
-</li>
-</ul>
-<p><strong>Docker giải quyết:</strong></p>
-<ul>
-<li>
-<p>“Đóng gói” app + tất cả dependencies vào 1 container</p>
-</li>
-<li>
-<p>Chạy giống nhau trên mọi máy</p>
-</li>
-<li>
-<p>1 lệnh khởi động, 1 lệnh dừng</p>
-</li>
-</ul>
-<h3 id="các-khái-niệm-quan-trọng">2.2 Các khái niệm quan trọng</h3>
-<p>| Khái niệm | Giải thích | Ví dụ thực tế |</p>
-<p>| ------------- | ----------------------------------- | ----------------------------- |</p>
-<p>| <strong>Image</strong> | “Khuôn mẫu” tĩnh, giống file ISO | <code>mysql:8.0</code>, <code>node:20-alpine</code> |</p>
-<p>| <strong>Container</strong> | Instance đang chạy từ image | MySQL server đang chạy |</p>
-<p>| <strong>Volume</strong> | Lưu trữ dữ liệu bên ngoài container | Database files |</p>
-<p>| <strong>Network</strong> | Mạng ảo để containers nói chuyện | API gọi MySQL |</p>
-<p>| <strong>Compose</strong> | Quản lý nhiều containers cùng lúc | MySQL + Redis + API |</p>
-<h3 id="giải-thích-docker-compose.dev.yml">2.3 Giải thích docker-compose.dev.yml</h3>
-<pre class=" language-yaml"><code class="prism  language-yaml">
+      <hr />
+      <h2 id="docker---đóng-gói-ứng-dụng">2. Docker - Đóng Gói Ứng Dụng</h2>
+      <h3 id="docker-là-gì-giải-thích-đơn-giản">
+        2.1 Docker là gì? (Giải thích đơn giản)
+      </h3>
+      <p><strong>Vấn đề không có Docker:</strong></p>
+      <ul>
+        <li>
+          <p>Bạn cài MySQL 8.0, đồng nghiệp cài MySQL 5.7 → Bug</p>
+        </li>
+        <li>
+          <p>Bạn cài Node 18, server cài Node 16 → Không chạy</p>
+        </li>
+        <li>
+          <p>Mỗi lần setup máy mới phải cài lại hàng chục thứ</p>
+        </li>
+      </ul>
+      <p><strong>Docker giải quyết:</strong></p>
+      <ul>
+        <li>
+          <p>“Đóng gói” app + tất cả dependencies vào 1 container</p>
+        </li>
+        <li>
+          <p>Chạy giống nhau trên mọi máy</p>
+        </li>
+        <li>
+          <p>1 lệnh khởi động, 1 lệnh dừng</p>
+        </li>
+      </ul>
+      <h3 id="các-khái-niệm-quan-trọng">2.2 Các khái niệm quan trọng</h3>
+      <p>| Khái niệm | Giải thích | Ví dụ thực tế |</p>
+      <p>
+        | ------------- | ----------------------------------- |
+        ----------------------------- |
+      </p>
+      <p>
+        | <strong>Image</strong> | “Khuôn mẫu” tĩnh, giống file ISO |
+        <code>mysql:8.0</code>, <code>node:20-alpine</code> |
+      </p>
+      <p>
+        | <strong>Container</strong> | Instance đang chạy từ image | MySQL
+        server đang chạy |
+      </p>
+      <p>
+        | <strong>Volume</strong> | Lưu trữ dữ liệu bên ngoài container |
+        Database files |
+      </p>
+      <p>
+        | <strong>Network</strong> | Mạng ảo để containers nói chuyện | API gọi
+        MySQL |
+      </p>
+      <p>
+        | <strong>Compose</strong> | Quản lý nhiều containers cùng lúc | MySQL +
+        Redis + API |
+      </p>
+      <h3 id="giải-thích-docker-compose.dev.yml">
+        2.3 Giải thích docker-compose.dev.yml
+      </h3>
+      <pre class="language-yaml"><code class="prism  language-yaml">
 <span class="token comment"># File: docker-compose.dev.yml</span>
 
   
@@ -435,8 +480,10 @@
 <span class="token key atrule">2pjp-dev-network</span><span class="token punctuation">:</span>
 
 </code></pre>
-<h3 id="lệnh-docker-thường-dùng-có-giải-thích">2.4 Lệnh Docker thường dùng (có giải thích)</h3>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <h3 id="lệnh-docker-thường-dùng-có-giải-thích">
+        2.4 Lệnh Docker thường dùng (có giải thích)
+      </h3>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
 
 <span class="token comment"># KHỞI ĐỘNG &amp; DỪNG</span>
@@ -558,26 +605,32 @@ docker compose <span class="token operator">-</span>f docker<span class="token o
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml up <span class="token operator">--</span>build
 
 </code></pre>
-<hr>
-<h2 id="nestjs---framework-backend">3. NestJS - Framework Backend</h2>
-<h3 id="nestjs-là-gì">3.1 NestJS là gì?</h3>
-<p>NestJS là framework Node.js để xây dựng backend:</p>
-<ul>
-<li>
-<p><strong>Cấu trúc rõ ràng:</strong> Modules, Controllers, Services</p>
-</li>
-<li>
-<p><strong>TypeScript:</strong> Có type checking, dễ maintain</p>
-</li>
-<li>
-<p><strong>Dependency Injection:</strong> Tự động inject dependencies</p>
-</li>
-<li>
-<p><strong>Decorators:</strong> Viết code ngắn gọn, dễ đọc</p>
-</li>
-</ul>
-<h3 id="cấu-trúc-module-trong-nestjs">3.2 Cấu trúc Module trong NestJS</h3>
-<pre><code>
+      <hr />
+      <h2 id="nestjs---framework-backend">3. NestJS - Framework Backend</h2>
+      <h3 id="nestjs-là-gì">3.1 NestJS là gì?</h3>
+      <p>NestJS là framework Node.js để xây dựng backend:</p>
+      <ul>
+        <li>
+          <p>
+            <strong>Cấu trúc rõ ràng:</strong> Modules, Controllers, Services
+          </p>
+        </li>
+        <li>
+          <p><strong>TypeScript:</strong> Có type checking, dễ maintain</p>
+        </li>
+        <li>
+          <p>
+            <strong>Dependency Injection:</strong> Tự động inject dependencies
+          </p>
+        </li>
+        <li>
+          <p><strong>Decorators:</strong> Viết code ngắn gọn, dễ đọc</p>
+        </li>
+      </ul>
+      <h3 id="cấu-trúc-module-trong-nestjs">
+        3.2 Cấu trúc Module trong NestJS
+      </h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────┐
 
 │ MODULE │
@@ -601,9 +654,9 @@ docker compose <span class="token operator">-</span>f docker<span class="token o
 └─────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<h3 id="ví-dụ-thực-tế-module-users">3.3 Ví dụ thực tế: Module Users</h3>
-<p><strong>File: users.module.ts</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="ví-dụ-thực-tế-module-users">3.3 Ví dụ thực tế: Module Users</h3>
+      <p><strong>File: users.module.ts</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token keyword">import</span> <span class="token punctuation">{</span> Module <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> <span class="token punctuation">{</span> UsersController <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./users.controller'</span><span class="token punctuation">;</span>
@@ -629,8 +682,8 @@ exports<span class="token punctuation">:</span> <span class="token punctuation">
 <span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">UsersModule</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 
 </code></pre>
-<p><strong>File: users.controller.ts</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>File: users.controller.ts</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token keyword">import</span> <span class="token punctuation">{</span> Controller<span class="token punctuation">,</span> Get<span class="token punctuation">,</span> Post<span class="token punctuation">,</span> Body<span class="token punctuation">,</span> Param<span class="token punctuation">,</span> UseGuards <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> <span class="token punctuation">{</span> UsersService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./users.service'</span><span class="token punctuation">;</span>
@@ -690,8 +743,8 @@ exports<span class="token punctuation">:</span> <span class="token punctuation">
 <span class="token punctuation">}</span>
 
 </code></pre>
-<p><strong>File: users.service.ts</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>File: users.service.ts</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token keyword">import</span> <span class="token punctuation">{</span> Injectable <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> <span class="token punctuation">{</span> PrismaService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'../prisma/prisma.service'</span><span class="token punctuation">;</span>
@@ -735,18 +788,42 @@ where<span class="token punctuation">:</span> <span class="token punctuation">{<
 <span class="token punctuation">}</span>
 
 </code></pre>
-<h3 id="decorators-quan-trọng">3.4 Decorators quan trọng</h3>
-<p>| Decorator | Ý nghĩa | Ví dụ |</p>
-<p>| ------------------------------------------ | ---------------------------- | ----------------------------- |</p>
-<p>| <code>@Controller('path')</code> | Định nghĩa controller | <code>@Controller('users')</code> |</p>
-<p>| <code>@Get()</code>, <code>@Post()</code>, <code>@Put()</code>, <code>@Delete()</code> | HTTP method | <code>@Get(':id')</code> |</p>
-<p>| <code>@Body()</code> | Lấy request body | <code>@Body() dto: CreateUserDto</code> |</p>
-<p>| <code>@Param('name')</code> | Lấy URL parameter | <code>@Param('id') id: string</code> |</p>
-<p>| <code>@Query('name')</code> | Lấy query string | <code>@Query('page') page: number</code> |</p>
-<p>| <code>@UseGuards()</code> | Áp dụng guard (bảo vệ route) | <code>@UseGuards(JwtAuthGuard)</code> |</p>
-<p>| <code>@Injectable()</code> | Đánh dấu class có thể inject | Service, Repository |</p>
-<h3 id="request-flow-chi-tiết">3.5 Request Flow chi tiết</h3>
-<pre><code>
+      <h3 id="decorators-quan-trọng">3.4 Decorators quan trọng</h3>
+      <p>| Decorator | Ý nghĩa | Ví dụ |</p>
+      <p>
+        | ------------------------------------------ |
+        ---------------------------- | ----------------------------- |
+      </p>
+      <p>
+        | <code>@Controller('path')</code> | Định nghĩa controller |
+        <code>@Controller('users')</code> |
+      </p>
+      <p>
+        | <code>@Get()</code>, <code>@Post()</code>, <code>@Put()</code>,
+        <code>@Delete()</code> | HTTP method | <code>@Get(':id')</code> |
+      </p>
+      <p>
+        | <code>@Body()</code> | Lấy request body |
+        <code>@Body() dto: CreateUserDto</code> |
+      </p>
+      <p>
+        | <code>@Param('name')</code> | Lấy URL parameter |
+        <code>@Param('id') id: string</code> |
+      </p>
+      <p>
+        | <code>@Query('name')</code> | Lấy query string |
+        <code>@Query('page') page: number</code> |
+      </p>
+      <p>
+        | <code>@UseGuards()</code> | Áp dụng guard (bảo vệ route) |
+        <code>@UseGuards(JwtAuthGuard)</code> |
+      </p>
+      <p>
+        | <code>@Injectable()</code> | Đánh dấu class có thể inject | Service,
+        Repository |
+      </p>
+      <h3 id="request-flow-chi-tiết">3.5 Request Flow chi tiết</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ Client gửi: POST /api/v1/contents │
@@ -856,12 +933,15 @@ where<span class="token punctuation">:</span> <span class="token punctuation">{<
 └─────────────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<hr>
-<h2 id="prisma---orm-database">4. Prisma - ORM Database</h2>
-<h3 id="prisma-là-gì">4.1 Prisma là gì?</h3>
-<p><strong>ORM (Object-Relational Mapping):</strong> Công cụ để tương tác với database bằng code thay vì viết SQL trực tiếp.</p>
-<p><strong>Ví dụ so sánh:</strong></p>
-<pre class=" language-sql"><code class="prism  language-sql">
+      <hr />
+      <h2 id="prisma---orm-database">4. Prisma - ORM Database</h2>
+      <h3 id="prisma-là-gì">4.1 Prisma là gì?</h3>
+      <p>
+        <strong>ORM (Object-Relational Mapping):</strong> Công cụ để tương tác
+        với database bằng code thay vì viết SQL trực tiếp.
+      </p>
+      <p><strong>Ví dụ so sánh:</strong></p>
+      <pre class="language-sql"><code class="prism  language-sql">
 <span class="token comment">-- SQL thuần</span>
 
 <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
@@ -869,7 +949,7 @@ where<span class="token punctuation">:</span> <span class="token punctuation">{<
 <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> posts <span class="token keyword">WHERE</span> author_id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
 
 </code></pre>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// Prisma</span>
 
 <span class="token keyword">const</span>  user <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
@@ -881,8 +961,8 @@ include<span class="token punctuation">:</span> <span class="token punctuation">
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre>
-<h3 id="cấu-trúc-prisma">4.2 Cấu trúc Prisma</h3>
-<pre><code>
+      <h3 id="cấu-trúc-prisma">4.2 Cấu trúc Prisma</h3>
+      <pre><code>
 prisma/
 
 ├── schema.prisma # 📝 Định nghĩa database schema
@@ -898,8 +978,8 @@ prisma/
 └── seed.ts
 
 </code></pre>
-<h3 id="giải-thích-schema.prisma">4.3 Giải thích schema.prisma</h3>
-<pre class=" language-prisma"><code class="prism  language-prisma">
+      <h3 id="giải-thích-schema.prisma">4.3 Giải thích schema.prisma</h3>
+      <pre class="language-prisma"><code class="prism  language-prisma">
 // prisma/schema.prisma
 
   
@@ -1077,8 +1157,8 @@ audio
 }
 
 </code></pre>
-<h3 id="prisma-cli-commands">4.4 Prisma CLI Commands</h3>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <h3 id="prisma-cli-commands">4.4 Prisma CLI Commands</h3>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
 
 <span class="token comment"># DEVELOPMENT</span>
@@ -1168,8 +1248,8 @@ npx prisma studio
 <span class="token comment"># → Mở browser tại http://localhost:5555</span>
 
 </code></pre>
-<h3 id="prisma-query-examples">4.5 Prisma Query Examples</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="prisma-query-examples">4.5 Prisma Query Examples</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
 
 <span class="token comment">// BASIC CRUD</span>
@@ -1383,23 +1463,25 @@ SELECT * FROM users WHERE email LIKE ${`</span></span><span class="token operato
 `</span></span><span class="token punctuation">;</span>
 
 </code></pre>
-<hr>
-<h2 id="redis---in-memory-cache--queue">5. Redis - In-Memory Cache &amp; Queue</h2>
-<h3 id="redis-là-gì">5.1 Redis là gì?</h3>
-<p><strong>Redis = Remote Dictionary Server</strong></p>
-<ul>
-<li>
-<p>Database lưu trữ trong RAM (rất nhanh!)</p>
-</li>
-<li>
-<p>Dùng cho: Cache, Session, Queue, Pub/Sub</p>
-</li>
-<li>
-<p>Data structures: String, List, Set, Hash, Sorted Set</p>
-</li>
-</ul>
-<h3 id="tại-sao-dự-án-này-cần-redis">5.2 Tại sao dự án này cần Redis?</h3>
-<pre><code>
+      <hr />
+      <h2 id="redis---in-memory-cache--queue">
+        5. Redis - In-Memory Cache &amp; Queue
+      </h2>
+      <h3 id="redis-là-gì">5.1 Redis là gì?</h3>
+      <p><strong>Redis = Remote Dictionary Server</strong></p>
+      <ul>
+        <li>
+          <p>Database lưu trữ trong RAM (rất nhanh!)</p>
+        </li>
+        <li>
+          <p>Dùng cho: Cache, Session, Queue, Pub/Sub</p>
+        </li>
+        <li>
+          <p>Data structures: String, List, Set, Hash, Sorted Set</p>
+        </li>
+      </ul>
+      <h3 id="tại-sao-dự-án-này-cần-redis">5.2 Tại sao dự án này cần Redis?</h3>
+      <pre><code>
 ┌─────────────────────────────────────────────────────────────────────┐
 
 │ KHÔNG CÓ REDIS (Queue) │
@@ -1441,9 +1523,12 @@ SELECT * FROM users WHERE email LIKE ${`</span></span><span class="token operato
 └─────────────────────────────────────────────────────────────────────┘
 
 </code></pre>
-<h3 id="bull-queue-trong-dự-án">5.3 Bull Queue trong dự án</h3>
-<p><strong>Bull</strong> là thư viện Node.js để quản lý job queue với Redis.</p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="bull-queue-trong-dự-án">5.3 Bull Queue trong dự án</h3>
+      <p>
+        <strong>Bull</strong> là thư viện Node.js để quản lý job queue với
+        Redis.
+      </p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// Cấu hình trong ai.module.ts</span>
 
 BullModule<span class="token punctuation">.</span><span class="token function">forRoot</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
@@ -1473,8 +1558,8 @@ BullModule<span class="token punctuation">.</span><span class="token function">r
 <span class="token punctuation">)</span><span class="token punctuation">,</span>
 
 </code></pre>
-<p><strong>Thêm job vào queue:</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Thêm job vào queue:</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: ai/services/queue.service.ts</span>
 
   
@@ -1518,8 +1603,8 @@ removeOnFail<span class="token punctuation">:</span>  <span class="token number"
 <span class="token punctuation">}</span>
 
 </code></pre>
-<p><strong>Processor xử lý job:</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Processor xử lý job:</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: ai/processors/translation.processor.ts</span>
 
   
@@ -1593,8 +1678,8 @@ console<span class="token punctuation">.</span><span class="token function">erro
 <span class="token punctuation">}</span>
 
 </code></pre>
-<h3 id="redis-cli-cơ-bản">5.4 Redis CLI cơ bản</h3>
-<pre class=" language-bash"><code class="prism  language-bash">
+      <h3 id="redis-cli-cơ-bản">5.4 Redis CLI cơ bản</h3>
+      <pre class="language-bash"><code class="prism  language-bash">
 <span class="token comment"># Kết nối Redis trong Docker</span>
 
 docker  compose  -f  docker-compose.dev.yml  <span class="token function">exec</span>  redis  redis-cli
@@ -1692,24 +1777,47 @@ INFO  memory
 MONITOR
 
 </code></pre>
-<hr>
-<h1 id="phần-2-thực-hành-1">PHẦN 2: THỰC HÀNH</h1>
-<hr>
-<h2 id="khởi-chạy-dự-án-từ-đầu">6. Khởi Chạy Dự Án Từ Đầu</h2>
-<h3 id="checklist-trước-khi-bắt-đầu">6.1 Checklist trước khi bắt đầu</h3>
-<ul>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đã cài Docker Desktop</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đã clone project</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đã tạo file <code>.env</code></p>
-</li>
-</ul>
-<h3 id="quy-trình-khởi-chạy-step-by-step">6.2 Quy trình khởi chạy step-by-step</h3>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <hr />
+      <h1 id="phần-2-thực-hành-1">PHẦN 2: THỰC HÀNH</h1>
+      <hr />
+      <h2 id="khởi-chạy-dự-án-từ-đầu">6. Khởi Chạy Dự Án Từ Đầu</h2>
+      <h3 id="checklist-trước-khi-bắt-đầu">6.1 Checklist trước khi bắt đầu</h3>
+      <ul>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Đã cài Docker Desktop
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Đã clone project
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Đã tạo file <code>.env</code>
+          </p>
+        </li>
+      </ul>
+      <h3 id="quy-trình-khởi-chạy-step-by-step">
+        6.2 Quy trình khởi chạy step-by-step
+      </h3>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
 
 <span class="token comment"># BƯỚC 1: Di chuyển vào thư mục dự án</span>
@@ -1783,8 +1891,8 @@ docker compose <span class="token operator">-</span>f docker<span class="token o
 <span class="token comment"># Nếu thấy { "status": "ok" } là thành công!</span>
 
 </code></pre>
-<h3 id="script-tự-động-dev.ps1">6.3 Script tự động (dev.ps1)</h3>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <h3 id="script-tự-động-dev.ps1">6.3 Script tự động (dev.ps1)</h3>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># Sử dụng script đã tạo sẵn:</span>
 
   
@@ -1804,24 +1912,24 @@ docker compose <span class="token operator">-</span>f docker<span class="token o
 <span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 shell <span class="token comment"># Mở shell trong container</span>
 
 </code></pre>
-<hr>
-<h2 id="hiểu-về-seed-data">7. Hiểu Về Seed Data</h2>
-<h3 id="seed-là-gì">7.1 Seed là gì?</h3>
-<p><strong>Seed = Dữ liệu mẫu ban đầu</strong></p>
-<p>Khi database mới tạo, nó trống rỗng. Seed giúp:</p>
-<ul>
-<li>
-<p>Tạo dữ liệu cần thiết để app chạy (config, default values)</p>
-</li>
-<li>
-<p>Tạo dữ liệu test để development</p>
-</li>
-<li>
-<p>Đảm bảo mọi người có cùng data ban đầu</p>
-</li>
-</ul>
-<h3 id="file-seed-của-dự-án">7.2 File seed của dự án</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <hr />
+      <h2 id="hiểu-về-seed-data">7. Hiểu Về Seed Data</h2>
+      <h3 id="seed-là-gì">7.1 Seed là gì?</h3>
+      <p><strong>Seed = Dữ liệu mẫu ban đầu</strong></p>
+      <p>Khi database mới tạo, nó trống rỗng. Seed giúp:</p>
+      <ul>
+        <li>
+          <p>Tạo dữ liệu cần thiết để app chạy (config, default values)</p>
+        </li>
+        <li>
+          <p>Tạo dữ liệu test để development</p>
+        </li>
+        <li>
+          <p>Đảm bảo mọi người có cùng data ban đầu</p>
+        </li>
+      </ul>
+      <h3 id="file-seed-của-dự-án">7.2 File seed của dự án</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: prisma/seeds/seed.ts</span>
 
   
@@ -1919,8 +2027,8 @@ isActive<span class="token punctuation">:</span>  <span class="token keyword">tr
 <span class="token punctuation">.</span><span class="token keyword">finally</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span>  prisma<span class="token punctuation">.</span><span class="token function">$disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre>
-<h3 id="cách-chạy-seed">7.3 Cách chạy seed</h3>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <h3 id="cách-chạy-seed">7.3 Cách chạy seed</h3>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># Trong Docker</span>
 
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx ts<span class="token operator">-</span>node prisma<span class="token operator">/</span>seeds<span class="token operator">/</span>seed<span class="token punctuation">.</span>ts
@@ -1932,11 +2040,13 @@ docker compose <span class="token operator">-</span>f docker<span class="token o
 npx ts<span class="token operator">-</span>node prisma<span class="token operator">/</span>seeds<span class="token operator">/</span>seed<span class="token punctuation">.</span>ts
 
 </code></pre>
-<hr>
-<h2 id="thêm-tính-năng-mới">8. Thêm Tính Năng Mới</h2>
-<h3 id="ví-dụ-thêm-module-categories">8.1 Ví dụ: Thêm module “Categories”</h3>
-<p><strong>Bước 1: Thêm model vào schema.prisma</strong></p>
-<pre class=" language-prisma"><code class="prism  language-prisma">
+      <hr />
+      <h2 id="thêm-tính-năng-mới">8. Thêm Tính Năng Mới</h2>
+      <h3 id="ví-dụ-thêm-module-categories">
+        8.1 Ví dụ: Thêm module “Categories”
+      </h3>
+      <p><strong>Bước 1: Thêm model vào schema.prisma</strong></p>
+      <pre class="language-prisma"><code class="prism  language-prisma">
 // prisma/schema.prisma
 
   
@@ -1978,13 +2088,13 @@ category Category? @relation(fields: [categoryId], references: [id])
 }
 
 </code></pre>
-<p><strong>Bước 2: Tạo migration</strong></p>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <p><strong>Bước 2: Tạo migration</strong></p>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma migrate dev <span class="token operator">--</span>name add_categories
 
 </code></pre>
-<p><strong>Bước 3: Tạo DTO</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Bước 3: Tạo DTO</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: src/categories/dto/create-category.dto.ts</span>
 
   
@@ -2014,8 +2124,8 @@ description<span class="token operator">?</span><span class="token punctuation">
 <span class="token punctuation">}</span>
 
 </code></pre>
-<p><strong>Bước 4: Tạo Service</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Bước 4: Tạo Service</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: src/categories/categories.service.ts</span>
 
   
@@ -2109,8 +2219,8 @@ data<span class="token punctuation">:</span>  dto<span class="token punctuation"
 <span class="token punctuation">}</span>
 
 </code></pre>
-<p><strong>Bước 5: Tạo Controller</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Bước 5: Tạo Controller</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: src/categories/categories.controller.ts</span>
 
   
@@ -2206,8 +2316,8 @@ ParseIntPipe<span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 
 </code></pre>
-<p><strong>Bước 6: Tạo Module</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Bước 6: Tạo Module</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: src/categories/categories.module.ts</span>
 
   
@@ -2237,8 +2347,8 @@ exports<span class="token punctuation">:</span> <span class="token punctuation">
 <span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">CategoriesModule</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 
 </code></pre>
-<p><strong>Bước 7: Đăng ký vào AppModule</strong></p>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <p><strong>Bước 7: Đăng ký vào AppModule</strong></p>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// File: src/app.module.ts</span>
 
   
@@ -2262,37 +2372,95 @@ CategoriesModule<span class="token punctuation">,</span> <span class="token comm
 <span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">AppModule</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
 
 </code></pre>
-<h3 id="checklist-khi-thêm-tính-năng">8.2 Checklist khi thêm tính năng</h3>
-<ul>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Thêm model vào <code>schema.prisma</code></p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Chạy <code>prisma migrate dev</code></p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo DTO (Data Transfer Object)</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo Service</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo Controller</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo Module</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đăng ký vào AppModule</p>
-</li>
-<li class="task-list-item">
-<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Test API</p>
-</li>
-</ul>
-<hr>
-<h2 id="debug-và-xử-lý-lỗi">9. Debug và Xử Lý Lỗi</h2>
-<h3 id="xem-logs">9.1 Xem logs</h3>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <h3 id="checklist-khi-thêm-tính-năng">
+        8.2 Checklist khi thêm tính năng
+      </h3>
+      <ul>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Thêm model vào <code>schema.prisma</code>
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Chạy <code>prisma migrate dev</code>
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Tạo DTO (Data Transfer Object)
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Tạo Service
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Tạo Controller
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Tạo Module
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Đăng ký vào AppModule
+          </p>
+        </li>
+        <li class="task-list-item">
+          <p>
+            <input
+              type="checkbox"
+              class="task-list-item-checkbox"
+              disabled=""
+            />
+            Test API
+          </p>
+        </li>
+      </ul>
+      <hr />
+      <h2 id="debug-và-xử-lý-lỗi">9. Debug và Xử Lý Lỗi</h2>
+      <h3 id="xem-logs">9.1 Xem logs</h3>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># Logs tất cả services</span>
 
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs
@@ -2310,14 +2478,14 @@ docker compose <span class="token operator">-</span>f docker<span class="token o
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs <span class="token operator">-</span>f <span class="token operator">-</span>t api
 
 </code></pre>
-<h3 id="lỗi-thường-gặp">9.2 Lỗi thường gặp</h3>
-<p><strong>Lỗi: Cannot connect to database</strong></p>
-<pre><code>
+      <h3 id="lỗi-thường-gặp">9.2 Lỗi thường gặp</h3>
+      <p><strong>Lỗi: Cannot connect to database</strong></p>
+      <pre><code>
 Error: Can't reach database server at mysql:3306
 
 </code></pre>
-<p><strong>Giải pháp:</strong></p>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <p><strong>Giải pháp:</strong></p>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># Đợi MySQL khởi động (30 giây)</span>
 
 <span class="token comment"># Hoặc restart API</span>
@@ -2325,33 +2493,33 @@ Error: Can't reach database server at mysql:3306
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml restart api
 
 </code></pre>
-<p><strong>Lỗi: Prisma Client chưa generate</strong></p>
-<pre><code>
+      <p><strong>Lỗi: Prisma Client chưa generate</strong></p>
+      <pre><code>
 Error: @prisma/client did not initialize yet
 
 </code></pre>
-<p><strong>Giải pháp:</strong></p>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <p><strong>Giải pháp:</strong></p>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma generate
 
 </code></pre>
-<p><strong>Lỗi: Migration failed</strong></p>
-<pre><code>
+      <p><strong>Lỗi: Migration failed</strong></p>
+      <pre><code>
 Error: Migration failed to apply
 
 </code></pre>
-<p><strong>Giải pháp:</strong></p>
-<pre class=" language-powershell"><code class="prism  language-powershell">
+      <p><strong>Giải pháp:</strong></p>
+      <pre class="language-powershell"><code class="prism  language-powershell">
 <span class="token comment"># Reset database (MẤT TOÀN BỘ DATA!)</span>
 
 docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma migrate reset
 
 </code></pre>
-<h3 id="debug-với-vs-code">9.3 Debug với VS Code</h3>
-<ol>
-<li>Thêm vào <code>launch.json</code>:</li>
-</ol>
-<pre class=" language-json"><code class="prism  language-json">
+      <h3 id="debug-với-vs-code">9.3 Debug với VS Code</h3>
+      <ol>
+        <li>Thêm vào <code>launch.json</code>:</li>
+      </ol>
+      <pre class="language-json"><code class="prism  language-json">
 <span class="token punctuation">{</span>
 
 <span class="token string">"type"</span><span class="token punctuation">:</span> <span class="token string">"node"</span><span class="token punctuation">,</span>
@@ -2373,18 +2541,18 @@ docker compose <span class="token operator">-</span>f docker<span class="token o
 <span class="token punctuation">}</span>
 
 </code></pre>
-<ol start="2">
-<li>
-<p>Đặt breakpoint trong code</p>
-</li>
-<li>
-<p>F5 để attach debugger</p>
-</li>
-</ol>
-<hr>
-<h2 id="best-practices">10. Best Practices</h2>
-<h3 id="code-style">10.1 Code Style</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <ol start="2">
+        <li>
+          <p>Đặt breakpoint trong code</p>
+        </li>
+        <li>
+          <p>F5 để attach debugger</p>
+        </li>
+      </ol>
+      <hr />
+      <h2 id="best-practices">10. Best Practices</h2>
+      <h3 id="code-style">10.1 Code Style</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// ✅ Tốt: Dùng async/await</span>
 
 <span class="token keyword">async</span>  <span class="token keyword">function</span>  <span class="token function">getUser</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -2408,8 +2576,8 @@ prisma<span class="token punctuation">.</span>user<span class="token punctuation
 <span class="token punctuation">}</span>
 
 </code></pre>
-<h3 id="error-handling">10.2 Error Handling</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="error-handling">10.2 Error Handling</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// ✅ Tốt: Throw NestJS exceptions</span>
 
 <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -2429,8 +2597,8 @@ prisma<span class="token punctuation">.</span>user<span class="token punctuation
 <span class="token punctuation">}</span>
 
 </code></pre>
-<h3 id="environment-variables">10.3 Environment Variables</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="environment-variables">10.3 Environment Variables</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// ✅ Tốt: Dùng ConfigService</span>
 
 <span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span>  configService<span class="token punctuation">:</span> ConfigService<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
@@ -2454,8 +2622,8 @@ prisma<span class="token punctuation">.</span>user<span class="token punctuation
 <span class="token punctuation">}</span>
 
 </code></pre>
-<h3 id="database-queries">10.4 Database Queries</h3>
-<pre class=" language-typescript"><code class="prism  language-typescript">
+      <h3 id="database-queries">10.4 Database Queries</h3>
+      <pre class="language-typescript"><code class="prism  language-typescript">
 <span class="token comment">// ✅ Tốt: Select chỉ fields cần thiết</span>
 
 <span class="token keyword">const</span>  users <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findMany</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
@@ -2471,33 +2639,51 @@ select<span class="token punctuation">:</span> <span class="token punctuation">{
 <span class="token keyword">const</span>  users <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findMany</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre>
-<hr>
-<h2 id="📚-tài-liệu-tham-khảo">📚 Tài Liệu Tham Khảo</h2>
-<ul>
-<li>
-<p><strong>NestJS:</strong> <a href="https://docs.nestjs.com/">https://docs.nestjs.com/</a></p>
-</li>
-<li>
-<p><strong>Prisma:</strong> <a href="https://www.prisma.io/docs/">https://www.prisma.io/docs/</a></p>
-</li>
-<li>
-<p><strong>Docker:</strong> <a href="https://docs.docker.com/">https://docs.docker.com/</a></p>
-</li>
-<li>
-<p><strong>Redis:</strong> <a href="https://redis.io/docs/">https://redis.io/docs/</a></p>
-</li>
-<li>
-<p><strong>Bull Queue:</strong> <a href="https://docs.bullmq.io/">https://docs.bullmq.io/</a></p>
-</li>
-</ul>
-<hr>
-<blockquote>
-<p><strong>Happy Coding! 🚀</strong></p>
-</blockquote>
-<blockquote>
-<p>Nếu có thắc mắc, đọc lại tài liệu hoặc search Google/StackOverflow</p>
-</blockquote>
-</div>
-</body>
-
+      <hr />
+      <h2 id="📚-tài-liệu-tham-khảo">📚 Tài Liệu Tham Khảo</h2>
+      <ul>
+        <li>
+          <p>
+            <strong>NestJS:</strong>
+            <a href="https://docs.nestjs.com/">https://docs.nestjs.com/</a>
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Prisma:</strong>
+            <a href="https://www.prisma.io/docs/"
+              >https://www.prisma.io/docs/</a
+            >
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Docker:</strong>
+            <a href="https://docs.docker.com/">https://docs.docker.com/</a>
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Redis:</strong>
+            <a href="https://redis.io/docs/">https://redis.io/docs/</a>
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Bull Queue:</strong>
+            <a href="https://docs.bullmq.io/">https://docs.bullmq.io/</a>
+          </p>
+        </li>
+      </ul>
+      <hr />
+      <blockquote>
+        <p><strong>Happy Coding! 🚀</strong></p>
+      </blockquote>
+      <blockquote>
+        <p>
+          Nếu có thắc mắc, đọc lại tài liệu hoặc search Google/StackOverflow
+        </p>
+      </blockquote>
+    </div>
+  </body>
 </html>
