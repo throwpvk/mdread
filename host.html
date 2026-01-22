@@ -1,0 +1,2493 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome file</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="🏠-hướng-dẫn-self-hosting-toàn-diện">🏠 Hướng Dẫn Self-Hosting Toàn Diện</h1>
+<blockquote>
+<p><strong>Tài liệu này dành cho:</strong> Người muốn tự host dự án trên máy chủ riêng</p>
+</blockquote>
+<blockquote>
+<p><strong>Mục tiêu:</strong> Từ mua máy → cài đặt → bảo mật → đưa lên internet → xử lý sự cố</p>
+</blockquote>
+<hr>
+<h2 id="📖-mục-lục">📖 Mục Lục</h2>
+<h3 id="phần-1-chuẩn-bị">Phần 1: Chuẩn Bị</h3>
+<ol>
+<li>
+<p><a href="#1-ch%E1%BB%8Dn-ph%E1%BA%A7n-c%E1%BB%A9ng">Chọn Phần Cứng</a></p>
+</li>
+<li>
+<p><a href="#2-c%C3%A0i-%C4%91%E1%BA%B7t-linux">Cài Đặt Linux</a></p>
+</li>
+<li>
+<p><a href="#3-thi%E1%BA%BFt-l%E1%BA%ADp-c%C6%A1-b%E1%BA%A3n">Thiết Lập Cơ Bản</a></p>
+</li>
+</ol>
+<h3 id="phần-2-triển-khai">Phần 2: Triển Khai</h3>
+<ol start="4">
+<li>
+<p><a href="#4-c%C3%A0i-%C4%91%E1%BA%B7t-docker">Cài Đặt Docker</a></p>
+</li>
+<li>
+<p><a href="#5-deploy-%E1%BB%A9ng-d%E1%BB%A5ng">Deploy Ứng Dụng</a></p>
+</li>
+<li>
+<p><a href="#6-database-local-vs-cloud">Database: Local vs Cloud</a></p>
+</li>
+<li>
+<p><a href="#7-storage-drive-api-vs-cloudflare-r2">Storage: Drive API vs Cloudflare R2</a></p>
+</li>
+</ol>
+<h3 id="phần-3-đưa-lên-internet">Phần 3: Đưa Lên Internet</h3>
+<ol start="8">
+<li>
+<p><a href="#8-mua-domain">Mua Domain</a></p>
+</li>
+<li>
+<p><a href="#9-cloudflare-setup">Cloudflare Setup</a></p>
+</li>
+<li>
+<p><a href="#10-sslhttps">SSL/HTTPS</a></p>
+</li>
+<li>
+<p><a href="#11-reverse-proxy-v%E1%BB%9Bi-nginx">Reverse Proxy với Nginx</a></p>
+</li>
+</ol>
+<h3 id="phần-4-bảo-mật">Phần 4: Bảo Mật</h3>
+<ol start="12">
+<li>
+<p><a href="#12-b%E1%BA%A3o-m%E1%BA%ADt-server">Bảo Mật Server</a></p>
+</li>
+<li>
+<p><a href="#13-b%E1%BA%A3o-m%E1%BA%ADt-%E1%BB%A9ng-d%E1%BB%A5ng">Bảo Mật Ứng Dụng</a></p>
+</li>
+<li>
+<p><a href="#14-cloudflare-protection">Cloudflare Protection</a></p>
+</li>
+</ol>
+<h3 id="phần-5-vận-hành">Phần 5: Vận Hành</h3>
+<ol start="15">
+<li>
+<p><a href="#15-monitoring--logging">Monitoring &amp; Logging</a></p>
+</li>
+<li>
+<p><a href="#16-backup--recovery">Backup &amp; Recovery</a></p>
+</li>
+<li>
+<p><a href="#17-x%E1%BB%AD-l%C3%BD-s%E1%BB%B1-c%E1%BB%91">Xử Lý Sự Cố</a></p>
+</li>
+<li>
+<p><a href="#18-scaling">Scaling</a></p>
+</li>
+</ol>
+<h3 id="phần-6-devops-roadmap">Phần 6: DevOps Roadmap</h3>
+<ol start="19">
+<li>
+<p><a href="#19-devops-l%C3%A0-g%C3%AC">DevOps là gì?</a></p>
+</li>
+<li>
+<p><a href="#20-h%E1%BB%8Dc-g%C3%AC-ti%E1%BA%BFp-theo">Học gì tiếp theo?</a></p>
+</li>
+</ol>
+<hr>
+<h1 id="phần-1-chuẩn-bị-1">PHẦN 1: CHUẨN BỊ</h1>
+<hr>
+<h2 id="chọn-phần-cứng">1. Chọn Phần Cứng</h2>
+<h3 id="yêu-cầu-tối-thiểu">1.1 Yêu cầu tối thiểu</h3>
+<p>| Thành phần | Tối thiểu | Khuyến nghị |</p>
+<p>| ----------- | --------- | ----------- |</p>
+<p>| <strong>CPU</strong> | 2 cores | 4+ cores |</p>
+<p>| <strong>RAM</strong> | 4GB | 8-16GB |</p>
+<p>| <strong>Storage</strong> | 50GB SSD | 100GB+ SSD |</p>
+<p>| <strong>Network</strong> | 100Mbps | 1Gbps |</p>
+<h3 id="mua-máy-trạm-cũ">1.2 Mua máy trạm cũ</h3>
+<p><strong>Ở đâu mua?</strong></p>
+<ul>
+<li>
+<p><strong>Nhật Bản:</strong> Yahoo Auction, Mercari, Hard-Off</p>
+</li>
+<li>
+<p><strong>Việt Nam:</strong> Shopee, Facebook Marketplace, các shop máy tính cũ</p>
+</li>
+</ul>
+<p><strong>Các dòng máy đề xuất:</strong></p>
+<pre><code>
+1. Dell OptiPlex (3050, 5050, 7050)
+
+- Giá: 3-5 triệu VNĐ
+
+- CPU: Intel Core i5/i7 Gen 6-7
+
+- Dễ nâng cấp RAM, SSD
+
+- Nhỏ gọn, tiết kiệm điện
+
+  
+
+2. HP ProDesk / EliteDesk
+
+- Tương tự Dell, giá cả phải chăng
+
+  
+
+3. Lenovo ThinkCentre
+
+- Bền bỉ, dễ tìm
+
+  
+
+4. Intel NUC (Mini PC)
+
+- Siêu nhỏ gọn
+
+- Tiết kiệm điện (~15W)
+
+- Giá cao hơn một chút
+
+</code></pre>
+<p><strong>Checklist khi mua:</strong></p>
+<ul>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Kiểm tra CPU (chạy stress test)</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Kiểm tra RAM (memtest86)</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Kiểm tra ổ cứng (CrystalDiskInfo)</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Cổng mạng LAN hoạt động</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Có thể cài Linux</p>
+</li>
+</ul>
+<h3 id="alternative-vpscloud">1.3 Alternative: VPS/Cloud</h3>
+<p>Nếu không muốn mua máy vật lý:</p>
+<p>| Provider | Free Tier | Giá rẻ nhất |</p>
+<p>| ---------------- | ------------------------------ | ----------------- |</p>
+<p>| <strong>Oracle Cloud</strong> | 4 core ARM, 24GB RAM (mãi mãi) | $0/tháng |</p>
+<p>| <strong>Google Cloud</strong> | e2-micro (1GB RAM) | $0/tháng |</p>
+<p>| <strong>AWS</strong> | t2.micro (1GB RAM, 12 tháng) | ~$5/tháng |</p>
+<p>| <strong>Vultr</strong> | - | $5/tháng (1GB) |</p>
+<p>| <strong>Contabo</strong> | - | €4.99/tháng (4GB) |</p>
+<p><strong>Khuyến nghị:</strong> Oracle Cloud Free Tier rất mạnh cho học tập!</p>
+<hr>
+<h2 id="cài-đặt-linux">2. Cài Đặt Linux</h2>
+<h3 id="chọn-bản-phân-phối">2.1 Chọn bản phân phối</h3>
+<p>| Distro | Đặc điểm | Phù hợp cho |</p>
+<p>| --------------------------- | ------------------------ | ----------------------- |</p>
+<p>| <strong>Ubuntu Server 22.04 LTS</strong> | Phổ biến, nhiều tài liệu | Người mới |</p>
+<p>| <strong>Debian 12</strong> | Ổn định, nhẹ | Server production |</p>
+<p>| <strong>Rocky Linux 9</strong> | Giống CentOS, enterprise | Môi trường doanh nghiệp |</p>
+<p><strong>Khuyến nghị:</strong> Ubuntu Server 22.04 LTS</p>
+<h3 id="cài-đặt-ubuntu-server">2.2 Cài đặt Ubuntu Server</h3>
+<p><strong>Bước 1: Tạo USB boot</strong></p>
+<pre><code>
+1. Tải ISO: https://ubuntu.com/download/server
+
+2. Tải Rufus (Windows): https://rufus.ie/
+
+3. Cắm USB → Mở Rufus → Chọn ISO → Start
+
+</code></pre>
+<p><strong>Bước 2: Boot từ USB</strong></p>
+<pre><code>
+1. Cắm USB vào máy trạm
+
+2. Khởi động, nhấn F12 (hoặc F2, Del) để vào Boot Menu
+
+3. Chọn USB drive
+
+4. Chọn "Install Ubuntu Server"
+
+</code></pre>
+<p><strong>Bước 3: Cài đặt</strong></p>
+<pre><code>
+- Language: English
+
+- Keyboard: Vietnamese hoặc US
+
+- Network: Để DHCP (tự động)
+
+- Storage: Use entire disk (cẩn thận nếu có data)
+
+- Profile:
+
+- Your name: admin
+
+- Server name: homeserver
+
+- Username: admin
+
+- Password: [mật khẩu mạnh]
+
+- SSH: ✅ Install OpenSSH server
+
+- Featured snaps: Bỏ qua
+
+</code></pre>
+<p><strong>Bước 4: Sau khi cài xong</strong></p>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Đăng nhập với user đã tạo</span>
+
+  
+
+<span class="token comment"># Cập nhật hệ thống</span>
+
+<span class="token function">sudo</span>  apt  update <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span>  apt  upgrade  -y
+
+  
+
+<span class="token comment"># Cài đặt các tools cơ bản</span>
+
+<span class="token function">sudo</span>  apt  <span class="token function">install</span>  -y  curl  <span class="token function">wget</span>  <span class="token function">git</span>  vim  <span class="token function">htop</span>  net-tools
+
+  
+
+<span class="token comment"># Xem IP của máy</span>
+
+ip  addr  show
+
+<span class="token comment"># Hoặc</span>
+
+<span class="token function">hostname</span>  -I
+
+</code></pre>
+<hr>
+<h2 id="thiết-lập-cơ-bản">3. Thiết Lập Cơ Bản</h2>
+<h3 id="cấu-hình-ip-tĩnh">3.1 Cấu hình IP tĩnh</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># File cấu hình network</span>
+
+<span class="token function">sudo</span>  vim  /etc/netplan/00-installer-config.yaml
+
+</code></pre>
+<pre class=" language-yaml"><code class="prism  language-yaml">
+<span class="token key atrule">network</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">ethernets</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">eno1</span><span class="token punctuation">:</span> <span class="token comment"># Tên card mạng (có thể khác, dùng 'ip link' để xem)</span>
+
+<span class="token key atrule">dhcp4</span><span class="token punctuation">:</span> no
+
+<span class="token key atrule">addresses</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> 192.168.1.100/24  <span class="token comment"># IP tĩnh bạn muốn</span>
+
+<span class="token key atrule">routes</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> <span class="token key atrule">to</span><span class="token punctuation">:</span> default
+
+<span class="token key atrule">via</span><span class="token punctuation">:</span> 192.168.1.1  <span class="token comment"># Gateway (IP router)</span>
+
+<span class="token key atrule">nameservers</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">addresses</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> 8.8.8.8  <span class="token comment"># DNS Google</span>
+
+<span class="token punctuation">-</span> 1.1.1.1  <span class="token comment"># DNS Cloudflare</span>
+
+<span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token number">2</span>
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Áp dụng cấu hình</span>
+
+<span class="token function">sudo</span>  netplan  apply
+
+  
+
+<span class="token comment"># Kiểm tra</span>
+
+ip  addr  show
+
+<span class="token function">ping</span>  google.com
+
+</code></pre>
+<h3 id="ssh-từ-windows">3.2 SSH từ Windows</h3>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># Mở PowerShell trên Windows</span>
+
+ssh admin@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100
+
+  
+
+<span class="token comment"># Nếu dùng SSH key (khuyến nghị)</span>
+
+ssh<span class="token operator">-</span>keygen <span class="token operator">-</span>t ed25519 <span class="token operator">-</span>C <span class="token string">"your_email@example.com"</span>
+
+<span class="token comment"># Enter để tạo key tại ~/.ssh/id_ed25519</span>
+
+  
+
+<span class="token comment"># Copy public key lên server</span>
+
+<span class="token function">type</span> <span class="token variable">$env</span>:USERPROFILE\<span class="token punctuation">.</span>ssh\id_ed25519<span class="token punctuation">.</span>pub <span class="token punctuation">|</span> ssh admin@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100  <span class="token string">"mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys"</span>
+
+  
+
+<span class="token comment"># Giờ có thể SSH không cần password</span>
+
+ssh admin@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100
+
+</code></pre>
+<h3 id="cấu-hình-timezone">3.3 Cấu hình timezone</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Xem timezone hiện tại</span>
+
+timedatectl
+
+  
+
+<span class="token comment"># Đặt timezone Vietnam</span>
+
+<span class="token function">sudo</span>  timedatectl  set-timezone  Asia/Ho_Chi_Minh
+
+  
+
+<span class="token comment"># Hoặc Japan</span>
+
+<span class="token function">sudo</span>  timedatectl  set-timezone  Asia/Tokyo
+
+</code></pre>
+<hr>
+<h1 id="phần-2-triển-khai-1">PHẦN 2: TRIỂN KHAI</h1>
+<hr>
+<h2 id="cài-đặt-docker">4. Cài Đặt Docker</h2>
+<h3 id="cài-docker-trên-ubuntu">4.1 Cài Docker trên Ubuntu</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Cài đặt dependencies</span>
+
+<span class="token function">sudo</span>  apt  update
+
+<span class="token function">sudo</span>  apt  <span class="token function">install</span>  -y  ca-certificates  curl  gnupg
+
+  
+
+<span class="token comment"># Thêm Docker GPG key</span>
+
+<span class="token function">sudo</span>  <span class="token function">install</span>  -m  0755  -d  /etc/apt/keyrings
+
+curl  -fsSL  https://download.docker.com/linux/ubuntu/gpg <span class="token operator">|</span> <span class="token function">sudo</span>  gpg  --dearmor  -o  /etc/apt/keyrings/docker.gpg
+
+<span class="token function">sudo</span>  <span class="token function">chmod</span>  a+r  /etc/apt/keyrings/docker.gpg
+
+  
+
+<span class="token comment"># Thêm Docker repository</span>
+
+<span class="token keyword">echo</span>  \
+
+<span class="token string">"deb [arch=<span class="token variable"><span class="token variable">$(</span>dpkg --print-architecture<span class="token variable">)</span></span> signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+
+$(.  /etc/os-release &amp;&amp; echo  "</span><span class="token variable">$VERSION_CODENAME</span><span class="token string">") stable"</span> <span class="token operator">|</span> \
+
+<span class="token function">sudo</span> <span class="token function">tee</span> /etc/apt/sources.list.d/docker.list <span class="token operator">&gt;</span> /dev/null
+
+  
+
+<span class="token comment"># Cài đặt Docker</span>
+
+<span class="token function">sudo</span> apt update
+
+<span class="token function">sudo</span> apt <span class="token function">install</span> -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  
+
+<span class="token comment"># Cho phép user chạy Docker không cần sudo</span>
+
+<span class="token function">sudo</span> <span class="token function">usermod</span> -aG docker <span class="token variable">$USER</span>
+
+  
+
+<span class="token comment"># Logout và login lại để có effect</span>
+
+<span class="token keyword">exit</span>
+
+<span class="token comment"># SSH lại</span>
+
+  
+
+<span class="token comment"># Kiểm tra</span>
+
+docker --version
+
+docker compose version
+
+</code></pre>
+<h3 id="cấu-hình-docker">4.2 Cấu hình Docker</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Tạo file cấu hình</span>
+
+<span class="token function">sudo</span>  vim  /etc/docker/daemon.json
+
+</code></pre>
+<pre class=" language-json"><code class="prism  language-json">
+<span class="token punctuation">{</span>
+
+<span class="token string">"log-driver"</span><span class="token punctuation">:</span> <span class="token string">"json-file"</span><span class="token punctuation">,</span>
+
+<span class="token string">"log-opts"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+<span class="token string">"max-size"</span><span class="token punctuation">:</span> <span class="token string">"10m"</span><span class="token punctuation">,</span>
+
+<span class="token string">"max-file"</span><span class="token punctuation">:</span> <span class="token string">"3"</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token string">"storage-driver"</span><span class="token punctuation">:</span> <span class="token string">"overlay2"</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Restart Docker</span>
+
+<span class="token function">sudo</span>  systemctl  restart  docker
+
+</code></pre>
+<hr>
+<h2 id="deploy-ứng-dụng">5. Deploy Ứng Dụng</h2>
+<h3 id="clone-project">5.1 Clone project</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Tạo thư mục cho apps</span>
+
+<span class="token function">mkdir</span>  -p  ~/apps
+
+<span class="token function">cd</span>  ~/apps
+
+  
+
+<span class="token comment"># Clone project (thay URL nếu cần)</span>
+
+<span class="token function">git</span>  clone  https://github.com/your-username/2pjp-api.git
+
+<span class="token function">cd</span>  2pjp-api
+
+</code></pre>
+<h3 id="tạo-file-.env">5.2 Tạo file .env</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Copy từ example</span>
+
+<span class="token function">cp</span>  .env.example  .env
+
+  
+
+<span class="token comment"># Edit</span>
+
+vim  .env
+
+</code></pre>
+<pre class=" language-env"><code class="prism  language-env">
+# Database (đổi password mạnh!)
+
+MYSQL_ROOT_PASSWORD=SuperStr0ng!RootP@ss2024
+
+MYSQL_DATABASE=2pjp_db
+
+MYSQL_USER=2pjp_user
+
+MYSQL_PASSWORD=Str0ng!UserP@ss2024
+
+  
+
+# Redis
+
+REDIS_PORT=6379
+
+  
+
+# API
+
+API_PORT=3000
+
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-this
+
+  
+
+# Google OAuth
+
+GOOGLE_CLIENT_ID=xxx
+
+GOOGLE_CLIENT_SECRET=xxx
+
+GOOGLE_CALLBACK_URL=https://api.yourdomain.com/api/v1/auth/google/callback
+
+  
+
+# AI API Keys
+
+GEMINI_API_KEY_1=xxx
+
+GEMINI_API_KEY_2=xxx
+
+GEMINI_API_KEY_3=xxx
+
+GEMINI_API_KEY_4=xxx
+
+</code></pre>
+<h3 id="deploy-với-docker-compose">5.3 Deploy với Docker Compose</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Build và chạy production</span>
+
+docker  compose  up  -d  --build
+
+  
+
+<span class="token comment"># Xem logs</span>
+
+docker  compose  logs  -f
+
+  
+
+<span class="token comment"># Chạy migrations</span>
+
+docker  compose  <span class="token function">exec</span>  api  npx  prisma  migrate  deploy
+
+  
+
+<span class="token comment"># Chạy seed</span>
+
+docker  compose  <span class="token function">exec</span>  api  npx  ts-node  prisma/seeds/seed.ts
+
+</code></pre>
+<h3 id="kiểm-tra">5.4 Kiểm tra</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Xem containers</span>
+
+docker  compose  <span class="token function">ps</span>
+
+  
+
+<span class="token comment"># Kiểm tra API</span>
+
+curl  http://localhost:3000/health
+
+</code></pre>
+<hr>
+<h2 id="database-local-vs-cloud">6. Database: Local vs Cloud</h2>
+<h3 id="so-sánh">6.1 So sánh</h3>
+<p>| Tiêu chí | Local MySQL | Cloud (PlanetScale, Railway) |</p>
+<p>| --------------- | ----------------------- | ---------------------------- |</p>
+<p>| <strong>Giá</strong> | $0 (tự host) | Free tier giới hạn |</p>
+<p>| <strong>Performance</strong> | Tùy hardware | Tốt, có CDN |</p>
+<p>| <strong>Backup</strong> | Tự làm | Tự động |</p>
+<p>| <strong>Maintenance</strong> | Tự làm | Có team chuyên |</p>
+<p>| <strong>Scaling</strong> | Khó | Dễ |</p>
+<p>| <strong>Latency</strong> | Rất thấp (same machine) | Cao hơn |</p>
+<p>| <strong>Học hỏi</strong> | Học nhiều | Ít học |</p>
+<h3 id="local-mysql-đã-có-trong-docker">6.2 Local MySQL (Đã có trong Docker)</h3>
+<p><strong>Ưu điểm:</strong></p>
+<ul>
+<li>
+<p>Miễn phí hoàn toàn</p>
+</li>
+<li>
+<p>Không giới hạn storage</p>
+</li>
+<li>
+<p>Latency cực thấp</p>
+</li>
+<li>
+<p>Full control</p>
+</li>
+</ul>
+<p><strong>Nhược điểm:</strong></p>
+<ul>
+<li>
+<p>Phải tự backup</p>
+</li>
+<li>
+<p>Phải tự monitor</p>
+</li>
+<li>
+<p>Nếu server hỏng = mất data</p>
+</li>
+</ul>
+<h3 id="cloud-database-options">6.3 Cloud Database Options</h3>
+<p><strong>PlanetScale (MySQL compatible)</strong></p>
+<ul>
+<li>
+<p>Free tier: 5GB storage, 1 billion row reads/month</p>
+</li>
+<li>
+<p>URL: <a href="https://planetscale.com/">https://planetscale.com/</a></p>
+</li>
+</ul>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Chỉ cần đổi DATABASE_URL trong .env</span>
+
+DATABASE_URL<span class="token operator">=</span><span class="token string">"mysql://user:pass@region.connect.psdb.cloud/dbname?sslaccept=strict"</span>
+
+</code></pre>
+<p><strong>Railway</strong></p>
+<ul>
+<li>
+<p>Free tier: $5 credit/month</p>
+</li>
+<li>
+<p>URL: <a href="https://railway.app/">https://railway.app/</a></p>
+</li>
+</ul>
+<p><strong>Supabase (PostgreSQL)</strong></p>
+<ul>
+<li>
+<p>Free tier: 500MB, 2GB bandwidth</p>
+</li>
+<li>
+<p>URL: <a href="https://supabase.com/">https://supabase.com/</a></p>
+</li>
+</ul>
+<h3 id="backup-local-mysql">6.4 Backup Local MySQL</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Tạo script backup</span>
+
+vim  ~/scripts/backup-mysql.sh
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment">#!/bin/bash</span>
+
+  
+
+<span class="token comment"># Cấu hình</span>
+
+BACKUP_DIR<span class="token operator">=</span><span class="token string">"/home/admin/backups/mysql"</span>
+
+MYSQL_CONTAINER<span class="token operator">=</span><span class="token string">"2pjp-mysql"</span>
+
+DB_NAME<span class="token operator">=</span><span class="token string">"2pjp_db"</span>
+
+DATE<span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">date</span>  +%Y%m%d_%H%M%S<span class="token variable">)</span></span>
+
+  
+
+<span class="token comment"># Tạo thư mục nếu chưa có</span>
+
+<span class="token function">mkdir</span>  -p  <span class="token variable">$BACKUP_DIR</span>
+
+  
+
+<span class="token comment"># Backup</span>
+
+docker  <span class="token function">exec</span>  <span class="token variable">$MYSQL_CONTAINER</span>  mysqldump  -u  root  -p<span class="token string">"<span class="token variable">$MYSQL_ROOT_PASSWORD</span>"</span>  <span class="token variable">$DB_NAME</span> <span class="token operator">|</span> <span class="token function">gzip</span> <span class="token operator">&gt;</span> <span class="token string">"<span class="token variable">$BACKUP_DIR</span>/backup_<span class="token variable">$DATE</span>.sql.gz"</span>
+
+  
+
+<span class="token comment"># Xóa backup cũ hơn 7 ngày</span>
+
+<span class="token function">find</span>  <span class="token variable">$BACKUP_DIR</span>  -name  <span class="token string">"*.sql.gz"</span>  -mtime  +7  -delete
+
+  
+
+<span class="token keyword">echo</span>  <span class="token string">"Backup completed: backup_<span class="token variable">$DATE</span>.sql.gz"</span>
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Cho phép chạy</span>
+
+<span class="token function">chmod</span>  +x  ~/scripts/backup-mysql.sh
+
+  
+
+<span class="token comment"># Thêm vào crontab (chạy mỗi ngày lúc 2 giờ sáng)</span>
+
+<span class="token function">crontab</span>  -e
+
+<span class="token comment"># Thêm dòng:</span>
+
+0  2  *  *  *  /home/admin/scripts/backup-mysql.sh <span class="token operator">&gt;&gt;</span> /home/admin/logs/backup.log 2<span class="token operator">&gt;</span><span class="token operator">&amp;</span>1
+
+</code></pre>
+<hr>
+<h2 id="storage-drive-api-vs-cloudflare-r2">7. Storage: Drive API vs Cloudflare R2</h2>
+<h3 id="so-sánh-1">7.1 So sánh</h3>
+<p>| Tiêu chí | Google Drive API | Cloudflare R2 |</p>
+<p>| ------------- | ------------------ | ----------------------------- |</p>
+<p>| <strong>Free tier</strong> | 15GB | 10GB + 10 triệu request/tháng |</p>
+<p>| <strong>Pricing</strong> | $1.99/100GB | $0.015/GB |</p>
+<p>| <strong>Speed</strong> | Chậm hơn | Nhanh (CDN global) |</p>
+<p>| <strong>API</strong> | REST, phức tạp hơn | S3 compatible |</p>
+<p>| <strong>Use case</strong> | Lưu file lâu dài | CDN, public files |</p>
+<h3 id="nén-json-trước-khi-upload">7.2 Nén JSON trước khi upload</h3>
+<p><strong>Tại sao nén?</strong></p>
+<ul>
+<li>
+<p>File JSON 1MB → Nén còn ~100KB (90% smaller)</p>
+</li>
+<li>
+<p>Tiết kiệm bandwidth và storage</p>
+</li>
+</ul>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// Nén JSON với gzip</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> gzip<span class="token punctuation">,</span> gunzip <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'zlib'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> promisify <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'util'</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">const</span>  gzipAsync <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>gzip<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span>  gunzipAsync <span class="token operator">=</span> <span class="token function">promisify</span><span class="token punctuation">(</span>gunzip<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Nén</span>
+
+<span class="token keyword">async</span>  <span class="token keyword">function</span>  <span class="token function">compressJson</span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> object<span class="token punctuation">)</span><span class="token punctuation">:</span> Promise<span class="token operator">&lt;</span>Buffer<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">const</span>  jsonString <span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">return</span>  <span class="token function">gzipAsync</span><span class="token punctuation">(</span>jsonString<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// Giải nén</span>
+
+<span class="token keyword">async</span>  <span class="token keyword">function</span>  decompressJson<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span><span class="token punctuation">(</span>buffer<span class="token punctuation">:</span> Buffer<span class="token punctuation">)</span><span class="token punctuation">:</span> Promise<span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">const</span>  decompressed <span class="token operator">=</span> <span class="token keyword">await</span>  <span class="token function">gunzipAsync</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">return</span>  JSON<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>decompressed<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// Ví dụ sử dụng</span>
+
+<span class="token keyword">const</span>  data <span class="token operator">=</span> <span class="token punctuation">{</span> sentences<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token punctuation">]</span><span class="token punctuation">,</span> translations<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token operator">...</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Nén trước khi upload</span>
+
+<span class="token keyword">const</span>  compressed <span class="token operator">=</span> <span class="token keyword">await</span>  <span class="token function">compressJson</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// compressed.length sẽ nhỏ hơn nhiều</span>
+
+  
+
+<span class="token comment">// Upload với tên file .json.gz</span>
+
+<span class="token keyword">await</span>  <span class="token function">uploadToStorage</span><span class="token punctuation">(</span><span class="token string">'content-123.json.gz'</span><span class="token punctuation">,</span> compressed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+<h3 id="cloudflare-r2-setup">7.3 Cloudflare R2 Setup</h3>
+<p><strong>Bước 1: Tạo R2 bucket</strong></p>
+<pre><code>
+1. Đăng nhập Cloudflare Dashboard
+
+2. Vào R2 → Create bucket
+
+3. Đặt tên: 2pjp-storage
+
+4. Chọn region gần nhất
+
+</code></pre>
+<p><strong>Bước 2: Tạo API Token</strong></p>
+<pre><code>
+1. R2 → Manage R2 API Tokens
+
+2. Create API Token
+
+3. Chọn permissions: Admin Read &amp; Write
+
+4. Lưu lại Access Key ID và Secret Access Key
+
+</code></pre>
+<p><strong>Bước 3: Code upload</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+
+S3Client<span class="token punctuation">,</span>
+
+PutObjectCommand<span class="token punctuation">,</span>
+
+GetObjectCommand<span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@aws-sdk/client-s3'</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">const</span>  r2Client <span class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">S3Client</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+region<span class="token punctuation">:</span>  <span class="token string">'auto'</span><span class="token punctuation">,</span>
+
+endpoint<span class="token punctuation">:</span>  <span class="token template-string"><span class="token string">`https://</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>CLOUDFLARE_ACCOUNT_ID<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">.r2.cloudflarestorage.com`</span></span><span class="token punctuation">,</span>
+
+credentials<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+accessKeyId<span class="token punctuation">:</span>  R2_ACCESS_KEY_ID<span class="token punctuation">,</span>
+
+secretAccessKey<span class="token punctuation">:</span>  R2_SECRET_ACCESS_KEY<span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Upload</span>
+
+<span class="token keyword">async</span>  <span class="token keyword">function</span>  <span class="token function">uploadToR2</span><span class="token punctuation">(</span>key<span class="token punctuation">:</span> <span class="token keyword">string</span><span class="token punctuation">,</span> data<span class="token punctuation">:</span> Buffer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">await</span>  r2Client<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>
+
+<span class="token keyword">new</span>  <span class="token class-name">PutObjectCommand</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+Bucket<span class="token punctuation">:</span>  <span class="token string">'2pjp-storage'</span><span class="token punctuation">,</span>
+
+Key<span class="token punctuation">:</span>  key<span class="token punctuation">,</span>
+
+Body<span class="token punctuation">:</span>  data<span class="token punctuation">,</span>
+
+ContentType<span class="token punctuation">:</span>  <span class="token string">'application/gzip'</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// Download</span>
+
+<span class="token keyword">async</span>  <span class="token keyword">function</span>  <span class="token function">downloadFromR2</span><span class="token punctuation">(</span>key<span class="token punctuation">:</span> <span class="token keyword">string</span><span class="token punctuation">)</span><span class="token punctuation">:</span> Promise<span class="token operator">&lt;</span>Buffer<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">const</span>  response <span class="token operator">=</span> <span class="token keyword">await</span>  r2Client<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>
+
+<span class="token keyword">new</span>  <span class="token class-name">GetObjectCommand</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+Bucket<span class="token punctuation">:</span>  <span class="token string">'2pjp-storage'</span><span class="token punctuation">,</span>
+
+Key<span class="token punctuation">:</span>  key<span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">return</span>  Buffer<span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span><span class="token keyword">await</span>  response<span class="token punctuation">.</span>Body<span class="token punctuation">.</span><span class="token function">transformToByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<hr>
+<h1 id="phần-3-đưa-lên-internet-1">PHẦN 3: ĐƯA LÊN INTERNET</h1>
+<hr>
+<h2 id="mua-domain">8. Mua Domain</h2>
+<h3 id="các-nhà-cung-cấp-domain">8.1 Các nhà cung cấp domain</h3>
+<p>| Provider | Giá .com/năm | Đặc điểm |</p>
+<p>| ------------------------ | ------------ | ---------------------------- |</p>
+<p>| <strong>Cloudflare Registrar</strong> | ~$9 | Giá gốc, không phí ẩn |</p>
+<p>| <strong>Namecheap</strong> | ~$10-15 | Phổ biến, WHOIS privacy free |</p>
+<p>| <strong>Google Domains</strong> | ~$12 | Đơn giản, integrate tốt |</p>
+<p>| <strong>Porkbun</strong> | ~$9 | Rẻ, WHOIS privacy free |</p>
+<p><strong>Khuyến nghị:</strong> Cloudflare Registrar (giá gốc, tích hợp sẵn Cloudflare)</p>
+<h3 id="mua-domain-trên-cloudflare">8.2 Mua domain trên Cloudflare</h3>
+<pre><code>
+1. Đăng ký tài khoản Cloudflare: https://dash.cloudflare.com/sign-up
+
+2. Vào Domain Registration → Register Domains
+
+3. Tìm domain muốn mua (vd: 2pjp.com)
+
+4. Thanh toán (cần thẻ Visa/Mastercard)
+
+</code></pre>
+<hr>
+<h2 id="cloudflare-setup">9. Cloudflare Setup</h2>
+<h3 id="tại-sao-dùng-cloudflare">9.1 Tại sao dùng Cloudflare?</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ KHÔNG CÓ CLOUDFLARE │
+
+│ │
+
+│ User → Internet → IP công khai của bạn → Server │
+
+│ (Ai cũng thấy IP!) │
+
+│ (Dễ bị DDoS attack!) │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+  
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ CÓ CLOUDFLARE │
+
+│ │
+
+│ User → Cloudflare CDN → Cloudflare WAF → Server │
+
+│ (Cache tĩnh) (Chặn attack) (IP ẩn) │
+
+│ (Nhanh hơn) (DDoS protect) │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<h3 id="thêm-site-vào-cloudflare">9.2 Thêm site vào Cloudflare</h3>
+<pre><code>
+1. Cloudflare Dashboard → Add a Site
+
+2. Nhập domain: yourdomain.com
+
+3. Chọn plan: Free (đủ dùng)
+
+4. Cloudflare sẽ scan DNS records hiện có
+
+5. Đổi nameservers ở nơi mua domain sang Cloudflare
+
+- ns1.cloudflare.com
+
+- ns2.cloudflare.com
+
+6. Đợi 24-48 giờ để propagate
+
+</code></pre>
+<h3 id="cấu-hình-dns">9.3 Cấu hình DNS</h3>
+<pre><code>
+Dashboard → DNS → Records
+
+  
+
+Thêm các records:
+
+  
+
+Type Name Content Proxy
+
+──────────────────────────────────────────────
+
+A @ 192.168.1.100 ☁️ Proxied
+
+A api 192.168.1.100 ☁️ Proxied
+
+CNAME www yourdomain.com ☁️ Proxied
+
+</code></pre>
+<p><strong>Lưu ý về IP:</strong></p>
+<ul>
+<li>
+<p>Nếu có IP công cộng tĩnh → Dùng IP đó</p>
+</li>
+<li>
+<p>Nếu IP động → Dùng Dynamic DNS (xem phần sau)</p>
+</li>
+</ul>
+<h3 id="dynamic-dns-ip-động">9.4 Dynamic DNS (IP động)</h3>
+<p>Nếu nhà bạn có IP động (đổi mỗi lần restart router):</p>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Cài ddclient</span>
+
+<span class="token function">sudo</span>  apt  <span class="token function">install</span>  ddclient
+
+  
+
+<span class="token comment"># Cấu hình</span>
+
+<span class="token function">sudo</span>  vim  /etc/ddclient.conf
+
+</code></pre>
+<pre><code>
+protocol=cloudflare
+
+use=web
+
+web=https://api.ipify.org
+
+login=your-cloudflare-email
+
+password=your-cloudflare-api-token
+
+zone=yourdomain.com
+
+api.yourdomain.com
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Khởi động</span>
+
+<span class="token function">sudo</span>  systemctl  <span class="token function">enable</span>  ddclient
+
+<span class="token function">sudo</span>  systemctl  start  ddclient
+
+</code></pre>
+<hr>
+<h2 id="sslhttps">10. SSL/HTTPS</h2>
+<h3 id="cloudflare-ssl-modes">10.1 Cloudflare SSL Modes</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ SSL Mode: Flexible (KHÔNG KHUYẾN NGHỊ) │
+
+│ │
+
+│ User ──HTTPS──&gt; Cloudflare ──HTTP──&gt; Server │
+
+│ (Không mã hóa!) │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+  
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ SSL Mode: Full (Strict) (KHUYẾN NGHỊ) │
+
+│ │
+
+│ User ──HTTPS──&gt; Cloudflare ──HTTPS──&gt; Server │
+
+│ (Mã hóa end-to-end!) │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<h3 id="lấy-cloudflare-origin-certificate">10.2 Lấy Cloudflare Origin Certificate</h3>
+<pre><code>
+1. Cloudflare Dashboard → SSL/TLS → Origin Server
+
+2. Create Certificate
+
+3. Let Cloudflare generate a private key and a CSR
+
+4. Hostnames: *.yourdomain.com, yourdomain.com
+
+5. Certificate Validity: 15 years
+
+6. Copy và lưu lại:
+
+- Origin Certificate → /etc/ssl/cloudflare/cert.pem
+
+- Private Key → /etc/ssl/cloudflare/key.pem
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Tạo thư mục và lưu certificates</span>
+
+<span class="token function">sudo</span>  <span class="token function">mkdir</span>  -p  /etc/ssl/cloudflare
+
+<span class="token function">sudo</span>  vim  /etc/ssl/cloudflare/cert.pem  <span class="token comment"># Paste certificate</span>
+
+<span class="token function">sudo</span>  vim  /etc/ssl/cloudflare/key.pem  <span class="token comment"># Paste private key</span>
+
+<span class="token function">sudo</span>  <span class="token function">chmod</span>  600  /etc/ssl/cloudflare/*
+
+</code></pre>
+<hr>
+<h2 id="reverse-proxy-với-nginx">11. Reverse Proxy với Nginx</h2>
+<h3 id="tại-sao-cần-nginx">11.1 Tại sao cần Nginx?</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ NGINX LÀM GÌ? │
+
+│ │
+
+│ 1. Reverse Proxy: Chuyển request đến container │
+
+│ 2. SSL Termination: Xử lý HTTPS │
+
+│ 3. Load Balancing: Phân tải (nếu có nhiều server) │
+
+│ 4. Serve Static Files: Nhanh hơn Node.js │
+
+│ 5. Rate Limiting: Giới hạn request │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<h3 id="cài-đặt-nginx">11.2 Cài đặt Nginx</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">sudo</span>  apt  <span class="token function">install</span>  -y  nginx
+
+  
+
+<span class="token comment"># Kiểm tra</span>
+
+<span class="token function">sudo</span>  systemctl  status  nginx
+
+</code></pre>
+<h3 id="cấu-hình-nginx">11.3 Cấu hình Nginx</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">sudo</span>  vim  /etc/nginx/sites-available/2pjp-api
+
+</code></pre>
+<pre class=" language-nginx"><code class="prism  language-nginx">
+<span class="token comment"># Redirect HTTP → HTTPS</span>
+
+<span class="token keyword">server</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">listen</span> <span class="token number">80</span><span class="token punctuation">;</span>
+
+<span class="token keyword">server_name</span> api<span class="token punctuation">.</span>yourdomain<span class="token punctuation">.</span>com<span class="token punctuation">;</span>
+
+<span class="token keyword">return</span> <span class="token number">301</span> <span class="token keyword">https</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token variable">$server_name</span><span class="token variable">$request_uri</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment"># HTTPS Server</span>
+
+<span class="token keyword">server</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">listen</span> <span class="token number">443</span> <span class="token keyword">ssl</span> http2<span class="token punctuation">;</span>
+
+<span class="token keyword">server_name</span> api<span class="token punctuation">.</span>yourdomain<span class="token punctuation">.</span>com<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># SSL Certificates (Cloudflare Origin)</span>
+
+<span class="token keyword">ssl_certificate</span> <span class="token operator">/</span>etc<span class="token operator">/</span><span class="token keyword">ssl</span><span class="token operator">/</span>cloudflare<span class="token operator">/</span>cert<span class="token punctuation">.</span>pem<span class="token punctuation">;</span>
+
+<span class="token keyword">ssl_certificate_key</span> <span class="token operator">/</span>etc<span class="token operator">/</span><span class="token keyword">ssl</span><span class="token operator">/</span>cloudflare<span class="token operator">/</span>key<span class="token punctuation">.</span>pem<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># SSL Settings</span>
+
+<span class="token keyword">ssl_protocols</span> TLSv1<span class="token number">.2</span> TLSv1<span class="token number">.3</span><span class="token punctuation">;</span>
+
+<span class="token keyword">ssl_ciphers</span> ECDHE<span class="token operator">-</span>ECDSA<span class="token operator">-</span>AES128<span class="token operator">-</span>GCM<span class="token operator">-</span>SHA256<span class="token punctuation">:</span>ECDHE<span class="token operator">-</span>RSA<span class="token operator">-</span>AES128<span class="token operator">-</span>GCM<span class="token operator">-</span>SHA256<span class="token punctuation">;</span>
+
+<span class="token keyword">ssl_prefer_server_ciphers</span> off<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># Security Headers</span>
+
+<span class="token keyword">add_header</span> X<span class="token operator">-</span>Frame<span class="token operator">-</span>Options <span class="token string">"SAMEORIGIN"</span> always<span class="token punctuation">;</span>
+
+<span class="token keyword">add_header</span> X<span class="token operator">-</span>Content<span class="token operator">-</span>Type<span class="token operator">-</span>Options <span class="token string">"nosniff"</span> always<span class="token punctuation">;</span>
+
+<span class="token keyword">add_header</span> X<span class="token operator">-</span>XSS<span class="token operator">-</span>Protection <span class="token string">"1; mode=block"</span> always<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># Logging</span>
+
+<span class="token keyword">access_log</span> <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>2pjp<span class="token operator">-</span>api<span class="token punctuation">.</span>access<span class="token punctuation">.</span>log<span class="token punctuation">;</span>
+
+<span class="token keyword">error_log</span> <span class="token operator">/</span>var<span class="token operator">/</span>log<span class="token operator">/</span>nginx<span class="token operator">/</span>2pjp<span class="token operator">-</span>api<span class="token punctuation">.</span>error<span class="token punctuation">.</span>log<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># Proxy to Docker container</span>
+
+<span class="token keyword">location</span> <span class="token operator">/</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">proxy_pass</span> <span class="token keyword">http</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">3000</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_http_version</span> <span class="token number">1.1</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_set_header</span> Upgrade <span class="token variable">$http_upgrade</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_set_header</span> Connection <span class="token string">'upgrade'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_set_header</span> Host <span class="token variable">$host</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_set_header</span> X<span class="token operator">-</span>Real<span class="token operator">-</span>IP <span class="token variable">$remote_addr</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_set_header</span> X<span class="token operator">-</span>Forwarded<span class="token operator">-</span>For <span class="token variable">$proxy_add_x_forwarded_for</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_set_header</span> X<span class="token operator">-</span>Forwarded<span class="token operator">-</span>Proto <span class="token variable">$scheme</span><span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_cache_bypass</span> <span class="token variable">$http_upgrade</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># Timeouts</span>
+
+<span class="token keyword">proxy_connect_timeout</span> 60s<span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_send_timeout</span> 60s<span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_read_timeout</span> 60s<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment"># Rate Limiting cho API</span>
+
+<span class="token keyword">location</span> <span class="token operator">/</span>api<span class="token operator">/</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">limit_req</span> zone<span class="token operator">=</span>api burst<span class="token operator">=</span><span class="token number">20</span> nodelay<span class="token punctuation">;</span>
+
+<span class="token keyword">proxy_pass</span> <span class="token keyword">http</span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">3000</span><span class="token punctuation">;</span>
+
+<span class="token comment"># ... same proxy settings as above</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Thêm rate limiting vào nginx.conf</span>
+
+<span class="token function">sudo</span>  vim  /etc/nginx/nginx.conf
+
+<span class="token comment"># Thêm vào block http {}:</span>
+
+limit_req_zone  <span class="token variable">$binary_remote_addr</span>  zone<span class="token operator">=</span>api:10m  rate<span class="token operator">=</span>10r/s<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># Enable site</span>
+
+<span class="token function">sudo</span>  <span class="token function">ln</span>  -s  /etc/nginx/sites-available/2pjp-api  /etc/nginx/sites-enabled/
+
+  
+
+<span class="token comment"># Test config</span>
+
+<span class="token function">sudo</span>  nginx  -t
+
+  
+
+<span class="token comment"># Reload</span>
+
+<span class="token function">sudo</span>  systemctl  reload  nginx
+
+</code></pre>
+<hr>
+<h1 id="phần-4-bảo-mật-1">PHẦN 4: BẢO MẬT</h1>
+<hr>
+<h2 id="bảo-mật-server">12. Bảo Mật Server</h2>
+<h3 id="firewall-với-ufw">12.1 Firewall với UFW</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Cài đặt</span>
+
+<span class="token function">sudo</span>  apt  <span class="token function">install</span>  ufw
+
+  
+
+<span class="token comment"># Rules cơ bản</span>
+
+<span class="token function">sudo</span>  ufw  default  deny  incoming  <span class="token comment"># Chặn tất cả incoming</span>
+
+<span class="token function">sudo</span>  ufw  default  allow  outgoing  <span class="token comment"># Cho phép outgoing</span>
+
+  
+
+<span class="token comment"># Cho phép các ports cần thiết</span>
+
+<span class="token function">sudo</span>  ufw  allow  <span class="token function">ssh</span>  <span class="token comment"># Port 22 (SSH)</span>
+
+<span class="token function">sudo</span>  ufw  allow  80/tcp  <span class="token comment"># HTTP</span>
+
+<span class="token function">sudo</span>  ufw  allow  443/tcp  <span class="token comment"># HTTPS</span>
+
+  
+
+<span class="token comment"># KHÔNG mở port 3000, 3306, 6379 ra ngoài!</span>
+
+<span class="token comment"># Chúng chỉ cần accessible từ localhost</span>
+
+  
+
+<span class="token comment"># Bật firewall</span>
+
+<span class="token function">sudo</span>  ufw  <span class="token function">enable</span>
+
+  
+
+<span class="token comment"># Kiểm tra</span>
+
+<span class="token function">sudo</span>  ufw  status
+
+</code></pre>
+<h3 id="ssh-hardening">12.2 SSH Hardening</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">sudo</span>  vim  /etc/ssh/sshd_config
+
+</code></pre>
+<pre><code>
+# Đổi port (optional, tránh scan)
+
+Port 2222
+
+  
+
+# Chỉ cho phép key-based auth
+
+PasswordAuthentication no
+
+PubkeyAuthentication yes
+
+  
+
+# Disable root login
+
+PermitRootLogin no
+
+  
+
+# Giới hạn users
+
+AllowUsers admin
+
+  
+
+# Timeout
+
+ClientAliveInterval 300
+
+ClientAliveCountMax 2
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Restart SSH (cẩn thận, đừng lock yourself out!)</span>
+
+<span class="token function">sudo</span>  systemctl  restart  sshd
+
+  
+
+<span class="token comment"># Nếu đổi port, update firewall</span>
+
+<span class="token function">sudo</span>  ufw  allow  2222/tcp
+
+<span class="token function">sudo</span>  ufw  deny  22/tcp
+
+</code></pre>
+<h3 id="fail2ban-chống-brute-force">12.3 Fail2Ban (Chống brute force)</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">sudo</span>  apt  <span class="token function">install</span>  fail2ban
+
+  
+
+<span class="token function">sudo</span>  vim  /etc/fail2ban/jail.local
+
+</code></pre>
+<pre class=" language-ini"><code class="prism  language-ini">
+<span class="token selector">[DEFAULT]</span>
+
+<span class="token constant">bantime</span> <span class="token attr-value"><span class="token punctuation">=</span> 1h</span>
+
+<span class="token constant">findtime</span> <span class="token attr-value"><span class="token punctuation">=</span> 10m</span>
+
+<span class="token constant">maxretry</span> <span class="token attr-value"><span class="token punctuation">=</span> 5</span>
+
+  
+
+<span class="token selector">[sshd]</span>
+
+<span class="token constant">enabled</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
+
+<span class="token constant">port</span> <span class="token attr-value"><span class="token punctuation">=</span> 2222 # Port SSH của bạn</span>
+
+<span class="token constant">filter</span> <span class="token attr-value"><span class="token punctuation">=</span> sshd</span>
+
+<span class="token constant">logpath</span> <span class="token attr-value"><span class="token punctuation">=</span> /var/log/auth.log</span>
+
+  
+
+<span class="token selector">[nginx-http-auth]</span>
+
+<span class="token constant">enabled</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
+
+  
+
+<span class="token selector">[nginx-limit-req]</span>
+
+<span class="token constant">enabled</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">sudo</span>  systemctl  <span class="token function">enable</span>  fail2ban
+
+<span class="token function">sudo</span>  systemctl  start  fail2ban
+
+  
+
+<span class="token comment"># Xem status</span>
+
+<span class="token function">sudo</span>  fail2ban-client  status
+
+<span class="token function">sudo</span>  fail2ban-client  status  sshd
+
+</code></pre>
+<h3 id="auto-updates">12.4 Auto Updates</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">sudo</span>  apt  <span class="token function">install</span>  unattended-upgrades
+
+  
+
+<span class="token function">sudo</span>  vim  /etc/apt/apt.conf.d/50unattended-upgrades
+
+</code></pre>
+<pre><code>
+Unattended-Upgrade::Allowed-Origins {
+
+"${distro_id}:${distro_codename}";
+
+"${distro_id}:${distro_codename}-security";
+
+"${distro_id}:${distro_codename}-updates";
+
+};
+
+  
+
+Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+
+Unattended-Upgrade::Automatic-Reboot "false"; # Không tự restart
+
+</code></pre>
+<hr>
+<h2 id="bảo-mật-ứng-dụng">13. Bảo Mật Ứng Dụng</h2>
+<h3 id="environment-variables">13.1 Environment Variables</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># KHÔNG BAO GIỜ commit .env vào git!</span>
+
+<span class="token keyword">echo</span>  <span class="token string">".env"</span> <span class="token operator">&gt;&gt;</span> .gitignore
+
+  
+
+<span class="token comment"># Sử dụng secrets management cho production</span>
+
+<span class="token comment"># Option 1: Docker secrets</span>
+
+<span class="token comment"># Option 2: HashiCorp Vault</span>
+
+<span class="token comment"># Option 3: AWS Secrets Manager</span>
+
+</code></pre>
+<h3 id="helmet.js-security-headers">13.2 Helmet.js (Security Headers)</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// main.ts</span>
+
+<span class="token keyword">import</span>  helmet  <span class="token keyword">from</span>  <span class="token string">'helmet'</span><span class="token punctuation">;</span>
+
+  
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">helmet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+<h3 id="rate-limiting-trong-nestjs">13.3 Rate Limiting trong NestJS</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// app.module.ts</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> ThrottlerModule<span class="token punctuation">,</span> ThrottlerGuard <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/throttler'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Module</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+imports<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+
+ThrottlerModule<span class="token punctuation">.</span><span class="token function">forRoot</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+ttl<span class="token punctuation">:</span>  <span class="token number">60</span><span class="token punctuation">,</span> <span class="token comment">// 60 seconds</span>
+
+limit<span class="token punctuation">:</span>  <span class="token number">100</span><span class="token punctuation">,</span> <span class="token comment">// 100 requests per ttl</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+providers<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+
+<span class="token punctuation">{</span>
+
+provide<span class="token punctuation">:</span>  APP_GUARD<span class="token punctuation">,</span>
+
+useClass<span class="token punctuation">:</span>  ThrottlerGuard<span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+</code></pre>
+<h3 id="cors-configuration">13.4 CORS Configuration</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// main.ts</span>
+
+app<span class="token punctuation">.</span><span class="token function">enableCors</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+origin<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'https://yourdomain.com'</span><span class="token punctuation">,</span> <span class="token string">'https://www.yourdomain.com'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+methods<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">,</span> <span class="token string">'PUT'</span><span class="token punctuation">,</span> <span class="token string">'DELETE'</span><span class="token punctuation">,</span> <span class="token string">'PATCH'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+credentials<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+<hr>
+<h2 id="cloudflare-protection">14. Cloudflare Protection</h2>
+<h3 id="security-settings">14.1 Security Settings</h3>
+<pre><code>
+Dashboard → Security → Settings
+
+  
+
+- Security Level: Medium (hoặc High)
+
+- Challenge Passage: 30 minutes
+
+- Browser Integrity Check: ON
+
+</code></pre>
+<h3 id="waf-rules">14.2 WAF Rules</h3>
+<pre><code>
+Dashboard → Security → WAF
+
+  
+
+Enable Managed Rules:
+
+- Cloudflare Managed Ruleset: ON
+
+- Cloudflare OWASP Core Ruleset: ON
+
+</code></pre>
+<h3 id="ddos-protection">14.3 DDoS Protection</h3>
+<pre><code>
+Dashboard → Security → DDoS
+
+  
+
+- DDoS L7 Attack Protection: ON (tự động)
+
+</code></pre>
+<h3 id="bot-management-free-tier">14.4 Bot Management (Free tier)</h3>
+<pre><code>
+Dashboard → Security → Bots
+
+  
+
+- Bot Fight Mode: ON
+
+- Chặn Known Bad Bots
+
+</code></pre>
+<h3 id="chỉ-cho-phép-cloudflare-ips">14.5 Chỉ cho phép Cloudflare IPs</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Nginx: Chỉ chấp nhận request từ Cloudflare</span>
+
+<span class="token function">sudo</span>  vim  /etc/nginx/cloudflare-ips.conf
+
+</code></pre>
+<pre class=" language-nginx"><code class="prism  language-nginx">
+<span class="token comment"># Cloudflare IPv4 (cập nhật từ https://www.cloudflare.com/ips-v4)</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">173.245</span><span class="token punctuation">.</span><span class="token number">48.0</span><span class="token operator">/</span><span class="token number">20</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">103.21</span><span class="token punctuation">.</span><span class="token number">244.0</span><span class="token operator">/</span><span class="token number">22</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">103.22</span><span class="token punctuation">.</span><span class="token number">200.0</span><span class="token operator">/</span><span class="token number">22</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">103.31</span><span class="token punctuation">.</span><span class="token number">4.0</span><span class="token operator">/</span><span class="token number">22</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">141.101</span><span class="token punctuation">.</span><span class="token number">64.0</span><span class="token operator">/</span><span class="token number">18</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">108.162</span><span class="token punctuation">.</span><span class="token number">192.0</span><span class="token operator">/</span><span class="token number">18</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">190.93</span><span class="token punctuation">.</span><span class="token number">240.0</span><span class="token operator">/</span><span class="token number">20</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">188.114</span><span class="token punctuation">.</span><span class="token number">96.0</span><span class="token operator">/</span><span class="token number">20</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">197.234</span><span class="token punctuation">.</span><span class="token number">240.0</span><span class="token operator">/</span><span class="token number">22</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">198.41</span><span class="token punctuation">.</span><span class="token number">128.0</span><span class="token operator">/</span><span class="token number">17</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">162.158</span><span class="token punctuation">.</span><span class="token number">0.0</span><span class="token operator">/</span><span class="token number">15</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">104.16</span><span class="token punctuation">.</span><span class="token number">0.0</span><span class="token operator">/</span><span class="token number">13</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">104.24</span><span class="token punctuation">.</span><span class="token number">0.0</span><span class="token operator">/</span><span class="token number">14</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">172.64</span><span class="token punctuation">.</span><span class="token number">0.0</span><span class="token operator">/</span><span class="token number">13</span><span class="token punctuation">;</span>
+
+<span class="token keyword">set_real_ip_from</span> <span class="token number">131.0</span><span class="token punctuation">.</span><span class="token number">72.0</span><span class="token operator">/</span><span class="token number">22</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">real_ip_header</span> CF<span class="token operator">-</span>Connecting<span class="token operator">-</span>IP<span class="token punctuation">;</span>
+
+</code></pre>
+<pre class=" language-nginx"><code class="prism  language-nginx">
+<span class="token comment"># Trong server block</span>
+
+<span class="token keyword">include</span> <span class="token operator">/</span>etc<span class="token operator">/</span>nginx<span class="token operator">/</span>cloudflare<span class="token operator">-</span>ips<span class="token punctuation">.</span>conf<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment"># Chặn direct access (không qua Cloudflare)</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$http_cf_connecting_ip</span> <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span> <span class="token number">403</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<hr>
+<h1 id="phần-5-vận-hành-1">PHẦN 5: VẬN HÀNH</h1>
+<hr>
+<h2 id="monitoring--logging">15. Monitoring &amp; Logging</h2>
+<h3 id="htop-xem-resource">15.1 Htop (xem resource)</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">htop</span>
+
+<span class="token comment"># CPU, RAM, processes real-time</span>
+
+</code></pre>
+<h3 id="docker-logs">15.2 Docker logs</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Logs tất cả containers</span>
+
+docker  compose  logs  -f
+
+  
+
+<span class="token comment"># Logs của 1 service</span>
+
+docker  compose  logs  -f  api
+
+  
+
+<span class="token comment"># Logs với timestamp</span>
+
+docker  compose  logs  -f  -t  api
+
+  
+
+<span class="token comment"># Logs 100 dòng cuối</span>
+
+docker  compose  logs  --tail<span class="token operator">=</span>100  api
+
+</code></pre>
+<h3 id="nginx-logs">15.3 Nginx logs</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Access log</span>
+
+<span class="token function">tail</span>  -f  /var/log/nginx/2pjp-api.access.log
+
+  
+
+<span class="token comment"># Error log</span>
+
+<span class="token function">tail</span>  -f  /var/log/nginx/2pjp-api.error.log
+
+</code></pre>
+<h3 id="uptime-monitoring-free">15.4 Uptime monitoring (Free)</h3>
+<p><strong>Uptime Robot:</strong> <a href="https://uptimerobot.com/">https://uptimerobot.com/</a></p>
+<ul>
+<li>
+<p>Free: 50 monitors</p>
+</li>
+<li>
+<p>Kiểm tra mỗi 5 phút</p>
+</li>
+<li>
+<p>Alert qua email/Telegram</p>
+</li>
+</ul>
+<p><strong>Cài đặt:</strong></p>
+<pre><code>
+1. Tạo tài khoản
+
+2. Add New Monitor
+
+3. Monitor Type: HTTP(s)
+
+4. URL: https://api.yourdomain.com/health
+
+5. Monitoring Interval: 5 minutes
+
+</code></pre>
+<h3 id="prometheus--grafana-advanced">15.5 Prometheus + Grafana (Advanced)</h3>
+<pre class=" language-yaml"><code class="prism  language-yaml">
+<span class="token comment"># docker-compose.monitoring.yml</span>
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">prometheus</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">image</span><span class="token punctuation">:</span> prom/prometheus
+
+<span class="token key atrule">ports</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> <span class="token string">'9090:9090'</span>
+
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> ./prometheus.yml<span class="token punctuation">:</span>/etc/prometheus/prometheus.yml
+
+  
+
+<span class="token key atrule">grafana</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">image</span><span class="token punctuation">:</span> grafana/grafana
+
+<span class="token key atrule">ports</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> <span class="token string">'3001:3000'</span>
+
+<span class="token key atrule">environment</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> GF_SECURITY_ADMIN_PASSWORD=admin
+
+</code></pre>
+<hr>
+<h2 id="backup--recovery">16. Backup &amp; Recovery</h2>
+<h3 id="backup-strategy-3-2-1-rule">16.1 Backup Strategy (3-2-1 Rule)</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ 3-2-1 BACKUP RULE │
+
+│ │
+
+│ 3 copies of data │
+
+│ 2 different storage media │
+
+│ 1 offsite (khác location) │
+
+│ │
+
+│ Ví dụ: │
+
+│ - Copy 1: Server chính │
+
+│ - Copy 2: External HDD tại nhà │
+
+│ - Copy 3: Cloud storage (R2, Google Drive) │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<h3 id="script-backup-toàn-diện">16.2 Script backup toàn diện</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+vim  ~/scripts/full-backup.sh
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment">#!/bin/bash</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># CONFIGURATION</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+BACKUP_DIR<span class="token operator">=</span><span class="token string">"/home/admin/backups"</span>
+
+DATE<span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">date</span>  +%Y%m%d_%H%M%S<span class="token variable">)</span></span>
+
+MYSQL_CONTAINER<span class="token operator">=</span><span class="token string">"2pjp-mysql"</span>
+
+DB_NAME<span class="token operator">=</span><span class="token string">"2pjp_db"</span>
+
+APP_DIR<span class="token operator">=</span><span class="token string">"/home/admin/apps/2pjp-api"</span>
+
+  
+
+<span class="token comment"># Cloudflare R2 (optional)</span>
+
+R2_BUCKET<span class="token operator">=</span><span class="token string">"2pjp-backups"</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># CREATE DIRECTORIES</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token function">mkdir</span>  -p  <span class="token variable">$BACKUP_DIR</span>/<span class="token punctuation">{</span>mysql,files,configs<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># 1. BACKUP MYSQL</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token keyword">echo</span>  <span class="token string">"📦 Backing up MySQL..."</span>
+
+docker  <span class="token function">exec</span>  <span class="token variable">$MYSQL_CONTAINER</span>  mysqldump  -u  root  -p<span class="token string">"<span class="token variable">$MYSQL_ROOT_PASSWORD</span>"</span>  \
+
+--single-transaction \
+
+--routines  \
+
+--triggers \
+
+<span class="token variable">$DB_NAME</span> <span class="token operator">|</span> <span class="token function">gzip</span> <span class="token operator">&gt;</span> <span class="token string">"<span class="token variable">$BACKUP_DIR</span>/mysql/db_<span class="token variable">$DATE</span>.sql.gz"</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># 2. BACKUP APP FILES</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token keyword">echo</span>  <span class="token string">"📁 Backing up app files..."</span>
+
+<span class="token function">tar</span>  -czf  <span class="token string">"<span class="token variable">$BACKUP_DIR</span>/files/app_<span class="token variable">$DATE</span>.tar.gz"</span>  \
+
+-C <span class="token variable">$APP_DIR</span> \
+
+--exclude<span class="token operator">=</span><span class="token string">'node_modules'</span>  \
+
+--exclude<span class="token operator">=</span><span class="token string">'dist'</span> \
+
+--exclude<span class="token operator">=</span><span class="token string">'.git'</span>  \
+
+<span class="token keyword">.</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># 3. BACKUP CONFIGS</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token keyword">echo</span>  <span class="token string">"⚙️ Backing up configs..."</span>
+
+<span class="token function">tar</span>  -czf  <span class="token string">"<span class="token variable">$BACKUP_DIR</span>/configs/configs_<span class="token variable">$DATE</span>.tar.gz"</span>  \
+
+/etc/nginx/sites-available/ \
+
+/etc/ssl/cloudflare/  \
+
+<span class="token variable">$APP_DIR</span>/.env \
+
+2<span class="token operator">&gt;</span>/dev/null
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># 4. UPLOAD TO R2 (Optional)</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># Uncomment if using R2</span>
+
+<span class="token comment"># echo "☁️ Uploading to R2..."</span>
+
+<span class="token comment"># aws s3 cp "$BACKUP_DIR/mysql/db_$DATE.sql.gz" s3://$R2_BUCKET/mysql/ --endpoint-url https://$CF_ACCOUNT_ID.r2.cloudflarestorage.com</span>
+
+<span class="token comment"># aws s3 cp "$BACKUP_DIR/files/app_$DATE.tar.gz" s3://$R2_BUCKET/files/ --endpoint-url https://$CF_ACCOUNT_ID.r2.cloudflarestorage.com</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># 5. CLEANUP OLD BACKUPS</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token keyword">echo</span>  <span class="token string">"🧹 Cleaning up old backups..."</span>
+
+<span class="token function">find</span>  <span class="token variable">$BACKUP_DIR</span>  -name  <span class="token string">"*.gz"</span>  -mtime  +7  -delete
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># DONE</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token keyword">echo</span>  <span class="token string">"✅ Backup completed: <span class="token variable">$DATE</span>"</span>
+
+<span class="token keyword">echo</span>  <span class="token string">" MySQL: <span class="token variable">$BACKUP_DIR</span>/mysql/db_<span class="token variable">$DATE</span>.sql.gz"</span>
+
+<span class="token keyword">echo</span>  <span class="token string">" Files: <span class="token variable">$BACKUP_DIR</span>/files/app_<span class="token variable">$DATE</span>.tar.gz"</span>
+
+<span class="token keyword">echo</span>  <span class="token string">" Configs: <span class="token variable">$BACKUP_DIR</span>/configs/configs_<span class="token variable">$DATE</span>.tar.gz"</span>
+
+</code></pre>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token function">chmod</span>  +x  ~/scripts/full-backup.sh
+
+  
+
+<span class="token comment"># Crontab: Chạy mỗi ngày lúc 3 giờ sáng</span>
+
+<span class="token function">crontab</span>  -e
+
+0  3  *  *  *  /home/admin/scripts/full-backup.sh <span class="token operator">&gt;&gt;</span> /home/admin/logs/backup.log 2<span class="token operator">&gt;</span><span class="token operator">&amp;</span>1
+
+</code></pre>
+<h3 id="restore">16.3 Restore</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Restore MySQL</span>
+
+gunzip <span class="token operator">&lt;</span> backup_file.sql.gz <span class="token operator">|</span> docker  <span class="token function">exec</span>  -i  2pjp-mysql  mysql  -u  root  -p<span class="token string">"<span class="token variable">$MYSQL_ROOT_PASSWORD</span>"</span>  2pjp_db
+
+  
+
+<span class="token comment"># Restore app files</span>
+
+<span class="token function">tar</span>  -xzf  app_backup.tar.gz  -C  /home/admin/apps/2pjp-api/
+
+docker  compose  up  -d  --build
+
+</code></pre>
+<hr>
+<h2 id="xử-lý-sự-cố">17. Xử Lý Sự Cố</h2>
+<h3 id="server-không-truy-cập-được">17.1 Server không truy cập được</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Checklist debug:</span>
+
+<span class="token comment"># 1. Ping server</span>
+
+<span class="token function">ping</span>  yourdomain.com
+
+  
+
+<span class="token comment"># 2. Kiểm tra Docker containers</span>
+
+docker  compose  <span class="token function">ps</span>
+
+  
+
+<span class="token comment"># 3. Xem logs</span>
+
+docker  compose  logs  -f  api
+
+  
+
+<span class="token comment"># 4. Kiểm tra Nginx</span>
+
+<span class="token function">sudo</span>  systemctl  status  nginx
+
+<span class="token function">sudo</span>  nginx  -t
+
+  
+
+<span class="token comment"># 5. Kiểm tra ports</span>
+
+<span class="token function">sudo</span>  <span class="token function">netstat</span>  -tlnp <span class="token operator">|</span> <span class="token function">grep</span>  -E  <span class="token string">'80|443|3000'</span>
+
+  
+
+<span class="token comment"># 6. Kiểm tra firewall</span>
+
+<span class="token function">sudo</span>  ufw  status
+
+  
+
+<span class="token comment"># 7. Kiểm tra disk space</span>
+
+<span class="token function">df</span>  -h
+
+  
+
+<span class="token comment"># 8. Kiểm tra memory</span>
+
+<span class="token function">free</span>  -h
+
+</code></pre>
+<h3 id="database-lỗi">17.2 Database lỗi</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Kiểm tra MySQL container</span>
+
+docker  compose  logs  mysql
+
+  
+
+<span class="token comment"># Restart MySQL</span>
+
+docker  compose  restart  mysql
+
+  
+
+<span class="token comment"># Nếu cần repair (cẩn thận!)</span>
+
+docker  <span class="token function">exec</span>  -it  2pjp-mysql  mysqlcheck  --repair  --all-databases  -u  root  -p
+
+</code></pre>
+<h3 id="out-of-memory">17.3 Out of memory</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Xem process nào dùng nhiều RAM</span>
+
+<span class="token function">htop</span>  <span class="token comment"># Sắp xếp theo memory: F6 → %MEM</span>
+
+  
+
+<span class="token comment"># Restart service chiếm nhiều RAM</span>
+
+docker  compose  restart  api
+
+  
+
+<span class="token comment"># Thêm swap nếu cần</span>
+
+<span class="token function">sudo</span>  fallocate  -l  4G  /swapfile
+
+<span class="token function">sudo</span>  <span class="token function">chmod</span>  600  /swapfile
+
+<span class="token function">sudo</span>  mkswap  /swapfile
+
+<span class="token function">sudo</span>  swapon  /swapfile
+
+<span class="token keyword">echo</span>  <span class="token string">'/swapfile none swap sw 0 0'</span> <span class="token operator">|</span> <span class="token function">sudo</span>  <span class="token function">tee</span>  -a  /etc/fstab
+
+</code></pre>
+<h3 id="disk-full">17.4 Disk full</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Xem disk usage</span>
+
+<span class="token function">df</span>  -h
+
+  
+
+<span class="token comment"># Tìm files lớn</span>
+
+<span class="token function">sudo</span>  <span class="token function">du</span>  -sh  /* <span class="token operator">|</span> <span class="token function">sort</span>  -hr <span class="token operator">|</span> <span class="token function">head</span>  -20
+
+  
+
+<span class="token comment"># Xóa Docker cache</span>
+
+docker  system  prune  -a
+
+  
+
+<span class="token comment"># Xóa logs cũ</span>
+
+<span class="token function">sudo</span>  journalctl  --vacuum-time<span class="token operator">=</span>7d
+
+</code></pre>
+<hr>
+<h2 id="scaling">18. Scaling</h2>
+<h3 id="vertical-scaling-nâng-cấp-server">18.1 Vertical Scaling (Nâng cấp server)</h3>
+<pre><code>
+- Thêm RAM
+
+- Upgrade CPU
+
+- Thay SSD nhanh hơn
+
+</code></pre>
+<h3 id="horizontal-scaling-thêm-server">18.2 Horizontal Scaling (Thêm server)</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ LOAD BALANCER │
+
+│ (Cloudflare/Nginx) │
+
+└───────────────────────────┬─────────────────────────────────────────┘
+
+│
+
+┌───────────────────┼───────────────────┐
+
+│ │ │
+
+▼ ▼ ▼
+
+┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+
+│ Server 1 │ │ Server 2 │ │ Server 3 │
+
+│ (API) │ │ (API) │ │ (API) │
+
+└───────────────┘ └───────────────┘ └───────────────┘
+
+│ │ │
+
+└───────────────────┼───────────────────┘
+
+│
+
+▼
+
+┌───────────────────┐
+
+│ Shared Database │
+
+│ (Cloud MySQL) │
+
+└───────────────────┘
+
+</code></pre>
+<h3 id="khi-nào-cần-scale">18.3 Khi nào cần scale?</h3>
+<p>| Dấu hiệu | Action |</p>
+<p>| ----------------------- | -------------------------------- |</p>
+<p>| CPU &gt; 80% liên tục | Scale up hoặc optimize code |</p>
+<p>| RAM &gt; 80% liên tục | Thêm RAM hoặc scale out |</p>
+<p>| Response time &gt; 2s | Optimize, cache, hoặc scale |</p>
+<p>| &gt; 1000 concurrent users | Load balancer + multiple servers |</p>
+<hr>
+<h1 id="phần-6-devops-roadmap-1">PHẦN 6: DEVOPS ROADMAP</h1>
+<hr>
+<h2 id="devops-là-gì">19. DevOps là gì?</h2>
+<h3 id="định-nghĩa">19.1 Định nghĩa</h3>
+<pre><code>
+DevOps = Development + Operations
+
+  
+
+Mục tiêu: Rút ngắn thời gian từ code → production
+
+Tự động hóa quy trình deploy
+
+Đảm bảo hệ thống ổn định
+
+</code></pre>
+<h3 id="devops-làm-gì">19.2 DevOps làm gì?</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ DEVOPS LIFECYCLE │
+
+│ │
+
+│ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ │
+
+│ │ PLAN │ →→→ │ CODE │ →→→ │ BUILD │ →→→ │ TEST │ │
+
+│ └─────────┘ └─────────┘ └─────────┘ └─────────┘ │
+
+│ ↑ ↓ │
+
+│ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ │
+
+│ │ MONITOR │ ←←← │ OPERATE │ ←←← │ DEPLOY │ ←←← │ RELEASE │ │
+
+│ └─────────┘ └─────────┘ └─────────┘ └─────────┘ │
+
+│ │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<h3 id="devops-skills-bạn-đã-học-trong-tài-liệu-này">19.3 DevOps skills bạn đã học trong tài liệu này</h3>
+<ul>
+<li>
+<p>✅ <strong>Linux Administration</strong> - Cài đặt, cấu hình server</p>
+</li>
+<li>
+<p>✅ <strong>Docker</strong> - Containerization</p>
+</li>
+<li>
+<p>✅ <strong>Nginx</strong> - Reverse proxy, load balancer</p>
+</li>
+<li>
+<p>✅ <strong>SSL/TLS</strong> - Security</p>
+</li>
+<li>
+<p>✅ <strong>Backup/Recovery</strong> - Data protection</p>
+</li>
+<li>
+<p>✅ <strong>Monitoring</strong> - Logs, metrics</p>
+</li>
+<li>
+<p>✅ <strong>CDN</strong> - Cloudflare</p>
+</li>
+</ul>
+<hr>
+<h2 id="học-gì-tiếp-theo">20. Học Gì Tiếp Theo?</h2>
+<h3 id="cicd-pipeline">20.1 CI/CD Pipeline</h3>
+<p><strong>Mục tiêu:</strong> Tự động build, test, deploy khi push code</p>
+<pre class=" language-yaml"><code class="prism  language-yaml">
+<span class="token comment"># .github/workflows/deploy.yml (GitHub Actions)</span>
+
+<span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
+
+  
+
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">push</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">branches</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>main<span class="token punctuation">]</span>
+
+  
+
+<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
+
+<span class="token key atrule">steps</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v3
+
+  
+
+<span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build Docker image
+
+<span class="token key atrule">run</span><span class="token punctuation">:</span> docker build <span class="token punctuation">-</span>t myapp<span class="token punctuation">:</span>latest .
+
+  
+
+<span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Push to Registry
+
+<span class="token key atrule">run</span><span class="token punctuation">:</span> <span class="token punctuation">|</span>
+
+echo $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.DOCKER_PASSWORD <span class="token punctuation">}</span><span class="token punctuation">}</span> <span class="token punctuation">|</span> docker login <span class="token punctuation">-</span>u $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.DOCKER_USERNAME <span class="token punctuation">}</span><span class="token punctuation">}</span> <span class="token punctuation">-</span><span class="token punctuation">-</span>password<span class="token punctuation">-</span>stdin
+
+docker push myapp<span class="token punctuation">:</span>latest
+
+  
+
+<span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to Server
+
+<span class="token key atrule">uses</span><span class="token punctuation">:</span> appleboy/ssh<span class="token punctuation">-</span>action@master
+
+<span class="token key atrule">with</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">host</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.SERVER_IP <span class="token punctuation">}</span><span class="token punctuation">}</span>
+
+<span class="token key atrule">username</span><span class="token punctuation">:</span> admin
+
+<span class="token key atrule">key</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span><span class="token punctuation">{</span> secrets.SSH_KEY <span class="token punctuation">}</span><span class="token punctuation">}</span>
+
+<span class="token key atrule">script</span><span class="token punctuation">:</span> <span class="token punctuation">|</span>
+
+cd ~/apps/2pjp<span class="token punctuation">-</span>api
+
+docker compose pull
+
+docker compose up <span class="token punctuation">-</span>d
+
+</code></pre>
+<h3 id="kubernetes-k8s">20.2 Kubernetes (K8s)</h3>
+<p><strong>Khi nào cần?</strong> Khi cần quản lý nhiều containers trên nhiều servers</p>
+<pre><code>
+Kubernetes giúp:
+
+- Auto-scaling
+
+- Self-healing (restart container khi crash)
+
+- Rolling updates (deploy không downtime)
+
+- Service discovery
+
+</code></pre>
+<p><strong>Học tại:</strong> <a href="https://kubernetes.io/docs/tutorials/">https://kubernetes.io/docs/tutorials/</a></p>
+<h3 id="infrastructure-as-code-iac">20.3 Infrastructure as Code (IaC)</h3>
+<p><strong>Terraform:</strong> Định nghĩa infrastructure bằng code</p>
+<pre class=" language-hcl"><code class="prism  language-hcl">
+# main.tf
+
+resource "aws_instance" "web" {
+
+ami = "ami-0c55b159cbfafe1f0"
+
+instance_type = "t2.micro"
+
+  
+
+tags = {
+
+Name = "2pjp-api"
+
+}
+
+}
+
+</code></pre>
+<h3 id="recommended-learning-path">20.4 Recommended Learning Path</h3>
+<pre><code>
+BEGINNER (Bạn đang ở đây!)
+
+├── ✅ Linux basics
+
+├── ✅ Docker
+
+├── ✅ Nginx
+
+├── ✅ Basic security
+
+└── ✅ Monitoring basics
+
+  
+
+INTERMEDIATE
+
+├── CI/CD (GitHub Actions, GitLab CI)
+
+├── Ansible (Configuration management)
+
+├── Terraform (Infrastructure as Code)
+
+└── Prometheus + Grafana (Monitoring)
+
+  
+
+ADVANCED
+
+├── Kubernetes
+
+├── AWS/GCP/Azure certifications
+
+├── Microservices architecture
+
+└── Site Reliability Engineering (SRE)
+
+</code></pre>
+<h3 id="tài-nguyên-học-tập">20.5 Tài nguyên học tập</h3>
+<p><strong>Free:</strong></p>
+<ul>
+<li>
+<p><strong>Linux:</strong> <a href="https://linuxjourney.com/">https://linuxjourney.com/</a></p>
+</li>
+<li>
+<p><strong>Docker:</strong> <a href="https://docs.docker.com/get-started/">https://docs.docker.com/get-started/</a></p>
+</li>
+<li>
+<p><strong>Kubernetes:</strong> <a href="https://kubernetes.io/docs/tutorials/">https://kubernetes.io/docs/tutorials/</a></p>
+</li>
+<li>
+<p><strong>DevOps Roadmap:</strong> <a href="https://roadmap.sh/devops">https://roadmap.sh/devops</a></p>
+</li>
+</ul>
+<p><strong>YouTube Channels:</strong></p>
+<ul>
+<li>
+<p>TechWorld with Nana</p>
+</li>
+<li>
+<p>NetworkChuck</p>
+</li>
+<li>
+<p>freeCodeCamp</p>
+</li>
+</ul>
+<p><strong>Chứng chỉ (cho phỏng vấn):</strong></p>
+<ul>
+<li>
+<p>AWS Certified Solutions Architect</p>
+</li>
+<li>
+<p>Certified Kubernetes Administrator (CKA)</p>
+</li>
+<li>
+<p>Docker Certified Associate</p>
+</li>
+</ul>
+<hr>
+<h2 id="📋-checklist-self-hosting-hoàn-chỉnh">📋 Checklist Self-Hosting Hoàn Chỉnh</h2>
+<pre><code>
+HARDWARE &amp; OS
+
+├── [ ] Mua/setup hardware
+
+├── [ ] Cài Ubuntu Server
+
+├── [ ] Cấu hình IP tĩnh
+
+├── [ ] Setup SSH key
+
+  
+
+DEPLOYMENT
+
+├── [ ] Cài Docker
+
+├── [ ] Clone project
+
+├── [ ] Tạo .env
+
+├── [ ] Docker compose up
+
+├── [ ] Run migrations
+
+├── [ ] Run seeds
+
+  
+
+NETWORKING
+
+├── [ ] Mua domain
+
+├── [ ] Setup Cloudflare
+
+├── [ ] Cấu hình DNS
+
+├── [ ] SSL certificates
+
+├── [ ] Nginx reverse proxy
+
+  
+
+SECURITY
+
+├── [ ] Firewall (UFW)
+
+├── [ ] SSH hardening
+
+├── [ ] Fail2Ban
+
+├── [ ] Cloudflare WAF
+
+├── [ ] Environment secrets
+
+  
+
+OPERATIONS
+
+├── [ ] Backup script
+
+├── [ ] Crontab backup
+
+├── [ ] Uptime monitoring
+
+├── [ ] Log rotation
+
+├── [ ] Auto updates
+
+</code></pre>
+<hr>
+<blockquote>
+<p><strong>Chúc bạn thành công! 🚀</strong></p>
+</blockquote>
+<blockquote>
+<p>Hành trình từ developer → DevOps Engineer bắt đầu từ đây.</p>
+</blockquote>
+<blockquote>
+<p>Mỗi lỗi bạn gặp, mỗi sự cố bạn giải quyết đều là kinh nghiệm quý giá.</p>
+</blockquote>
+</div>
+</body>
+
+</html>

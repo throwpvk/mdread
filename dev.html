@@ -1,0 +1,2503 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome file</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="📚-hướng-dẫn-phát-triển-toàn-diện---2pjp-api">📚 Hướng Dẫn Phát Triển Toàn Diện - 2PJP API</h1>
+<blockquote>
+<p><strong>Tài liệu này dành cho:</strong> Người mới bắt đầu muốn hiểu toàn bộ dự án</p>
+</blockquote>
+<blockquote>
+<p><strong>Mục tiêu:</strong> Từ zero đến có thể tự phát triển và mở rộng dự án</p>
+</blockquote>
+<hr>
+<h2 id="📖-mục-lục">📖 Mục Lục</h2>
+<h3 id="phần-1-nền-tảng-kiến-thức">Phần 1: Nền Tảng Kiến Thức</h3>
+<ol>
+<li>
+<p><a href="#1-t%E1%BB%95ng-quan-ki%E1%BA%BFn-tr%C3%BAc-d%E1%BB%B1-%C3%A1n">Tổng Quan Kiến Trúc Dự Án</a></p>
+</li>
+<li>
+<p><a href="#2-docker---%C4%91%C3%B3ng-g%C3%B3i-%E1%BB%A9ng-d%E1%BB%A5ng">Docker - Đóng Gói Ứng Dụng</a></p>
+</li>
+<li>
+<p><a href="#3-nestjs---framework-backend">NestJS - Framework Backend</a></p>
+</li>
+<li>
+<p><a href="#4-prisma---orm-database">Prisma - ORM Database</a></p>
+</li>
+<li>
+<p><a href="#5-redis---in-memory-cache--queue">Redis - In-Memory Cache &amp; Queue</a></p>
+</li>
+</ol>
+<h3 id="phần-2-thực-hành">Phần 2: Thực Hành</h3>
+<ol start="6">
+<li>
+<p><a href="#6-kh%E1%BB%9Fi-ch%E1%BA%A1y-d%E1%BB%B1-%C3%A1n-t%E1%BB%AB-%C4%91%E1%BA%A7u">Khởi Chạy Dự Án Từ Đầu</a></p>
+</li>
+<li>
+<p><a href="#7-hi%E1%BB%83u-v%E1%BB%81-seed-data">Hiểu Về Seed Data</a></p>
+</li>
+<li>
+<p><a href="#8-th%C3%AAm-t%C3%ADnh-n%C4%83ng-m%E1%BB%9Bi">Thêm Tính Năng Mới</a></p>
+</li>
+<li>
+<p><a href="#9-debug-v%C3%A0-x%E1%BB%AD-l%C3%BD-l%E1%BB%97i">Debug và Xử Lý Lỗi</a></p>
+</li>
+<li>
+<p><a href="#10-best-practices">Best Practices</a></p>
+</li>
+</ol>
+<hr>
+<h1 id="phần-1-nền-tảng-kiến-thức-1">PHẦN 1: NỀN TẢNG KIẾN THỨC</h1>
+<hr>
+<h2 id="tổng-quan-kiến-trúc-dự-án">1. Tổng Quan Kiến Trúc Dự Án</h2>
+<h3 id="dự-án-này-làm-gì">1.1 Dự án này làm gì?</h3>
+<p><strong>2PJP API</strong> là backend API cho ứng dụng học tiếng Nhật qua podcast:</p>
+<ul>
+<li>
+<p>Quản lý nội dung podcast (script, audio, video)</p>
+</li>
+<li>
+<p>Xử lý AI: dịch thuật, phân tích từ vựng, ngữ pháp</p>
+</li>
+<li>
+<p>Quản lý người dùng, xác thực</p>
+</li>
+</ul>
+<h3 id="kiến-trúc-tổng-quan">1.2 Kiến trúc tổng quan</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ FRONTEND (ReactJS) │
+
+│ (Người dùng tương tác ở đây) │
+
+└─────────────────────────────────┬───────────────────────────────────┘
+
+│ HTTP Requests
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ BACKEND (NestJS) │
+
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
+
+│ │ Controllers │ │ Services │ │ Modules │ │
+
+│ │ (Nhận req) │→ │ (Xử lý logic)│→ │ (Tổ chức) │ │
+
+│ └──────────────┘ └──────────────┘ └──────────────┘ │
+
+└────────────┬────────────────────┬───────────────────────────────────┘
+
+│ │
+
+▼ ▼
+
+┌────────────────────┐ ┌────────────────────┐ ┌────────────────────┐
+
+│ MySQL Database │ │ Redis │ │ Google Gemini │
+
+│ (Lưu dữ liệu) │ │ (Queue &amp; Cache) │ │ (AI Processing) │
+
+└────────────────────┘ └────────────────────┘ └────────────────────┘
+
+</code></pre>
+<h3 id="cấu-trúc-thư-mục">1.3 Cấu trúc thư mục</h3>
+<pre><code>
+2pjp-api/
+
+├── src/ # 📁 SOURCE CODE CHÍNH
+
+│ ├── main.ts # Entry point - Khởi động app
+
+│ ├── app.module.ts # Root module - Kết nối tất cả
+
+│ │
+
+│ ├── auth/ # 🔐 Module xác thực
+
+│ │ ├── auth.controller.ts # API endpoints: /auth/login, /auth/register
+
+│ │ ├── auth.service.ts # Logic xử lý đăng nhập, JWT
+
+│ │ ├── guards/ # Bảo vệ routes (cần đăng nhập)
+
+│ │ └── strategies/ # Chiến lược xác thực (JWT, Google OAuth)
+
+│ │
+
+│ ├── users/ # 👤 Module người dùng
+
+│ │ ├── users.controller.ts # API: /users/me, /users/:id
+
+│ │ └── users.service.ts # CRUD người dùng
+
+│ │
+
+│ ├── contents/ # 📝 Module nội dung podcast
+
+│ │ ├── contents.controller.ts
+
+│ │ └── contents.service.ts
+
+│ │
+
+│ ├── ai/ # 🤖 Module AI processing
+
+│ │ ├── services/ # Gemini API, batch processing
+
+│ │ ├── processors/ # Bull queue processors
+
+│ │ └── queues/ # Queue management
+
+│ │
+
+│ ├── prisma/ # 🗄️ Database service
+
+│ │ └── prisma.service.ts # Kết nối database
+
+│ │
+
+│ └── common/ # 🔧 Utilities dùng chung
+
+│ ├── interceptors/ # Xử lý response
+
+│ └── utils/ # Helper functions
+
+│
+
+├── prisma/ # 📁 PRISMA (DATABASE)
+
+│ ├── schema.prisma # Định nghĩa database schema
+
+│ ├── migrations/ # Lịch sử thay đổi database
+
+│ └── seeds/ # Dữ liệu mẫu ban đầu
+
+│
+
+├── docs/ # 📁 TÀI LIỆU
+
+├── docker-compose.yml # Cấu hình Docker production
+
+├── docker-compose.dev.yml # Cấu hình Docker development
+
+└── package.json # Dependencies và scripts
+
+</code></pre>
+<h3 id="flow-xử-lý-một-request">1.4 Flow xử lý một request</h3>
+<p><strong>Ví dụ:</strong> User gọi API <code>GET /api/v1/contents/1</code></p>
+<pre><code>
+1. Request đến → main.ts (entry point)
+
+↓
+
+2. NestJS routing → contents.controller.ts
+
+↓
+
+3. Controller gọi → contents.service.ts
+
+↓
+
+4. Service gọi → prisma.service.ts (query database)
+
+↓
+
+5. Database trả về → Service xử lý logic
+
+↓
+
+6. Response JSON ← Controller trả về client
+
+</code></pre>
+<hr>
+<h2 id="docker---đóng-gói-ứng-dụng">2. Docker - Đóng Gói Ứng Dụng</h2>
+<h3 id="docker-là-gì-giải-thích-đơn-giản">2.1 Docker là gì? (Giải thích đơn giản)</h3>
+<p><strong>Vấn đề không có Docker:</strong></p>
+<ul>
+<li>
+<p>Bạn cài MySQL 8.0, đồng nghiệp cài MySQL 5.7 → Bug</p>
+</li>
+<li>
+<p>Bạn cài Node 18, server cài Node 16 → Không chạy</p>
+</li>
+<li>
+<p>Mỗi lần setup máy mới phải cài lại hàng chục thứ</p>
+</li>
+</ul>
+<p><strong>Docker giải quyết:</strong></p>
+<ul>
+<li>
+<p>“Đóng gói” app + tất cả dependencies vào 1 container</p>
+</li>
+<li>
+<p>Chạy giống nhau trên mọi máy</p>
+</li>
+<li>
+<p>1 lệnh khởi động, 1 lệnh dừng</p>
+</li>
+</ul>
+<h3 id="các-khái-niệm-quan-trọng">2.2 Các khái niệm quan trọng</h3>
+<p>| Khái niệm | Giải thích | Ví dụ thực tế |</p>
+<p>| ------------- | ----------------------------------- | ----------------------------- |</p>
+<p>| <strong>Image</strong> | “Khuôn mẫu” tĩnh, giống file ISO | <code>mysql:8.0</code>, <code>node:20-alpine</code> |</p>
+<p>| <strong>Container</strong> | Instance đang chạy từ image | MySQL server đang chạy |</p>
+<p>| <strong>Volume</strong> | Lưu trữ dữ liệu bên ngoài container | Database files |</p>
+<p>| <strong>Network</strong> | Mạng ảo để containers nói chuyện | API gọi MySQL |</p>
+<p>| <strong>Compose</strong> | Quản lý nhiều containers cùng lúc | MySQL + Redis + API |</p>
+<h3 id="giải-thích-docker-compose.dev.yml">2.3 Giải thích docker-compose.dev.yml</h3>
+<pre class=" language-yaml"><code class="prism  language-yaml">
+<span class="token comment"># File: docker-compose.dev.yml</span>
+
+  
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># SERVICE 1: MySQL Database</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token key atrule">mysql</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">image</span><span class="token punctuation">:</span> mysql<span class="token punctuation">:</span><span class="token number">8.0  </span><span class="token comment"># Dùng image MySQL version 8.0</span>
+
+<span class="token key atrule">container_name</span><span class="token punctuation">:</span> 2pjp<span class="token punctuation">-</span>mysql<span class="token punctuation">-</span>dev  <span class="token comment"># Tên container (để dễ nhận diện)</span>
+
+<span class="token key atrule">restart</span><span class="token punctuation">:</span> unless<span class="token punctuation">-</span>stopped  <span class="token comment"># Tự restart nếu crash</span>
+
+  
+
+<span class="token key atrule">environment</span><span class="token punctuation">:</span> <span class="token comment"># Biến môi trường (giống .env trong app)</span>
+
+<span class="token key atrule">MYSQL_ROOT_PASSWORD</span><span class="token punctuation">:</span> rootpassword  <span class="token comment"># Password cho user root</span>
+
+<span class="token key atrule">MYSQL_DATABASE</span><span class="token punctuation">:</span> 2pjp_db  <span class="token comment"># Tạo database này khi khởi động</span>
+
+<span class="token key atrule">MYSQL_USER</span><span class="token punctuation">:</span> 2pjp_user  <span class="token comment"># Tạo user này</span>
+
+<span class="token key atrule">MYSQL_PASSWORD</span><span class="token punctuation">:</span> 2pjp_password  <span class="token comment"># Password cho user trên</span>
+
+  
+
+<span class="token key atrule">ports</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> '3307<span class="token punctuation">:</span>3306'  <span class="token comment"># Map port: máy_bạn:trong_container</span>
+
+<span class="token comment"># Truy cập MySQL qua localhost:3307</span>
+
+  
+
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> mysql_dev_data<span class="token punctuation">:</span>/var/lib/mysql  <span class="token comment"># Lưu data vào volume (không mất khi xóa container)</span>
+
+  
+
+<span class="token key atrule">networks</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> 2pjp<span class="token punctuation">-</span>dev<span class="token punctuation">-</span>network  <span class="token comment"># Kết nối vào mạng ảo</span>
+
+  
+
+<span class="token key atrule">healthcheck</span><span class="token punctuation">:</span> <span class="token comment"># Kiểm tra container có healthy không</span>
+
+<span class="token key atrule">test</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'CMD'</span><span class="token punctuation">,</span> <span class="token string">'mysqladmin'</span><span class="token punctuation">,</span> <span class="token string">'ping'</span><span class="token punctuation">,</span> <span class="token string">'-h'</span><span class="token punctuation">,</span> <span class="token string">'localhost'</span><span class="token punctuation">]</span>
+
+<span class="token key atrule">interval</span><span class="token punctuation">:</span> 10s  <span class="token comment"># Kiểm tra mỗi 10 giây</span>
+
+<span class="token key atrule">timeout</span><span class="token punctuation">:</span> 5s  <span class="token comment"># Timeout sau 5 giây</span>
+
+<span class="token key atrule">retries</span><span class="token punctuation">:</span> <span class="token number">5  </span><span class="token comment"># Thử lại 5 lần</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># SERVICE 2: Redis (Cache &amp; Queue)</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token key atrule">redis</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">image</span><span class="token punctuation">:</span> redis<span class="token punctuation">:</span>7<span class="token punctuation">-</span>alpine  <span class="token comment"># Redis 7, bản alpine (nhẹ)</span>
+
+<span class="token key atrule">container_name</span><span class="token punctuation">:</span> 2pjp<span class="token punctuation">-</span>redis<span class="token punctuation">-</span>dev
+
+<span class="token key atrule">ports</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> '6379<span class="token punctuation">:</span>6379'  <span class="token comment"># Redis mặc định port 6379</span>
+
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> redis_dev_data<span class="token punctuation">:</span>/data  <span class="token comment"># Lưu data</span>
+
+<span class="token key atrule">command</span><span class="token punctuation">:</span> redis<span class="token punctuation">-</span>server <span class="token punctuation">-</span><span class="token punctuation">-</span>appendonly yes  <span class="token comment"># Bật persistence (không mất data)</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># SERVICE 3: NestJS API</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token key atrule">api</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">build</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">context</span><span class="token punctuation">:</span> .  <span class="token comment"># Build từ thư mục hiện tại</span>
+
+<span class="token key atrule">dockerfile</span><span class="token punctuation">:</span> Dockerfile.dev  <span class="token comment"># Dùng Dockerfile cho dev</span>
+
+<span class="token key atrule">container_name</span><span class="token punctuation">:</span> 2pjp<span class="token punctuation">-</span>api<span class="token punctuation">-</span>dev
+
+<span class="token key atrule">ports</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> '3000<span class="token punctuation">:</span>3000'  <span class="token comment"># API chạy port 3000</span>
+
+<span class="token punctuation">-</span> '9229<span class="token punctuation">:</span>9229'  <span class="token comment"># Debug port</span>
+
+  
+
+<span class="token key atrule">environment</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">NODE_ENV</span><span class="token punctuation">:</span> development
+
+<span class="token comment"># URL để API kết nối MySQL (mysql là tên service ở trên)</span>
+
+<span class="token key atrule">DATABASE_URL</span><span class="token punctuation">:</span> mysql<span class="token punctuation">:</span>//2pjp_user<span class="token punctuation">:</span>2pjp_password@mysql<span class="token punctuation">:</span>3306/2pjp_db
+
+<span class="token key atrule">REDIS_HOST</span><span class="token punctuation">:</span> redis  <span class="token comment"># Tên service Redis</span>
+
+<span class="token key atrule">REDIS_PORT</span><span class="token punctuation">:</span> <span class="token number">6379</span>
+
+  
+
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+
+<span class="token punctuation">-</span> .<span class="token punctuation">:</span>/app  <span class="token comment"># Mount code vào container</span>
+
+<span class="token punctuation">-</span> /app/node_modules  <span class="token comment"># Không mount node_modules (dùng của container)</span>
+
+  
+
+<span class="token key atrule">depends_on</span><span class="token punctuation">:</span> <span class="token comment"># Đợi services này healthy mới start</span>
+
+<span class="token key atrule">mysql</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">condition</span><span class="token punctuation">:</span> service_healthy
+
+<span class="token key atrule">redis</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">condition</span><span class="token punctuation">:</span> service_healthy
+
+  
+
+<span class="token key atrule">command</span><span class="token punctuation">:</span> npm run start<span class="token punctuation">:</span>dev  <span class="token comment"># Chạy dev mode với hot-reload</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># VOLUMES: Lưu trữ persistent</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">mysql_dev_data</span><span class="token punctuation">:</span> <span class="token comment"># Volume cho MySQL</span>
+
+<span class="token key atrule">redis_dev_data</span><span class="token punctuation">:</span> <span class="token comment"># Volume cho Redis</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># NETWORKS: Mạng ảo để containers giao tiếp</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token key atrule">networks</span><span class="token punctuation">:</span>
+
+<span class="token key atrule">2pjp-dev-network</span><span class="token punctuation">:</span>
+
+</code></pre>
+<h3 id="lệnh-docker-thường-dùng-có-giải-thích">2.4 Lệnh Docker thường dùng (có giải thích)</h3>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># KHỞI ĐỘNG &amp; DỪNG</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Khởi động tất cả services (foreground - thấy logs)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml up
+
+  
+
+<span class="token comment"># Khởi động background (không thấy logs, chạy ngầm)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml up <span class="token operator">-</span>d
+
+  
+
+<span class="token comment"># Dừng tất cả</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml down
+
+  
+
+<span class="token comment"># Dừng và XÓA LUÔN DATA (cẩn thận!)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml down <span class="token operator">-</span>v
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># XEM THÔNG TIN</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Xem containers đang chạy</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml <span class="token function">ps</span>
+
+  
+
+<span class="token comment"># Xem logs tất cả</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs
+
+  
+
+<span class="token comment"># Xem logs của 1 service (follow mode)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs <span class="token operator">-</span>f api
+
+  
+
+<span class="token comment"># Xem logs 100 dòng cuối</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs <span class="token operator">--</span>tail=100 api
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># CHẠY LỆNH TRONG CONTAINER</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Mở shell trong container API</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api sh
+
+  
+
+<span class="token comment"># Chạy 1 lệnh trong container API</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma migrate dev
+
+  
+
+<span class="token comment"># Kết nối MySQL CLI</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec mysql mysql <span class="token operator">-</span>u root <span class="token operator">-</span>prootpassword
+
+  
+
+<span class="token comment"># Kết nối Redis CLI</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec redis redis<span class="token operator">-</span><span class="token function">cli</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># BUILD LẠI</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Build lại image (khi thay đổi Dockerfile hoặc package.json)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml build
+
+  
+
+<span class="token comment"># Build lại từ đầu (xóa cache)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml build <span class="token operator">--</span>no<span class="token operator">-</span>cache
+
+  
+
+<span class="token comment"># Build và chạy luôn</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml up <span class="token operator">--</span>build
+
+</code></pre>
+<hr>
+<h2 id="nestjs---framework-backend">3. NestJS - Framework Backend</h2>
+<h3 id="nestjs-là-gì">3.1 NestJS là gì?</h3>
+<p>NestJS là framework Node.js để xây dựng backend:</p>
+<ul>
+<li>
+<p><strong>Cấu trúc rõ ràng:</strong> Modules, Controllers, Services</p>
+</li>
+<li>
+<p><strong>TypeScript:</strong> Có type checking, dễ maintain</p>
+</li>
+<li>
+<p><strong>Dependency Injection:</strong> Tự động inject dependencies</p>
+</li>
+<li>
+<p><strong>Decorators:</strong> Viết code ngắn gọn, dễ đọc</p>
+</li>
+</ul>
+<h3 id="cấu-trúc-module-trong-nestjs">3.2 Cấu trúc Module trong NestJS</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────┐
+
+│ MODULE │
+
+│ (Đơn vị tổ chức code - nhóm các thành phần liên quan) │
+
+│ │
+
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │
+
+│ │ Controller │ │ Service │ │ DTOs │ │
+
+│ │ │ │ │ │ │ │
+
+│ │ Nhận HTTP │→ │ Xử lý logic │ │ Validate │ │
+
+│ │ requests │ │ nghiệp vụ │ │ input/output│ │
+
+│ └─────────────┘ └─────────────┘ └─────────────┘ │
+
+└─────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<h3 id="ví-dụ-thực-tế-module-users">3.3 Ví dụ thực tế: Module Users</h3>
+<p><strong>File: users.module.ts</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Module <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> UsersController <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./users.controller'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> UsersService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./users.service'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> PrismaModule <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'../prisma/prisma.module'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Module</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+imports<span class="token punctuation">:</span> <span class="token punctuation">[</span>PrismaModule<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// Import module khác</span>
+
+controllers<span class="token punctuation">:</span> <span class="token punctuation">[</span>UsersController<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// Đăng ký controller</span>
+
+providers<span class="token punctuation">:</span> <span class="token punctuation">[</span>UsersService<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// Đăng ký service</span>
+
+exports<span class="token punctuation">:</span> <span class="token punctuation">[</span>UsersService<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// Cho phép module khác dùng</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">UsersModule</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>File: users.controller.ts</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Controller<span class="token punctuation">,</span> Get<span class="token punctuation">,</span> Post<span class="token punctuation">,</span> Body<span class="token punctuation">,</span> Param<span class="token punctuation">,</span> UseGuards <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> UsersService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./users.service'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> JwtAuthGuard <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'../auth/guards/jwt-auth.guard'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Controller</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">)</span> <span class="token comment">// Prefix: /api/v1/users</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">UsersController</span> <span class="token punctuation">{</span>
+
+<span class="token comment">// Dependency Injection - NestJS tự động inject UsersService</span>
+
+<span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span>  readonly  usersService<span class="token punctuation">:</span> UsersService<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// GET /api/v1/users</span>
+
+@<span class="token function">Get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+@<span class="token function">UseGuards</span><span class="token punctuation">(</span>JwtAuthGuard<span class="token punctuation">)</span> <span class="token comment">// Cần đăng nhập mới truy cập được</span>
+
+<span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>usersService<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// GET /api/v1/users/:id</span>
+
+@<span class="token function">Get</span><span class="token punctuation">(</span><span class="token string">':id'</span><span class="token punctuation">)</span>
+
+@<span class="token function">UseGuards</span><span class="token punctuation">(</span>JwtAuthGuard<span class="token punctuation">)</span>
+
+<span class="token function">findOne</span><span class="token punctuation">(</span>@<span class="token function">Param</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">)</span> id<span class="token punctuation">:</span> <span class="token keyword">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>usersService<span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span><span class="token operator">+</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// +id convert string → number</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// POST /api/v1/users</span>
+
+@<span class="token function">Post</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token function">create</span><span class="token punctuation">(</span>@<span class="token function">Body</span><span class="token punctuation">(</span><span class="token punctuation">)</span> createUserDto<span class="token punctuation">:</span> CreateUserDto<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>usersService<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>createUserDto<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>File: users.service.ts</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Injectable <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> PrismaService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'../prisma/prisma.service'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Injectable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// Đánh dấu class này có thể được inject</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">UsersService</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span>  prisma<span class="token punctuation">:</span> PrismaService<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  
+
+<span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findMany</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token function">findOne</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token function">create</span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> CreateUserDto<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span> data <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="decorators-quan-trọng">3.4 Decorators quan trọng</h3>
+<p>| Decorator | Ý nghĩa | Ví dụ |</p>
+<p>| ------------------------------------------ | ---------------------------- | ----------------------------- |</p>
+<p>| <code>@Controller('path')</code> | Định nghĩa controller | <code>@Controller('users')</code> |</p>
+<p>| <code>@Get()</code>, <code>@Post()</code>, <code>@Put()</code>, <code>@Delete()</code> | HTTP method | <code>@Get(':id')</code> |</p>
+<p>| <code>@Body()</code> | Lấy request body | <code>@Body() dto: CreateUserDto</code> |</p>
+<p>| <code>@Param('name')</code> | Lấy URL parameter | <code>@Param('id') id: string</code> |</p>
+<p>| <code>@Query('name')</code> | Lấy query string | <code>@Query('page') page: number</code> |</p>
+<p>| <code>@UseGuards()</code> | Áp dụng guard (bảo vệ route) | <code>@UseGuards(JwtAuthGuard)</code> |</p>
+<p>| <code>@Injectable()</code> | Đánh dấu class có thể inject | Service, Repository |</p>
+<h3 id="request-flow-chi-tiết">3.5 Request Flow chi tiết</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ Client gửi: POST /api/v1/contents │
+
+│ Body: { "title": "Podcast 1", "authorId": 1, ... } │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+│
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ 1. MIDDLEWARE (Global) │
+
+│ - Logger: Ghi log request │
+
+│ - CORS: Kiểm tra origin │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+│
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ 2. GUARD (Route-level) │
+
+│ - JwtAuthGuard: Kiểm tra token hợp lệ │
+
+│ - RolesGuard: Kiểm tra quyền (admin/user) │
+
+│ ❌ Nếu không hợp lệ → 401 Unauthorized │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+│
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ 3. PIPE (Validation) │
+
+│ - ValidationPipe: Validate body theo DTO │
+
+│ - ParseIntPipe: Convert string → number │
+
+│ ❌ Nếu không hợp lệ → 400 Bad Request │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+│
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ 4. CONTROLLER │
+
+│ - Nhận request đã được validate │
+
+│ - Gọi service để xử lý │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+│
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ 5. SERVICE │
+
+│ - Xử lý business logic │
+
+│ - Gọi database qua Prisma │
+
+│ - Gọi external APIs (Gemini, Drive...) │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+│
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ 6. INTERCEPTOR (Response) │
+
+│ - Transform response format │
+
+│ - Logging response time │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+│
+
+▼
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ Response: { "success": true, "data": {...} } │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<hr>
+<h2 id="prisma---orm-database">4. Prisma - ORM Database</h2>
+<h3 id="prisma-là-gì">4.1 Prisma là gì?</h3>
+<p><strong>ORM (Object-Relational Mapping):</strong> Công cụ để tương tác với database bằng code thay vì viết SQL trực tiếp.</p>
+<p><strong>Ví dụ so sánh:</strong></p>
+<pre class=" language-sql"><code class="prism  language-sql">
+<span class="token comment">-- SQL thuần</span>
+
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> posts <span class="token keyword">WHERE</span> author_id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+</code></pre>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// Prisma</span>
+
+<span class="token keyword">const</span>  user <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+include<span class="token punctuation">:</span> <span class="token punctuation">{</span> posts<span class="token punctuation">:</span>  <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// Auto join</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+<h3 id="cấu-trúc-prisma">4.2 Cấu trúc Prisma</h3>
+<pre><code>
+prisma/
+
+├── schema.prisma # 📝 Định nghĩa database schema
+
+├── migrations/ # 📁 Lịch sử thay đổi database
+
+│ └── 20260122_xxx/
+
+│ └── migration.sql
+
+└── seeds/ # 📁 Dữ liệu mẫu
+
+└── seed.ts
+
+</code></pre>
+<h3 id="giải-thích-schema.prisma">4.3 Giải thích schema.prisma</h3>
+<pre class=" language-prisma"><code class="prism  language-prisma">
+// prisma/schema.prisma
+
+  
+
+// ═══════════════════════════════════════════════════════════════
+
+// CẤU HÌNH
+
+// ═══════════════════════════════════════════════════════════════
+
+  
+
+// Generator: Prisma sẽ generate code TypeScript
+
+generator client {
+
+provider = "prisma-client-js"
+
+}
+
+  
+
+// Datasource: Kết nối MySQL
+
+datasource db {
+
+provider = "mysql"
+
+url = env("DATABASE_URL") // Lấy từ biến môi trường
+
+}
+
+  
+
+// ═══════════════════════════════════════════════════════════════
+
+// MODELS (Tương đương với TABLE trong SQL)
+
+// ═══════════════════════════════════════════════════════════════
+
+  
+
+// Model User → Table "users"
+
+model User {
+
+// COLUMNS
+
+id Int @id @default(autoincrement()) // PRIMARY KEY, auto increment
+
+email String @unique // UNIQUE constraint
+
+name String? // ? = nullable (có thể NULL)
+
+password String?
+
+role UserRole @default(user) // Enum với default value
+
+createdAt DateTime @default(now()) // Tự động lấy thời gian hiện tại
+
+updatedAt DateTime @updatedAt // Tự động update khi record thay đổi
+
+  
+
+// TABLE NAME (map to custom table name)
+
+@@map("users")
+
+}
+
+  
+
+// Enum (danh sách giá trị cố định)
+
+enum UserRole {
+
+owner
+
+admin
+
+teacher
+
+user
+
+}
+
+  
+
+// Model với Relations
+
+model ContentInfo {
+
+id BigInt @id @default(autoincrement())
+
+title String @db.VarChar(255) // Specify MySQL type
+
+authorId BigInt @map("author_id") // Column name trong DB
+
+  
+
+// RELATION: ContentInfo belongs to Author
+
+author Author @relation(fields: [authorId], references: [id])
+
+  
+
+// RELATION: ContentInfo has many ContentSource (1:N)
+
+sources ContentSource[]
+
+  
+
+@@map("content_info")
+
+}
+
+  
+
+model Author {
+
+id BigInt @id @default(autoincrement())
+
+name String @unique
+
+displayName String @map("display_name")
+
+  
+
+// RELATION: Author has many ContentInfo
+
+contents ContentInfo[]
+
+  
+
+@@map("authors")
+
+}
+
+  
+
+model ContentSource {
+
+id BigInt @id @default(autoincrement())
+
+contentId BigInt @map("content_id")
+
+platform Platform
+
+  
+
+// RELATION với ON DELETE CASCADE
+
+content ContentInfo @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  
+
+// UNIQUE constraint trên 2 columns
+
+@@unique([contentId, platform])
+
+@@map("content_sources")
+
+}
+
+  
+
+enum Platform {
+
+youtube
+
+spotify
+
+audio
+
+}
+
+</code></pre>
+<h3 id="prisma-cli-commands">4.4 Prisma CLI Commands</h3>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># DEVELOPMENT</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Tạo migration mới (khi thay đổi schema)</span>
+
+npx prisma migrate dev <span class="token operator">--</span>name add_new_field
+
+<span class="token comment"># → Tạo file SQL trong migrations/</span>
+
+<span class="token comment"># → Chạy SQL đó trên database</span>
+
+<span class="token comment"># → Regenerate Prisma Client</span>
+
+  
+
+<span class="token comment"># Reset database (XÓA TOÀN BỘ DATA!)</span>
+
+npx prisma migrate reset
+
+<span class="token comment"># → Drop database</span>
+
+<span class="token comment"># → Chạy lại tất cả migrations</span>
+
+<span class="token comment"># → Chạy seed</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># GENERATE &amp; INTROSPECT</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Generate Prisma Client (sau khi thay đổi schema)</span>
+
+npx prisma generate
+
+<span class="token comment"># → Tạo TypeScript types</span>
+
+<span class="token comment"># → Tạo query methods</span>
+
+  
+
+<span class="token comment"># Introspect: Tạo schema từ database có sẵn</span>
+
+npx prisma db pull
+
+<span class="token comment"># → Đọc database structure</span>
+
+<span class="token comment"># → Tạo schema.prisma</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># PRODUCTION</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Deploy migrations (không tạo mới, chỉ chạy existing)</span>
+
+npx prisma migrate deploy
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># TOOLS</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Mở Prisma Studio (GUI để xem database)</span>
+
+npx prisma studio
+
+<span class="token comment"># → Mở browser tại http://localhost:5555</span>
+
+</code></pre>
+<h3 id="prisma-query-examples">4.5 Prisma Query Examples</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment">// BASIC CRUD</span>
+
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment">// CREATE - Tạo mới</span>
+
+<span class="token keyword">const</span>  user <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+email<span class="token punctuation">:</span>  <span class="token string">'test@example.com'</span><span class="token punctuation">,</span>
+
+name<span class="token punctuation">:</span>  <span class="token string">'Test User'</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// READ - Tìm 1 record</span>
+
+<span class="token keyword">const</span>  user <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// READ - Tìm nhiều records</span>
+
+<span class="token keyword">const</span>  users <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findMany</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+role<span class="token punctuation">:</span>  <span class="token string">'admin'</span><span class="token punctuation">,</span>
+
+createdAt<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+gte<span class="token punctuation">:</span>  <span class="token keyword">new</span>  <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token string">'2024-01-01'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// Greater than or equal</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+orderBy<span class="token punctuation">:</span> <span class="token punctuation">{</span> createdAt<span class="token punctuation">:</span>  <span class="token string">'desc'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+take<span class="token punctuation">:</span>  <span class="token number">10</span><span class="token punctuation">,</span> <span class="token comment">// LIMIT 10</span>
+
+skip<span class="token punctuation">:</span>  <span class="token number">0</span><span class="token punctuation">,</span> <span class="token comment">// OFFSET 0</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// UPDATE</span>
+
+<span class="token keyword">const</span>  updated <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">{</span> name<span class="token punctuation">:</span>  <span class="token string">'New Name'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// DELETE</span>
+
+<span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token keyword">delete</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment">// RELATIONS</span>
+
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment">// Include relations (JOIN)</span>
+
+<span class="token keyword">const</span>  content <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>contentInfo<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  1n <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// BigInt cần thêm 'n'</span>
+
+include<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+author<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span> <span class="token comment">// Include author</span>
+
+sources<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span> <span class="token comment">// Include tất cả sources</span>
+
+files<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> isActive<span class="token punctuation">:</span>  <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// Filter relation</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Nested create (tạo parent + children cùng lúc)</span>
+
+<span class="token keyword">const</span>  content <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>contentInfo<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+title<span class="token punctuation">:</span>  <span class="token string">'New Podcast'</span><span class="token punctuation">,</span>
+
+author<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+connect<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  1n <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// Connect to existing author</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+sources<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+create<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+
+<span class="token punctuation">{</span> platform<span class="token punctuation">:</span>  <span class="token string">'youtube'</span><span class="token punctuation">,</span> sourceUrl<span class="token punctuation">:</span>  <span class="token string">'https://...'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">{</span> platform<span class="token punctuation">:</span>  <span class="token string">'spotify'</span><span class="token punctuation">,</span> sourceUrl<span class="token punctuation">:</span>  <span class="token string">'https://...'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+include<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+author<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span>
+
+sources<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment">// TRANSACTIONS</span>
+
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment">// Transaction: Tất cả queries thành công hoặc tất cả rollback</span>
+
+<span class="token keyword">const</span>  result <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span><span class="token function">$transaction</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span>tx<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+
+<span class="token comment">// Xóa sources cũ</span>
+
+<span class="token keyword">await</span>  tx<span class="token punctuation">.</span>contentSource<span class="token punctuation">.</span><span class="token function">deleteMany</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> contentId<span class="token punctuation">:</span>  1n <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Tạo sources mới</span>
+
+<span class="token keyword">await</span>  tx<span class="token punctuation">.</span>contentSource<span class="token punctuation">.</span><span class="token function">createMany</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+
+<span class="token punctuation">{</span> contentId<span class="token punctuation">:</span>  1n<span class="token punctuation">,</span> platform<span class="token punctuation">:</span>  <span class="token string">'youtube'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">{</span> contentId<span class="token punctuation">:</span>  1n<span class="token punctuation">,</span> platform<span class="token punctuation">:</span>  <span class="token string">'spotify'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">return</span>  tx<span class="token punctuation">.</span>contentInfo<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span> where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  1n <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment">// RAW QUERIES (khi cần SQL phức tạp)</span>
+
+<span class="token comment">// ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token keyword">const</span>  results <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>$queryRaw<span class="token template-string"><span class="token string">`
+
+SELECT * FROM users WHERE email LIKE ${`</span></span><span class="token operator">%</span>@gmail<span class="token punctuation">.</span>com<span class="token template-string"><span class="token string">`}
+
+`</span></span><span class="token punctuation">;</span>
+
+</code></pre>
+<hr>
+<h2 id="redis---in-memory-cache--queue">5. Redis - In-Memory Cache &amp; Queue</h2>
+<h3 id="redis-là-gì">5.1 Redis là gì?</h3>
+<p><strong>Redis = Remote Dictionary Server</strong></p>
+<ul>
+<li>
+<p>Database lưu trữ trong RAM (rất nhanh!)</p>
+</li>
+<li>
+<p>Dùng cho: Cache, Session, Queue, Pub/Sub</p>
+</li>
+<li>
+<p>Data structures: String, List, Set, Hash, Sorted Set</p>
+</li>
+</ul>
+<h3 id="tại-sao-dự-án-này-cần-redis">5.2 Tại sao dự án này cần Redis?</h3>
+<pre><code>
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ KHÔNG CÓ REDIS (Queue) │
+
+│ │
+
+│ User request → API → Gọi AI Gemini → Đợi 30 giây → Response │
+
+│ (User phải đợi rất lâu!) │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+  
+
+┌─────────────────────────────────────────────────────────────────────┐
+
+│ CÓ REDIS (Queue) │
+
+│ │
+
+│ User request → API → Đẩy job vào Queue → Response ngay lập tức │
+
+│ ↓ │
+
+│ Background Worker │
+
+│ ↓ │
+
+│ Gọi AI Gemini │
+
+│ ↓ │
+
+│ Lưu kết quả vào DB │
+
+│ ↓ │
+
+│ User lấy kết quả sau │
+
+└─────────────────────────────────────────────────────────────────────┘
+
+</code></pre>
+<h3 id="bull-queue-trong-dự-án">5.3 Bull Queue trong dự án</h3>
+<p><strong>Bull</strong> là thư viện Node.js để quản lý job queue với Redis.</p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// Cấu hình trong ai.module.ts</span>
+
+BullModule<span class="token punctuation">.</span><span class="token function">forRoot</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+redis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+host<span class="token punctuation">:</span>  <span class="token string">'redis'</span><span class="token punctuation">,</span> <span class="token comment">// Tên service trong docker-compose</span>
+
+port<span class="token punctuation">:</span>  <span class="token number">6379</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+  
+
+<span class="token comment">// Đăng ký các queue</span>
+
+BullModule<span class="token punctuation">.</span><span class="token function">registerQueue</span><span class="token punctuation">(</span>
+
+<span class="token punctuation">{</span> name<span class="token punctuation">:</span>  <span class="token string">'translation'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// Queue cho dịch thuật</span>
+
+<span class="token punctuation">{</span> name<span class="token punctuation">:</span>  <span class="token string">'vocabulary'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// Queue cho từ vựng</span>
+
+<span class="token punctuation">{</span> name<span class="token punctuation">:</span>  <span class="token string">'grammar'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// Queue cho ngữ pháp</span>
+
+<span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+</code></pre>
+<p><strong>Thêm job vào queue:</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: ai/services/queue.service.ts</span>
+
+  
+
+@<span class="token function">Injectable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">AiQueueService</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">constructor</span><span class="token punctuation">(</span>@<span class="token function">InjectQueue</span><span class="token punctuation">(</span><span class="token string">'translation'</span><span class="token punctuation">)</span> <span class="token keyword">private</span>  translationQueue<span class="token punctuation">:</span> Queue<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  
+
+<span class="token keyword">async</span>  <span class="token function">addTranslationJob</span><span class="token punctuation">(</span>data<span class="token punctuation">:</span> TranslationJobData<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">await</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>translationQueue<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>
+
+data<span class="token punctuation">,</span> <span class="token comment">// Job data</span>
+
+<span class="token punctuation">{</span>
+
+attempts<span class="token punctuation">:</span>  <span class="token number">3</span><span class="token punctuation">,</span> <span class="token comment">// Retry 3 lần nếu fail</span>
+
+backoff<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">type</span><span class="token punctuation">:</span>  <span class="token string">'exponential'</span><span class="token punctuation">,</span> <span class="token comment">// Exponential backoff</span>
+
+delay<span class="token punctuation">:</span>  <span class="token number">5000</span><span class="token punctuation">,</span> <span class="token comment">// Bắt đầu với 5 giây</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+removeOnComplete<span class="token punctuation">:</span>  <span class="token number">100</span><span class="token punctuation">,</span> <span class="token comment">// Giữ lại 100 jobs thành công</span>
+
+removeOnFail<span class="token punctuation">:</span>  <span class="token number">50</span><span class="token punctuation">,</span> <span class="token comment">// Giữ lại 50 jobs thất bại</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>Processor xử lý job:</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: ai/processors/translation.processor.ts</span>
+
+  
+
+@<span class="token function">Processor</span><span class="token punctuation">(</span><span class="token string">'translation'</span><span class="token punctuation">)</span> <span class="token comment">// Processor cho queue 'translation'</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">TranslationProcessor</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span>  geminiService<span class="token punctuation">:</span> GeminiService<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">Process</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// Hàm xử lý job</span>
+
+<span class="token keyword">async</span>  <span class="token function">handleTranslation</span><span class="token punctuation">(</span>job<span class="token punctuation">:</span> Job<span class="token operator">&lt;</span>TranslationJobData<span class="token operator">&gt;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">const</span> <span class="token punctuation">{</span> sentences<span class="token punctuation">,</span> jobId <span class="token punctuation">}</span> <span class="token operator">=</span> job<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Cập nhật progress</span>
+
+<span class="token keyword">await</span>  job<span class="token punctuation">.</span><span class="token function">progress</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Gọi AI</span>
+
+<span class="token keyword">const</span>  result <span class="token operator">=</span> <span class="token keyword">await</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>geminiService<span class="token punctuation">.</span><span class="token function">translate</span><span class="token punctuation">(</span>sentences<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Cập nhật progress</span>
+
+<span class="token keyword">await</span>  job<span class="token punctuation">.</span><span class="token function">progress</span><span class="token punctuation">(</span><span class="token number">90</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// Lưu vào DB</span>
+
+<span class="token keyword">await</span>  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">saveResults</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">await</span>  job<span class="token punctuation">.</span><span class="token function">progress</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">return</span>  result<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">OnQueueCompleted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// Event khi job hoàn thành</span>
+
+<span class="token function">handleCompleted</span><span class="token punctuation">(</span>job<span class="token punctuation">:</span> Job<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Job </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>job<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> completed`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">OnQueueFailed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// Event khi job thất bại</span>
+
+<span class="token function">handleFailed</span><span class="token punctuation">(</span>job<span class="token punctuation">:</span> Job<span class="token punctuation">,</span> error<span class="token punctuation">:</span> Error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Job </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>job<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> failed:`</span></span><span class="token punctuation">,</span> error<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="redis-cli-cơ-bản">5.4 Redis CLI cơ bản</h3>
+<pre class=" language-bash"><code class="prism  language-bash">
+<span class="token comment"># Kết nối Redis trong Docker</span>
+
+docker  compose  -f  docker-compose.dev.yml  <span class="token function">exec</span>  redis  redis-cli
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># COMMANDS CƠ BẢN</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Ping (kiểm tra kết nối)</span>
+
+PING
+
+<span class="token comment"># → PONG</span>
+
+  
+
+<span class="token comment"># Set/Get string</span>
+
+SET  mykey  <span class="token string">"Hello"</span>
+
+GET  mykey
+
+<span class="token comment"># → "Hello"</span>
+
+  
+
+<span class="token comment"># Set với TTL (tự xóa sau 60 giây)</span>
+
+SET  session:123  <span class="token string">"user_data"</span>  EX  60
+
+  
+
+<span class="token comment"># Kiểm tra TTL còn lại</span>
+
+TTL  session:123
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># XEM QUEUE (Bull)</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Liệt kê tất cả keys</span>
+
+KEYS  *
+
+  
+
+<span class="token comment"># Xem jobs trong queue translation</span>
+
+LRANGE  bull:translation:wait  0  -1  <span class="token comment"># Jobs đang đợi</span>
+
+LRANGE  bull:translation:active  0  -1  <span class="token comment"># Jobs đang chạy</span>
+
+  
+
+<span class="token comment"># Xem số lượng jobs</span>
+
+LLEN  bull:translation:wait
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># MONITORING</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+  
+
+<span class="token comment"># Xem thông tin server</span>
+
+INFO
+
+  
+
+<span class="token comment"># Xem memory usage</span>
+
+INFO  memory
+
+  
+
+<span class="token comment"># Monitor real-time commands</span>
+
+MONITOR
+
+</code></pre>
+<hr>
+<h1 id="phần-2-thực-hành-1">PHẦN 2: THỰC HÀNH</h1>
+<hr>
+<h2 id="khởi-chạy-dự-án-từ-đầu">6. Khởi Chạy Dự Án Từ Đầu</h2>
+<h3 id="checklist-trước-khi-bắt-đầu">6.1 Checklist trước khi bắt đầu</h3>
+<ul>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đã cài Docker Desktop</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đã clone project</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đã tạo file <code>.env</code></p>
+</li>
+</ul>
+<h3 id="quy-trình-khởi-chạy-step-by-step">6.2 Quy trình khởi chạy step-by-step</h3>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># BƯỚC 1: Di chuyển vào thư mục dự án</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+cd d:\CODE\git\2pjp\2pjp<span class="token operator">-</span>api
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># BƯỚC 2: Tạo file .env (nếu chưa có)</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># Copy từ .env.example và điền các giá trị</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># BƯỚC 3: Khởi động Docker containers</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml up
+
+  
+
+<span class="token comment"># Đợi đến khi thấy:</span>
+
+<span class="token comment"># 2pjp-api-dev | [Nest] LOG [NestApplication] Nest application successfully started</span>
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># BƯỚC 4: Chạy Prisma migrations (terminal mới)</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma migrate deploy
+
+  
+
+<span class="token comment"># Hoặc nếu là lần đầu / muốn reset:</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma migrate dev
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># BƯỚC 5: Chạy seed data</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx ts<span class="token operator">-</span>node prisma<span class="token operator">/</span>seeds<span class="token operator">/</span>seed<span class="token punctuation">.</span>ts
+
+  
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># BƯỚC 6: Kiểm tra</span>
+
+<span class="token comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="token comment"># Mở browser: http://localhost:3000/health</span>
+
+<span class="token comment"># Nếu thấy { "status": "ok" } là thành công!</span>
+
+</code></pre>
+<h3 id="script-tự-động-dev.ps1">6.3 Script tự động (dev.ps1)</h3>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># Sử dụng script đã tạo sẵn:</span>
+
+  
+
+<span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 up <span class="token comment"># Khởi động</span>
+
+<span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 down <span class="token comment"># Dừng</span>
+
+<span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 logs <span class="token comment"># Xem logs</span>
+
+<span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 seed <span class="token comment"># Chạy seed</span>
+
+<span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 migrate <span class="token comment"># Chạy migrations</span>
+
+<span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 reset <span class="token comment"># Reset toàn bộ (xóa DB)</span>
+
+<span class="token punctuation">.</span>\dev<span class="token punctuation">.</span>ps1 shell <span class="token comment"># Mở shell trong container</span>
+
+</code></pre>
+<hr>
+<h2 id="hiểu-về-seed-data">7. Hiểu Về Seed Data</h2>
+<h3 id="seed-là-gì">7.1 Seed là gì?</h3>
+<p><strong>Seed = Dữ liệu mẫu ban đầu</strong></p>
+<p>Khi database mới tạo, nó trống rỗng. Seed giúp:</p>
+<ul>
+<li>
+<p>Tạo dữ liệu cần thiết để app chạy (config, default values)</p>
+</li>
+<li>
+<p>Tạo dữ liệu test để development</p>
+</li>
+<li>
+<p>Đảm bảo mọi người có cùng data ban đầu</p>
+</li>
+</ul>
+<h3 id="file-seed-của-dự-án">7.2 File seed của dự án</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: prisma/seeds/seed.ts</span>
+
+  
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> PrismaClient <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@prisma/client'</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">const</span>  prisma <span class="token operator">=</span> <span class="token keyword">new</span>  <span class="token class-name">PrismaClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">async</span>  <span class="token keyword">function</span>  <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token comment">// 1. Seed AI Providers</span>
+
+<span class="token keyword">const</span>  googleProvider <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>aiProvider<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+code<span class="token punctuation">:</span>  <span class="token string">'google'</span><span class="token punctuation">,</span>
+
+name<span class="token punctuation">:</span>  <span class="token string">'Google Generative AI'</span><span class="token punctuation">,</span>
+
+baseUrl<span class="token punctuation">:</span>  <span class="token string">'https://generativelanguage.googleapis.com'</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// 2. Seed AI Models</span>
+
+<span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>aiModel<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+providerId<span class="token punctuation">:</span>  googleProvider<span class="token punctuation">.</span>id<span class="token punctuation">,</span>
+
+modelName<span class="token punctuation">:</span>  <span class="token string">'gemma-3-27b-it'</span><span class="token punctuation">,</span>
+
+rpmLimit<span class="token punctuation">:</span>  <span class="token number">30</span><span class="token punctuation">,</span>
+
+tpmLimit<span class="token punctuation">:</span>  <span class="token number">15000</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// 3. Seed AI Task Config</span>
+
+<span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>aiTaskConfig<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+taskType<span class="token punctuation">:</span>  <span class="token string">'translation'</span><span class="token punctuation">,</span>
+
+providerId<span class="token punctuation">:</span>  googleProvider<span class="token punctuation">.</span>id<span class="token punctuation">,</span>
+
+<span class="token comment">// ... config</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// 4. Seed Prompt Templates</span>
+
+<span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>aiPromptTemplate<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+taskType<span class="token punctuation">:</span>  <span class="token string">'translation'</span><span class="token punctuation">,</span>
+
+promptText<span class="token punctuation">:</span>  <span class="token string">'...'</span><span class="token punctuation">,</span>
+
+isActive<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>error<span class="token punctuation">)</span>
+
+<span class="token punctuation">.</span><span class="token keyword">finally</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span>  prisma<span class="token punctuation">.</span><span class="token function">$disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+<h3 id="cách-chạy-seed">7.3 Cách chạy seed</h3>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># Trong Docker</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx ts<span class="token operator">-</span>node prisma<span class="token operator">/</span>seeds<span class="token operator">/</span>seed<span class="token punctuation">.</span>ts
+
+  
+
+<span class="token comment"># Hoặc nếu đã cài npm packages locally</span>
+
+npx ts<span class="token operator">-</span>node prisma<span class="token operator">/</span>seeds<span class="token operator">/</span>seed<span class="token punctuation">.</span>ts
+
+</code></pre>
+<hr>
+<h2 id="thêm-tính-năng-mới">8. Thêm Tính Năng Mới</h2>
+<h3 id="ví-dụ-thêm-module-categories">8.1 Ví dụ: Thêm module “Categories”</h3>
+<p><strong>Bước 1: Thêm model vào schema.prisma</strong></p>
+<pre class=" language-prisma"><code class="prism  language-prisma">
+// prisma/schema.prisma
+
+  
+
+model Category {
+
+id Int @id @default(autoincrement())
+
+name String @unique
+
+description String?
+
+createdAt DateTime @default(now()) @map("created_at")
+
+updatedAt DateTime? @updatedAt @map("updated_at")
+
+  
+
+contents ContentInfo[]
+
+  
+
+@@map("categories")
+
+}
+
+  
+
+// Thêm relation vào ContentInfo
+
+model ContentInfo {
+
+// ... existing fields
+
+categoryId Int? @map("category_id")
+
+category Category? @relation(fields: [categoryId], references: [id])
+
+}
+
+</code></pre>
+<p><strong>Bước 2: Tạo migration</strong></p>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma migrate dev <span class="token operator">--</span>name add_categories
+
+</code></pre>
+<p><strong>Bước 3: Tạo DTO</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: src/categories/dto/create-category.dto.ts</span>
+
+  
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> IsString<span class="token punctuation">,</span> IsOptional<span class="token punctuation">,</span> MaxLength <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'class-validator'</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">CreateCategoryDto</span> <span class="token punctuation">{</span>
+
+@<span class="token function">IsString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+@<span class="token function">MaxLength</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span>
+
+name<span class="token punctuation">:</span> <span class="token keyword">string</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">IsString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+@<span class="token function">IsOptional</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+@<span class="token function">MaxLength</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span>
+
+description<span class="token operator">?</span><span class="token punctuation">:</span> <span class="token keyword">string</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>Bước 4: Tạo Service</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: src/categories/categories.service.ts</span>
+
+  
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Injectable<span class="token punctuation">,</span> NotFoundException <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> PrismaService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'../prisma/prisma.service'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> CreateCategoryDto <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./dto/create-category.dto'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Injectable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">CategoriesService</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span>  prisma<span class="token punctuation">:</span> PrismaService<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  
+
+<span class="token keyword">async</span>  <span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>category<span class="token punctuation">.</span><span class="token function">findMany</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+include<span class="token punctuation">:</span> <span class="token punctuation">{</span> _count<span class="token punctuation">:</span> <span class="token punctuation">{</span> select<span class="token punctuation">:</span> <span class="token punctuation">{</span> contents<span class="token punctuation">:</span>  <span class="token keyword">true</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token keyword">async</span>  <span class="token function">findOne</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">const</span>  category <span class="token operator">=</span> <span class="token keyword">await</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>category<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+include<span class="token punctuation">:</span> <span class="token punctuation">{</span> contents<span class="token punctuation">:</span>  <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>category<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">throw</span>  <span class="token keyword">new</span>  <span class="token class-name">NotFoundException</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Category #</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> not found`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token keyword">return</span>  category<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token keyword">async</span>  <span class="token function">create</span><span class="token punctuation">(</span>dto<span class="token punctuation">:</span> CreateCategoryDto<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>category<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span> data<span class="token punctuation">:</span>  dto <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token keyword">async</span>  <span class="token function">update</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">,</span> dto<span class="token punctuation">:</span> CreateCategoryDto<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">await</span>  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Check exists</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>category<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+data<span class="token punctuation">:</span>  dto<span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token keyword">async</span>  <span class="token function">remove</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">await</span>  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Check exists</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>prisma<span class="token punctuation">.</span>category<span class="token punctuation">.</span><span class="token keyword">delete</span><span class="token punctuation">(</span><span class="token punctuation">{</span> where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>Bước 5: Tạo Controller</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: src/categories/categories.controller.ts</span>
+
+  
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+
+Controller<span class="token punctuation">,</span>
+
+Get<span class="token punctuation">,</span>
+
+Post<span class="token punctuation">,</span>
+
+Put<span class="token punctuation">,</span>
+
+Delete<span class="token punctuation">,</span>
+
+Body<span class="token punctuation">,</span>
+
+Param<span class="token punctuation">,</span>
+
+ParseIntPipe<span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> CategoriesService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./categories.service'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> CreateCategoryDto <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./dto/create-category.dto'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Controller</span><span class="token punctuation">(</span><span class="token string">'categories'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">CategoriesController</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span>  readonly  categoriesService<span class="token punctuation">:</span> CategoriesService<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">Get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>categoriesService<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">Get</span><span class="token punctuation">(</span><span class="token string">':id'</span><span class="token punctuation">)</span>
+
+<span class="token function">findOne</span><span class="token punctuation">(</span>@<span class="token function">Param</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> ParseIntPipe<span class="token punctuation">)</span> id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>categoriesService<span class="token punctuation">.</span><span class="token function">findOne</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">Post</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token function">create</span><span class="token punctuation">(</span>@<span class="token function">Body</span><span class="token punctuation">(</span><span class="token punctuation">)</span> dto<span class="token punctuation">:</span> CreateCategoryDto<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>categoriesService<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>dto<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">Put</span><span class="token punctuation">(</span><span class="token string">':id'</span><span class="token punctuation">)</span>
+
+<span class="token function">update</span><span class="token punctuation">(</span>
+
+@<span class="token function">Param</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> ParseIntPipe<span class="token punctuation">)</span> id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">,</span>
+
+@<span class="token function">Body</span><span class="token punctuation">(</span><span class="token punctuation">)</span> dto<span class="token punctuation">:</span> CreateCategoryDto<span class="token punctuation">,</span>
+
+<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>categoriesService<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> dto<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+@<span class="token function">Delete</span><span class="token punctuation">(</span><span class="token string">':id'</span><span class="token punctuation">)</span>
+
+<span class="token function">remove</span><span class="token punctuation">(</span>@<span class="token function">Param</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> ParseIntPipe<span class="token punctuation">)</span> id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>categoriesService<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>Bước 6: Tạo Module</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: src/categories/categories.module.ts</span>
+
+  
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Module <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'@nestjs/common'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> CategoriesController <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./categories.controller'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> CategoriesService <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./categories.service'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> PrismaModule <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'../prisma/prisma.module'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Module</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+imports<span class="token punctuation">:</span> <span class="token punctuation">[</span>PrismaModule<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+controllers<span class="token punctuation">:</span> <span class="token punctuation">[</span>CategoriesController<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+providers<span class="token punctuation">:</span> <span class="token punctuation">[</span>CategoriesService<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+exports<span class="token punctuation">:</span> <span class="token punctuation">[</span>CategoriesService<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">CategoriesModule</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+</code></pre>
+<p><strong>Bước 7: Đăng ký vào AppModule</strong></p>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// File: src/app.module.ts</span>
+
+  
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> CategoriesModule <span class="token punctuation">}</span> <span class="token keyword">from</span>  <span class="token string">'./categories/categories.module'</span><span class="token punctuation">;</span>
+
+  
+
+@<span class="token function">Module</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+imports<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+
+<span class="token comment">// ... existing modules</span>
+
+CategoriesModule<span class="token punctuation">,</span> <span class="token comment">// Thêm dòng này</span>
+
+<span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span>  <span class="token keyword">class</span>  <span class="token class-name">AppModule</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="checklist-khi-thêm-tính-năng">8.2 Checklist khi thêm tính năng</h3>
+<ul>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Thêm model vào <code>schema.prisma</code></p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Chạy <code>prisma migrate dev</code></p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo DTO (Data Transfer Object)</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo Service</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo Controller</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Tạo Module</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Đăng ký vào AppModule</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" class="task-list-item-checkbox" disabled=""> Test API</p>
+</li>
+</ul>
+<hr>
+<h2 id="debug-và-xử-lý-lỗi">9. Debug và Xử Lý Lỗi</h2>
+<h3 id="xem-logs">9.1 Xem logs</h3>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># Logs tất cả services</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs
+
+  
+
+<span class="token comment"># Logs API (follow mode)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs <span class="token operator">-</span>f api
+
+  
+
+<span class="token comment"># Logs với timestamp</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml logs <span class="token operator">-</span>f <span class="token operator">-</span>t api
+
+</code></pre>
+<h3 id="lỗi-thường-gặp">9.2 Lỗi thường gặp</h3>
+<p><strong>Lỗi: Cannot connect to database</strong></p>
+<pre><code>
+Error: Can't reach database server at mysql:3306
+
+</code></pre>
+<p><strong>Giải pháp:</strong></p>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># Đợi MySQL khởi động (30 giây)</span>
+
+<span class="token comment"># Hoặc restart API</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml restart api
+
+</code></pre>
+<p><strong>Lỗi: Prisma Client chưa generate</strong></p>
+<pre><code>
+Error: @prisma/client did not initialize yet
+
+</code></pre>
+<p><strong>Giải pháp:</strong></p>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma generate
+
+</code></pre>
+<p><strong>Lỗi: Migration failed</strong></p>
+<pre><code>
+Error: Migration failed to apply
+
+</code></pre>
+<p><strong>Giải pháp:</strong></p>
+<pre class=" language-powershell"><code class="prism  language-powershell">
+<span class="token comment"># Reset database (MẤT TOÀN BỘ DATA!)</span>
+
+docker compose <span class="token operator">-</span>f docker<span class="token operator">-</span>compose<span class="token punctuation">.</span>dev<span class="token punctuation">.</span>yml exec api npx prisma migrate reset
+
+</code></pre>
+<h3 id="debug-với-vs-code">9.3 Debug với VS Code</h3>
+<ol>
+<li>Thêm vào <code>launch.json</code>:</li>
+</ol>
+<pre class=" language-json"><code class="prism  language-json">
+<span class="token punctuation">{</span>
+
+<span class="token string">"type"</span><span class="token punctuation">:</span> <span class="token string">"node"</span><span class="token punctuation">,</span>
+
+<span class="token string">"request"</span><span class="token punctuation">:</span> <span class="token string">"attach"</span><span class="token punctuation">,</span>
+
+<span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Docker: Attach to Node"</span><span class="token punctuation">,</span>
+
+<span class="token string">"port"</span><span class="token punctuation">:</span> <span class="token number">9229</span><span class="token punctuation">,</span>
+
+<span class="token string">"address"</span><span class="token punctuation">:</span> <span class="token string">"localhost"</span><span class="token punctuation">,</span>
+
+<span class="token string">"localRoot"</span><span class="token punctuation">:</span> <span class="token string">"${workspaceFolder}"</span><span class="token punctuation">,</span>
+
+<span class="token string">"remoteRoot"</span><span class="token punctuation">:</span> <span class="token string">"/app"</span><span class="token punctuation">,</span>
+
+<span class="token string">"restart"</span><span class="token punctuation">:</span> <span class="token boolean">true</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<ol start="2">
+<li>
+<p>Đặt breakpoint trong code</p>
+</li>
+<li>
+<p>F5 để attach debugger</p>
+</li>
+</ol>
+<hr>
+<h2 id="best-practices">10. Best Practices</h2>
+<h3 id="code-style">10.1 Code Style</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// ✅ Tốt: Dùng async/await</span>
+
+<span class="token keyword">async</span>  <span class="token keyword">function</span>  <span class="token function">getUser</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">const</span>  user <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span> where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>user<span class="token punctuation">)</span> <span class="token keyword">throw</span>  <span class="token keyword">new</span>  <span class="token class-name">NotFoundException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">return</span>  user<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// ❌ Xấu: Dùng callback</span>
+
+<span class="token keyword">function</span>  <span class="token function">getUser</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token keyword">number</span><span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findUnique</span><span class="token punctuation">(</span><span class="token punctuation">{</span> where<span class="token punctuation">:</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="error-handling">10.2 Error Handling</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// ✅ Tốt: Throw NestJS exceptions</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">throw</span>  <span class="token keyword">new</span>  <span class="token class-name">NotFoundException</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`User #</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> not found`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// ❌ Xấu: Return null hoặc throw Error generic</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">null</span><span class="token punctuation">;</span> <span class="token comment">// Client không biết lỗi gì</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="environment-variables">10.3 Environment Variables</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// ✅ Tốt: Dùng ConfigService</span>
+
+<span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span>  configService<span class="token punctuation">:</span> ConfigService<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  
+
+<span class="token function">getApiKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  <span class="token keyword">this</span><span class="token punctuation">.</span>configService<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token operator">&lt;</span><span class="token keyword">string</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token string">'GEMINI_API_KEY'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+  
+
+<span class="token comment">// ❌ Xấu: Đọc trực tiếp process.env</span>
+
+<span class="token function">getApiKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">return</span>  process<span class="token punctuation">.</span>env<span class="token punctuation">.</span>GEMINI_API_KEY<span class="token punctuation">;</span> <span class="token comment">// Không có type checking</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre>
+<h3 id="database-queries">10.4 Database Queries</h3>
+<pre class=" language-typescript"><code class="prism  language-typescript">
+<span class="token comment">// ✅ Tốt: Select chỉ fields cần thiết</span>
+
+<span class="token keyword">const</span>  users <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findMany</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+
+select<span class="token punctuation">:</span> <span class="token punctuation">{</span> id<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span>  <span class="token keyword">true</span><span class="token punctuation">,</span> email<span class="token punctuation">:</span>  <span class="token keyword">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  
+
+<span class="token comment">// ❌ Xấu: Select all (kể cả password!)</span>
+
+<span class="token keyword">const</span>  users <span class="token operator">=</span> <span class="token keyword">await</span>  prisma<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">findMany</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre>
+<hr>
+<h2 id="📚-tài-liệu-tham-khảo">📚 Tài Liệu Tham Khảo</h2>
+<ul>
+<li>
+<p><strong>NestJS:</strong> <a href="https://docs.nestjs.com/">https://docs.nestjs.com/</a></p>
+</li>
+<li>
+<p><strong>Prisma:</strong> <a href="https://www.prisma.io/docs/">https://www.prisma.io/docs/</a></p>
+</li>
+<li>
+<p><strong>Docker:</strong> <a href="https://docs.docker.com/">https://docs.docker.com/</a></p>
+</li>
+<li>
+<p><strong>Redis:</strong> <a href="https://redis.io/docs/">https://redis.io/docs/</a></p>
+</li>
+<li>
+<p><strong>Bull Queue:</strong> <a href="https://docs.bullmq.io/">https://docs.bullmq.io/</a></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>Happy Coding! 🚀</strong></p>
+</blockquote>
+<blockquote>
+<p>Nếu có thắc mắc, đọc lại tài liệu hoặc search Google/StackOverflow</p>
+</blockquote>
+</div>
+</body>
+
+</html>
